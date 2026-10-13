@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  # FastAPI Valuation Backend Engine
+  api:
+    build:
+      context: .
+      dockerfile: services/api/Dockerfile
+    container_name: quantdcf-api
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - PORT=8000
+      - HOST=0.0.0.0
+      - CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+      - NSE_DATA_LICENSE_APPROVED=false
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # Next.js Institutional Web Frontend
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    container_name: quantdcf-web
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+    depends_on:
+      - api
+    restart: unless-stopped
