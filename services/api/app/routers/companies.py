@@ -15,6 +15,12 @@ async def search_companies(q: str = Query(..., min_length=1, description="Compan
     return await provider_registry.search_companies(q)
 
 
+@router.get("/indices/nifty", response_model=dict)
+async def get_nifty_quote():
+    """Returns official real-time or Bhavcopy NIFTY 50 index level."""
+    return await provider_registry.get_nifty_quote()
+
+
 @router.get("/{symbol}", response_model=dict)
 async def get_company_profile(symbol: str):
     """Returns official profile, sector, ISIN, and market data status for a company."""

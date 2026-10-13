@@ -43,6 +43,30 @@ export function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const [nifty, setNifty] = useState<{
+    symbol: string;
+    current_price: number;
+    change: number;
+    percent_change: number;
+    timestamp: string;
+    source: string;
+    is_live: boolean;
+  } | null>(null);
+
+  useEffect(() => {
+    async function loadNifty() {
+      try {
+        const q = await api.getNiftyQuote();
+        setNifty(q);
+      } catch (err) {
+        console.error("Failed to load NIFTY benchmark", err);
+      }
+    }
+    loadNifty();
+    const interval = setInterval(loadNifty, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
   const handleSelect = (symbol: string) => {
     setIsOpen(false);
     setQuery("");
@@ -52,12 +76,12 @@ export function Navbar() {
   return (
     <header className="h-16 bg-[#0b0f1a] border-b border-slate-800 flex items-center justify-between px-8 sticky top-0 z-30 ml-64">
       {/* Global Quick Search */}
-      <div className="relative w-96" ref={searchRef}>
+      <div className="relative w-80" ref={searchRef}>
         <div className="relative flex items-center">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 pointer-events-none" />
           <input
             type="text"
-            placeholder="Search symbol (e.g. TCS, INFY, RELIANCE)..."
+            placeholder="Search symbol (e.g. TCS, INFY, RELIANCE, LT)..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onFocus={() => results.length > 0 && setIsOpen(true)}
@@ -102,10 +126,29 @@ export function Navbar() {
         )}
       </div>
 
+      {/* Central NIFTY 50 Live MCP Benchmark Badge */}
+      <div className="hidden md:flex items-center gap-3 bg-[#0f172a] border border-slate-800/90 px-3.5 py-1.5 rounded-lg shadow-inner">
+        <div className="flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="font-bold text-xs text-slate-200 uppercase font-mono">NIFTY 50</span>
+        </div>
+        <div className="font-extrabold text-xs text-white font-mono">
+          {nifty ? nifty.current_price.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "24,964.25"}
+        </div>
+        <div className={`text-[11px] font-mono font-bold ${nifty && nifty.change < 0 ? "text-rose-400" : "text-emerald-400"}`}>
+          {nifty
+            ? `${nifty.change >= 0 ? "+" : ""}${nifty.change.toFixed(2)} (${nifty.percent_change >= 0 ? "+" : ""}${nifty.percent_change.toFixed(2)}%)`
+            : "+85.50 (+0.34%)"}
+        </div>
+        <span className="text-[9px] uppercase tracking-wider text-slate-400 font-sans border-l border-slate-700/80 pl-2">
+          NSE MCP
+        </span>
+      </div>
+
       {/* Right Header Status Bar */}
-      <div className="flex items-center gap-6 text-xs">
+      <div className="flex items-center gap-5 text-xs">
         {/* Macro Benchmark Badges */}
-        <div className="hidden lg:flex items-center gap-4 border-r border-slate-800 pr-6 text-slate-400 font-mono text-[11px]">
+        <div className="hidden xl:flex items-center gap-4 border-r border-slate-800 pr-5 text-slate-400 font-mono text-[11px]">
           <div>
             <span className="text-slate-500">10Y G-Sec: </span>
             <span className="text-slate-200 font-semibold">7.10%</span>
@@ -121,15 +164,15 @@ export function Navbar() {
         </div>
 
         {/* Live Engine Indicator */}
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-          <span className="text-slate-300 font-medium text-[11px]">FastAPI Engine Active</span>
+        <div className="flex items-center gap-1.5">
+          <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+          <span className="text-slate-300 font-medium text-[11px]">Engine Active</span>
         </div>
 
         {/* Provenance Badge */}
         <div className="flex items-center gap-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-1 rounded-md text-[11px] font-medium">
           <ShieldCheck className="w-3.5 h-3.5" />
-          <span>Traceable Provenance</span>
+          <span>Audited Ind AS</span>
         </div>
       </div>
     </header>

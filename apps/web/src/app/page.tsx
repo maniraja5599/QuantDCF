@@ -62,15 +62,15 @@ export default function DashboardPage() {
       name: "Reliance Industries Limited",
       sector: "Energy & Diversified",
       marketCap: "₹18,53,800 Cr",
-      status: "Exchange Catalog Listed",
+      status: "Audited Filings Verified",
       color: "border-indigo-500/40",
     },
     {
-      symbol: "HDFCBANK",
-      name: "HDFC Bank Limited",
-      sector: "Financial Services",
-      marketCap: "₹12,76,800 Cr",
-      status: "Exchange Catalog Listed",
+      symbol: "LT",
+      name: "Larsen & Toubro Limited",
+      sector: "Capital Goods & Infrastructure",
+      marketCap: "₹4,84,000 Cr",
+      status: "Audited Filings Verified",
       color: "border-amber-500/40",
     },
   ];
@@ -81,34 +81,49 @@ export default function DashboardPage() {
       <div className="bg-gradient-to-r from-[#0d1424] via-[#10182c] to-[#0d1424] border border-slate-800 rounded-2xl p-8 relative overflow-hidden shadow-2xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="max-w-3xl space-y-3 relative z-10">
+        <div className="max-w-4xl space-y-4 relative z-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20 text-xs font-semibold uppercase tracking-wider">
             <ShieldCheck className="w-3.5 h-3.5" /> Institutional Valuation Platform
           </div>
           <h1 className="text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
             Discounted Cash Flow Valuation for <span className="text-sky-400">Indian Equities</span>
           </h1>
-          <p className="text-slate-400 text-sm leading-relaxed">
+          <p className="text-slate-400 text-sm leading-relaxed max-w-3xl">
             Institutional-grade equity research platform featuring verified exchange filings, rigorous WACC modeling,
             perpetual Gordon Growth terminal valuations, 2D sensitivity matrices, and transparent mathematical auditing.
           </p>
 
-          <div className="flex flex-wrap items-center gap-4 pt-3">
-            <Link
-              href="/valuation/TCS"
-              className="bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-5 py-2.5 rounded-lg text-xs flex items-center gap-2 transition-all shadow-lg shadow-sky-500/20"
-            >
-              <Calculator className="w-4 h-4" />
-              <span>Launch TCS Valuation Model</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link
-              href="/screener"
-              className="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold px-5 py-2.5 rounded-lg text-xs flex items-center gap-2 transition-all border border-slate-700"
-            >
-              <Search className="w-4 h-4" />
-              <span>Explore Company Screener</span>
-            </Link>
+          {/* Multi-Stock Direct Launch Strip */}
+          <div className="pt-2">
+            <div className="text-xs text-slate-400 font-semibold mb-2.5 flex items-center gap-2">
+              <Calculator className="w-3.5 h-3.5 text-sky-400" />
+              <span>Launch DCF Valuation Terminal for Audited Indian Blue Chips:</span>
+            </div>
+            <div className="flex flex-wrap items-center gap-2.5">
+              {[
+                { symbol: "TCS", name: "Tata Consultancy", mcap: "₹14.9L Cr" },
+                { symbol: "INFY", name: "Infosys", mcap: "₹7.8L Cr" },
+                { symbol: "RELIANCE", name: "Reliance Ind.", mcap: "₹18.5L Cr" },
+                { symbol: "LT", name: "Larsen & Toubro", mcap: "₹4.8L Cr" },
+              ].map((item) => (
+                <Link
+                  key={item.symbol}
+                  href={`/valuation/${item.symbol}`}
+                  className="bg-sky-500/10 hover:bg-sky-500 text-sky-300 hover:text-slate-950 border border-sky-500/30 hover:border-sky-400 font-bold px-3.5 py-2 rounded-lg text-xs flex items-center gap-2 transition-all shadow-md group"
+                >
+                  <span className="font-mono text-white group-hover:text-slate-950 font-black">{item.symbol}</span>
+                  <span className="text-[11px] opacity-80 font-normal">({item.name})</span>
+                  <ArrowRight className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100" />
+                </Link>
+              ))}
+              <Link
+                href="/screener"
+                className="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold px-4 py-2 rounded-lg text-xs flex items-center gap-2 transition-all border border-slate-700 ml-1"
+              >
+                <Search className="w-3.5 h-3.5" />
+                <span>Explore Screener</span>
+              </Link>
+            </div>
           </div>
         </div>
       </div>

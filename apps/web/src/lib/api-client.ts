@@ -51,6 +51,16 @@ export const api = {
   getQuote: (symbol: string): Promise<MarketQuote> =>
     request<MarketQuote>(`/api/companies/${encodeURIComponent(symbol)}/quote`),
 
+  getNiftyQuote: (): Promise<{
+    symbol: string;
+    current_price: number;
+    change: number;
+    percent_change: number;
+    timestamp: string;
+    source: string;
+    is_live: boolean;
+  }> => request("/api/companies/indices/nifty"),
+
   // Financial Statements
   getHistoricalFinancials: (symbol: string): Promise<HistoricalStatement[]> =>
     request<HistoricalStatement[]>(`/api/financials/${encodeURIComponent(symbol)}/historical`),
