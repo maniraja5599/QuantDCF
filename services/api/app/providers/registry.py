@@ -55,7 +55,7 @@ VERIFIED_COMPANIES_CATALOG: List[Dict[str, Any]] = [
         "market_price": 2740.00,
         "market_cap_cr": 1853800.0,
         "shares_cr": 676.5,
-        "has_audited_filings": False,
+        "has_audited_filings": True,
     },
     {
         "symbol": "HDFCBANK",
@@ -91,7 +91,7 @@ VERIFIED_COMPANIES_CATALOG: List[Dict[str, Any]] = [
         "market_price": 3520.00,
         "market_cap_cr": 484000.0,
         "shares_cr": 137.5,
-        "has_audited_filings": False,
+        "has_audited_filings": True,
     },
 ]
 

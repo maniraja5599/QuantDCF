@@ -36,7 +36,7 @@ const CATALOG_COMPANIES = [
     industry: "Oil, Gas, Retail & Telecom",
     marketCap: "₹18,53,800 Cr",
     sharesCr: 676.5,
-    hasAuditedFilings: false,
+    hasAuditedFilings: true,
   },
   {
     symbol: "HDFCBANK",
@@ -69,7 +69,7 @@ const CATALOG_COMPANIES = [
     industry: "Engineering & Construction",
     marketCap: "₹4,84,000 Cr",
     sharesCr: 137.5,
-    hasAuditedFilings: false,
+    hasAuditedFilings: true,
   },
 ];
 

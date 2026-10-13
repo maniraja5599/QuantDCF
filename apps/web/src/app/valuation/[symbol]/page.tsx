@@ -140,11 +140,17 @@ export default function CompanyValuationPage() {
       setRecalculating(true);
       setError(null);
       try {
-        const baseRev = latestStmt ? latestStmt.revenue : 240893.0;
-        const shares = latestStmt ? latestStmt.diluted_shares : 361.8;
-        const cash = latestStmt ? latestStmt.cash_and_equivalents : 14782.0;
+        const baseRev = latestStmt
+          ? latestStmt.revenue
+          : mQuote?.market_cap
+          ? mQuote.market_cap * 0.35
+          : 50000.0;
+        const shares = latestStmt
+          ? latestStmt.diluted_shares
+          : mQuote?.diluted_shares || 100.0;
+        const cash = latestStmt ? latestStmt.cash_and_equivalents : 0.0;
         const debt = latestStmt ? latestStmt.total_debt : 0.0;
-        const minority = latestStmt ? latestStmt.minority_interest : 820.0;
+        const minority = latestStmt ? latestStmt.minority_interest : 0.0;
         const cmp = mQuote ? mQuote.current_price : undefined;
 
         const payload: DCFCalculationInput = {
