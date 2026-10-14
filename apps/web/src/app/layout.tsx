@@ -37,6 +37,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { VisitorTracker } from "@/components/analytics/visitor-tracker";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -49,6 +51,7 @@ export default function RootLayout({
         className={`${inter.className} min-h-screen antialiased selection:bg-sky-500/30 selection:text-sky-200`}
       >
         <ThemeProvider>
+          <VisitorTracker />
           <AppShell>{children}</AppShell>
         </ThemeProvider>
       </body>
