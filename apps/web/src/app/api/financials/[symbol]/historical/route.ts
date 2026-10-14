@@ -6,6 +6,6 @@ export async function GET(
   { params }: { params: { symbol: string } }
 ) {
   const { symbol } = params;
-  const financials = getHistoricalFinancials(symbol);
+  const financials = await getHistoricalFinancials(symbol);
   return NextResponse.json(financials);
 }
