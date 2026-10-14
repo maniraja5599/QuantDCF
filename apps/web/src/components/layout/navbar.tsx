@@ -189,9 +189,9 @@ export function Navbar({ onToggleMobileMenu, isCollapsed = false, onToggleCollap
         </div>
 
         {/* Global Quick Search (Desktop: sm and above) */}
-        <div className="hidden sm:block relative w-full sm:max-w-xs md:max-w-sm" ref={searchRef}>
+        <div className="hidden sm:block relative w-full sm:max-w-xs md:max-w-sm group" ref={searchRef}>
           <div className="relative flex items-center">
-            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 sm:left-3 pointer-events-none" />
+            <Search className="w-3.5 h-3.5 text-slate-400 group-hover:text-sky-400 group-hover:scale-110 absolute left-2.5 sm:left-3 pointer-events-none transition-all duration-200" />
             <input
               ref={inputRef}
               id="global-search-input"
@@ -202,12 +202,12 @@ export function Navbar({ onToggleMobileMenu, isCollapsed = false, onToggleCollap
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
               onFocus={() => results.length > 0 && setIsOpen(true)}
-              className="w-full bg-slate-100 dark:bg-[#121829] border border-slate-300 dark:border-slate-800 rounded-lg pl-8 sm:pl-9 pr-14 py-1.5 text-xs text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/50 transition-all font-sans"
+              className="w-full bg-slate-100 dark:bg-[#121829] border border-slate-300 dark:border-slate-800 hover:border-sky-500/50 rounded-lg pl-8 sm:pl-9 pr-14 py-1.5 text-xs text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-500/20 transition-all font-sans hover:shadow-md hover:shadow-sky-500/5"
             />
             <button
               type="button"
               onClick={() => window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", ctrlKey: true }))}
-              className="hidden sm:flex items-center absolute right-2 text-[10px] bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-700 font-mono tracking-wide cursor-pointer"
+              className="hidden sm:flex items-center absolute right-2 text-[10px] bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-sky-400 hover:border-sky-500/40 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-700 font-mono tracking-wide cursor-pointer active-press hover:scale-105 transition-all duration-150"
               title="Open Command Palette (Ctrl+K)"
             >
               Ctrl K
@@ -286,19 +286,19 @@ export function Navbar({ onToggleMobileMenu, isCollapsed = false, onToggleCollap
           </div>
         ) : (
           <div
-            className="hidden sm:flex items-center gap-2.5 bg-slate-100 dark:bg-[#0f172a] hover:bg-slate-200 dark:hover:bg-[#131d35] border border-slate-300 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700/80 px-2.5 sm:px-3 py-1 rounded-lg shadow-inner transition-colors group cursor-default"
+            className="hidden sm:flex items-center gap-2.5 bg-slate-100 dark:bg-[#0f172a] hover:bg-slate-200 dark:hover:bg-[#131d35] border border-slate-300 dark:border-slate-800 hover:border-emerald-500/50 hover:shadow-lg hover:shadow-emerald-500/10 px-2.5 sm:px-3 py-1 rounded-lg shadow-inner transition-all duration-200 group cursor-default hover-lift"
             title={`NIFTY 50 Live Benchmark\nStatus: ${nifty?.is_live ? "Live Real-Time Market Feed" : "Official Bhavcopy Snapshot"}\nDay High: ₹${nifty?.day_high?.toLocaleString("en-IN") || "--"}\nDay Low: ₹${nifty?.day_low?.toLocaleString("en-IN") || "--"}\nFeed: ${nifty?.source || "NSE"}`}
           >
             <div className="flex items-center gap-1.5">
               <span className={`w-2 h-2 rounded-full ${nifty?.is_live ? "bg-emerald-500 dark:bg-emerald-400 animate-ping" : "bg-emerald-500 dark:bg-emerald-400 animate-pulse"}`} />
-              <span className="font-bold text-xs text-slate-800 dark:text-slate-200 uppercase font-mono">NIFTY 50</span>
+              <span className="font-bold text-xs text-slate-800 dark:text-slate-200 uppercase font-mono group-hover:text-emerald-400 transition-colors">NIFTY 50</span>
               {nifty?.is_live && (
                 <span className="text-[9px] bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 font-mono font-bold px-1 py-0.2 rounded border border-emerald-500/30">
                   LIVE
                 </span>
               )}
             </div>
-            <div suppressHydrationWarning className="font-extrabold text-xs text-slate-900 dark:text-white font-mono">
+            <div suppressHydrationWarning className="font-extrabold text-xs text-slate-900 dark:text-white font-mono group-hover:scale-105 transition-transform duration-150">
               ₹{niftyPrice}
             </div>
             <div suppressHydrationWarning className={`text-[11px] font-mono font-bold ${isPositive ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}`}>
@@ -313,7 +313,7 @@ export function Navbar({ onToggleMobileMenu, isCollapsed = false, onToggleCollap
         {/* Mobile: Compact NIFTY Pill (Visible on screens >= 420px) */}
         {!serverError && (
           <div
-            className="hidden min-[420px]:flex sm:hidden items-center gap-1.5 bg-slate-100 dark:bg-[#0f172a] border border-slate-300 dark:border-slate-800 px-2 py-1 rounded-md text-[10px] font-mono shrink-0"
+            className="hidden min-[420px]:flex sm:hidden items-center gap-1.5 bg-slate-100 dark:bg-[#0f172a] border border-slate-300 dark:border-slate-800 px-2 py-1 rounded-md text-[10px] font-mono shrink-0 hover-lift active-press"
             title={`NIFTY 50: ₹${niftyPrice} (${niftyCompactChange})`}
           >
             <span className={`w-1.5 h-1.5 rounded-full ${nifty?.is_live ? "bg-emerald-500 dark:bg-emerald-400 animate-ping" : "bg-emerald-500 dark:bg-emerald-400"}`} />
@@ -334,15 +334,15 @@ export function Navbar({ onToggleMobileMenu, isCollapsed = false, onToggleCollap
           </div>
         )}
 
-        {/* Mobile: Search Icon Trigger Button ("search icon mattum vechuko") */}
+        {/* Mobile: Search Icon Trigger Button */}
         <button
           type="button"
           onClick={() => setMobileSearchOpen(true)}
           aria-label="Search Indian Equities"
           title="Search Equities (Ctrl+K)"
-          className="sm:hidden w-9 h-9 flex items-center justify-center rounded-lg bg-slate-100 dark:bg-[#121829] hover:bg-slate-200 dark:hover:bg-slate-800 active:scale-95 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white border border-slate-300 dark:border-slate-800 transition-all shrink-0"
+          className="sm:hidden w-9 h-9 flex items-center justify-center rounded-lg bg-slate-100 dark:bg-[#121829] hover:bg-slate-200 dark:hover:bg-slate-800 active:scale-95 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white border border-slate-300 dark:border-slate-800 transition-all shrink-0 hover-lift active-press"
         >
-          <Search className="w-4 h-4 text-sky-500 dark:text-sky-400" />
+          <Search className="w-4 h-4 text-sky-500 dark:text-sky-400 hover-icon-pop" />
         </button>
 
         {/* Theme Mode Toggle (Dark / Light) */}
@@ -354,7 +354,7 @@ export function Navbar({ onToggleMobileMenu, isCollapsed = false, onToggleCollap
           onClick={() => window.dispatchEvent(new KeyboardEvent("keydown", { key: "?" }))}
           title="Keyboard Shortcuts (?)"
           aria-label="View Keyboard Shortcuts"
-          className="hidden md:flex w-7 h-7 items-center justify-center rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-slate-200 border border-slate-700/80 transition-colors text-xs font-mono"
+          className="hidden md:flex w-7 h-7 items-center justify-center rounded-lg bg-slate-800/80 hover:bg-sky-500/20 text-slate-400 hover:text-sky-300 border border-slate-700/80 hover:border-sky-500/40 transition-all duration-150 text-xs font-mono hover-lift active-press"
         >
           ?
         </button>

@@ -61,8 +61,8 @@ export function ValuationSummaryCard({ output, quote, onOpenWaccModal }: Valuati
       )}
 
       {/* Main KPI Card */}
-      <div className="bg-white dark:bg-[#111726] border border-slate-200 dark:border-slate-800 rounded-xl p-4 sm:p-5 shadow-lg relative overflow-hidden transition-colors">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-sky-500/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="bg-white dark:bg-[#111726] border border-slate-200 dark:border-slate-800 hover-glow-sky hover-lift rounded-xl p-4 sm:p-5 shadow-lg relative overflow-hidden transition-all duration-300 group">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-sky-500/5 group-hover:bg-sky-500/10 rounded-full blur-3xl pointer-events-none transition-all duration-500" />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5">
           {/* 1. Intrinsic Value */}

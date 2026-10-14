@@ -134,16 +134,16 @@ export default function ScreenerPage() {
             </thead>
             <tbody className="divide-y divide-slate-800/60 font-mono">
               {paginated.map((c) => (
-                <tr key={c.symbol} className="hover:bg-slate-800/30 transition-colors">
-                  <td className="py-3.5 px-4 font-bold text-sky-400 text-sm">
+                <tr key={c.symbol} className="hover:bg-sky-500/[0.04] dark:hover:bg-sky-500/[0.06] transition-colors duration-150 group">
+                  <td className="py-3.5 px-4 font-bold text-sky-400 text-sm group-hover:text-sky-300 transition-colors">
                     {c.symbol}
                   </td>
                   <td className="py-3.5 px-4 font-sans font-medium text-slate-200">
-                    <div>{c.name}</div>
+                    <div className="group-hover:text-white transition-colors">{c.name}</div>
                     <div className="text-[10px] text-slate-500 font-mono">ISIN: {c.isin}</div>
                   </td>
                   <td className="py-3.5 px-4">
-                    <span className="bg-slate-800 px-2 py-0.5 rounded text-[11px] text-slate-300">
+                    <span className="bg-slate-800 group-hover:bg-slate-700/80 px-2 py-0.5 rounded text-[11px] text-slate-300 transition-colors">
                       {c.exchange}
                     </span>
                   </td>
@@ -156,8 +156,8 @@ export default function ScreenerPage() {
                   </td>
                   <td className="py-3.5 px-4 font-sans">
                     {c.hasAuditedFilings ? (
-                      <span className="inline-flex items-center gap-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded text-[10px] font-semibold">
-                        <ShieldCheck className="w-3 h-3" /> Audited Filings Available
+                      <span className="inline-flex items-center gap-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded text-[10px] font-semibold group-hover:border-emerald-500/40 transition-colors">
+                        <ShieldCheck className="w-3 h-3 text-emerald-400" /> Audited Filings Available
                       </span>
                     ) : (
                       <span className="inline-flex items-center gap-1 bg-slate-800/80 text-slate-400 border border-slate-700/60 px-2 py-0.5 rounded text-[10px]">
@@ -168,9 +168,9 @@ export default function ScreenerPage() {
                   <td className="py-3.5 px-4 text-right">
                     <Link
                       href={`/valuation/${c.symbol}`}
-                      className="inline-flex items-center gap-1.5 bg-sky-500/10 hover:bg-sky-500 text-sky-400 hover:text-slate-950 font-bold px-3 py-1.5 rounded-lg border border-sky-500/20 transition-all text-xs"
+                      className="inline-flex items-center gap-1.5 bg-sky-500/10 hover:bg-sky-500 text-sky-400 hover:text-slate-950 font-bold px-3 py-1.5 rounded-lg border border-sky-500/20 hover:border-sky-400 transition-all text-xs hover-lift active-press shimmer-sweep"
                     >
-                      <Calculator className="w-3.5 h-3.5" />
+                      <Calculator className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform duration-200" />
                       <span>Model DCF</span>
                     </Link>
                   </td>

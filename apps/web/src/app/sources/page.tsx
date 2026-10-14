@@ -198,14 +198,14 @@ export default function DataSourcesPage() {
         </div>
       </div>
 
-      {/* 2. Top Diagnostic Metrics (4 Cards) */}
+      {/* 2. Top Diagnostic Metrics (4 Cards with ItsHover Style) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <div className="bg-[#0e1526] border border-slate-800 rounded-xl p-4 space-y-1 shadow-sm">
+        <div className="bg-[#0e1526] border border-slate-800 hover-glow-sky hover-lift rounded-xl p-4 space-y-1 shadow-sm group transition-all">
           <div className="flex items-center justify-between text-slate-400 text-xs">
-            <span className="font-semibold">Tracked Equities</span>
-            <Building2 className="w-3.5 h-3.5 text-sky-400" />
+            <span className="font-semibold group-hover:text-slate-200 transition-colors">Tracked Equities</span>
+            <Building2 className="w-3.5 h-3.5 text-sky-400 hover-icon-pop" />
           </div>
-          <div className="text-xl sm:text-2xl font-extrabold font-mono text-white">
+          <div className="text-xl sm:text-2xl font-extrabold font-mono text-white group-hover:text-sky-300 transition-colors">
             {totalCatalog}
           </div>
           <p className="text-[11px] text-slate-400">
@@ -213,12 +213,12 @@ export default function DataSourcesPage() {
           </p>
         </div>
 
-        <div className="bg-[#0e1526] border border-slate-800 rounded-xl p-4 space-y-1 shadow-sm">
+        <div className="bg-[#0e1526] border border-slate-800 hover-glow-emerald hover-lift rounded-xl p-4 space-y-1 shadow-sm group transition-all">
           <div className="flex items-center justify-between text-slate-400 text-xs">
-            <span className="font-semibold">Audited Disclosures</span>
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+            <span className="font-semibold group-hover:text-slate-200 transition-colors">Audited Disclosures</span>
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 hover-icon-pop" />
           </div>
-          <div className="text-xl sm:text-2xl font-extrabold font-mono text-emerald-400">
+          <div className="text-xl sm:text-2xl font-extrabold font-mono text-emerald-400 group-hover:scale-105 transition-transform origin-left">
             {verifiedCount * 5} Filings
           </div>
           <p className="text-[11px] text-slate-400">
@@ -226,12 +226,12 @@ export default function DataSourcesPage() {
           </p>
         </div>
 
-        <div className="bg-[#0e1526] border border-slate-800 rounded-xl p-4 space-y-1 shadow-sm">
+        <div className="bg-[#0e1526] border border-slate-800 hover-glow-sky hover-lift rounded-xl p-4 space-y-1 shadow-sm group transition-all">
           <div className="flex items-center justify-between text-slate-400 text-xs">
-            <span className="font-semibold">Live Market Feeds</span>
-            <TrendingUp className="w-3.5 h-3.5 text-cyan-400" />
+            <span className="font-semibold group-hover:text-slate-200 transition-colors">Live Market Feeds</span>
+            <TrendingUp className="w-3.5 h-3.5 text-cyan-400 hover-icon-pop" />
           </div>
-          <div className="text-xl sm:text-2xl font-extrabold font-mono text-cyan-300">
+          <div className="text-xl sm:text-2xl font-extrabold font-mono text-cyan-300 group-hover:scale-105 transition-transform origin-left">
             {isMarketFeedOnline ? "Active Feed" : "Connecting"}
           </div>
           <p className="text-[11px] text-slate-400">
@@ -239,12 +239,12 @@ export default function DataSourcesPage() {
           </p>
         </div>
 
-        <div className="bg-[#0e1526] border border-slate-800 rounded-xl p-4 space-y-1 shadow-sm">
+        <div className="bg-[#0e1526] border border-slate-800 hover-glow-sky hover-lift rounded-xl p-4 space-y-1 shadow-sm group transition-all">
           <div className="flex items-center justify-between text-slate-400 text-xs">
-            <span className="font-semibold">NSE MCP Gate</span>
-            <Lock className="w-3.5 h-3.5 text-amber-400" />
+            <span className="font-semibold group-hover:text-slate-200 transition-colors">NSE MCP Gate</span>
+            <Lock className="w-3.5 h-3.5 text-amber-400 hover-icon-pop" />
           </div>
-          <div className="text-xl sm:text-2xl font-extrabold font-mono text-amber-300">
+          <div className="text-xl sm:text-2xl font-extrabold font-mono text-amber-300 group-hover:scale-105 transition-transform origin-left">
             {isMcpGated ? "Gated / Locked" : "Approved"}
           </div>
           <p className="text-[11px] text-slate-400">

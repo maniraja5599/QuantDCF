@@ -145,23 +145,41 @@ export function Sidebar({
               : pathname.startsWith(item.href.split("/")[1] ? `/${item.href.split("/")[1]}` : item.href);
 
           return (
-            <Link
-              key={item.name}
-              href={item.href}
-              onClick={handleLinkClick}
-              suppressHydrationWarning
-              title={collapsed ? item.name : undefined}
-              className={`flex items-center ${
-                collapsed ? "justify-center p-3" : "gap-3 px-3.5 py-3"
-              } rounded-xl text-xs font-medium transition-all duration-150 active:scale-[0.98] ${
-                isActive
-                  ? "bg-sky-500/15 text-sky-400 border border-sky-500/30 font-semibold shadow-sm"
-                  : "text-slate-400 hover:text-slate-100 hover:bg-slate-800/60"
-              }`}
-            >
-              <item.icon className={`${collapsed ? "w-5 h-5" : "w-4 h-4"} shrink-0 ${isActive ? "text-sky-400" : "text-slate-400"}`} />
-              {!collapsed && <span className="truncate">{item.name}</span>}
-            </Link>
+            <div key={item.name} className="relative group">
+              <Link
+                href={item.href}
+                onClick={handleLinkClick}
+                suppressHydrationWarning
+                className={`flex items-center ${
+                  collapsed ? "justify-center p-3" : "gap-3 px-3.5 py-3"
+                } rounded-xl text-xs font-medium transition-all duration-200 active:scale-[0.97] relative overflow-hidden ${
+                  isActive
+                    ? "bg-gradient-to-r from-sky-500/20 via-sky-500/10 to-transparent text-sky-300 border border-sky-500/30 font-semibold shadow-sm shadow-sky-500/10"
+                    : "text-slate-400 hover:text-slate-100 hover:bg-slate-800/70 hover:translate-x-0.5"
+                }`}
+              >
+                {isActive && (
+                  <span className="absolute left-0 top-1.5 bottom-1.5 w-1 bg-sky-400 rounded-r-full shadow-[0_0_8px_rgba(56,189,248,0.8)]" />
+                )}
+                <item.icon
+                  className={`${collapsed ? "w-5 h-5" : "w-4 h-4"} shrink-0 transition-all duration-200 group-hover:scale-115 group-hover:-translate-y-0.5 ${
+                    isActive ? "text-sky-400 drop-shadow-[0_0_6px_rgba(56,189,248,0.5)]" : "text-slate-400 group-hover:text-sky-300"
+                  }`}
+                />
+                {!collapsed && (
+                  <span className="truncate transition-colors duration-200 group-hover:text-slate-100">
+                    {item.name}
+                  </span>
+                )}
+              </Link>
+
+              {/* Floating Tooltip Pill for Collapsed Mode (ItsHover Style) */}
+              {collapsed && (
+                <div className="absolute left-full top-1/2 -translate-y-1/2 ml-3 px-2.5 py-1 bg-slate-900/95 backdrop-blur-md text-slate-100 text-[11px] font-medium rounded-lg shadow-2xl border border-slate-700/80 pointer-events-none opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 z-50 whitespace-nowrap flex items-center gap-1.5">
+                  <span>{item.name}</span>
+                </div>
+              )}
+            </div>
           );
         })}
       </nav>

@@ -339,7 +339,7 @@ export default function ReportsPage() {
             <button
               onClick={handleGenerate}
               disabled={generating}
-              className="bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-3.5 py-2 rounded-lg text-xs flex items-center gap-1.5 transition-all disabled:opacity-50 shadow-md shadow-sky-500/20"
+              className="bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-3.5 py-2 rounded-lg text-xs flex items-center gap-1.5 transition-all disabled:opacity-50 shadow-md shadow-sky-500/20 hover-lift active-press shimmer-sweep group"
             >
               {generating ? (
                 <>
@@ -348,7 +348,7 @@ export default function ReportsPage() {
                 </>
               ) : (
                 <>
-                  <Eye className="w-3.5 h-3.5" />
+                  <Eye className="w-3.5 h-3.5 group-hover:scale-115 transition-transform" />
                   <span>Generate Research Memo</span>
                 </>
               )}
@@ -356,9 +356,9 @@ export default function ReportsPage() {
             {reportPreview && (
               <button
                 onClick={handlePrint}
-                className="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold px-3 py-2 rounded-lg text-xs flex items-center gap-1.5 transition-all"
+                className="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold px-3 py-2 rounded-lg text-xs flex items-center gap-1.5 transition-all hover-lift active-press shimmer-sweep group"
               >
-                <Printer className="w-3.5 h-3.5" />
+                <Printer className="w-3.5 h-3.5 group-hover:rotate-6 transition-transform" />
                 <span>Print / PDF</span>
               </button>
             )}

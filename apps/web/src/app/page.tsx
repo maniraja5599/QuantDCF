@@ -321,10 +321,10 @@ export default function DashboardPage() {
       {/* 3. Indian Macro Benchmarks with Concise Micro-Descriptions */}
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
         {/* Risk-free Rate */}
-        <div className="bg-[#111726] border border-slate-800 rounded-xl p-4 flex flex-col justify-between shadow-sm">
+        <div className="bg-[#111726] border border-slate-800 hover-glow-sky hover-lift rounded-xl p-4 flex flex-col justify-between shadow-sm group cursor-default">
           <div>
             <div className="text-[10px] uppercase font-semibold text-slate-400">10-Year Indian G-Sec Yield (Rf)</div>
-            <div className="text-2xl font-black text-slate-100 font-mono mt-1">7.10%</div>
+            <div className="text-2xl font-black text-slate-100 font-mono mt-1 group-hover:text-sky-300 transition-colors">7.10%</div>
           </div>
           <div className="text-[10px] text-slate-500 mt-2 pt-2 border-t border-slate-800/60 leading-tight">
             Benchmark risk-free rate from RBI sovereign bond yield curve
@@ -332,10 +332,10 @@ export default function DashboardPage() {
         </div>
 
         {/* Equity Risk Premium */}
-        <div className="bg-[#111726] border border-slate-800 rounded-xl p-4 flex flex-col justify-between shadow-sm">
+        <div className="bg-[#111726] border border-slate-800 hover-glow-sky hover-lift rounded-xl p-4 flex flex-col justify-between shadow-sm group cursor-default">
           <div>
             <div className="text-[10px] uppercase font-semibold text-slate-400">India Equity Risk Premium (ERP)</div>
-            <div className="text-2xl font-black text-sky-400 font-mono mt-1">6.50%</div>
+            <div className="text-2xl font-black text-sky-400 font-mono mt-1 group-hover:scale-105 group-hover:text-sky-300 transition-all origin-left">6.50%</div>
           </div>
           <div className="text-[10px] text-slate-500 mt-2 pt-2 border-t border-slate-800/60 leading-tight">
             Expected equity return over sovereign G-Sec for emerging market risk
@@ -343,10 +343,10 @@ export default function DashboardPage() {
         </div>
 
         {/* Corporate Tax Rate */}
-        <div className="bg-[#111726] border border-slate-800 rounded-xl p-4 flex flex-col justify-between shadow-sm">
+        <div className="bg-[#111726] border border-slate-800 hover-glow-emerald hover-lift rounded-xl p-4 flex flex-col justify-between shadow-sm group cursor-default">
           <div>
             <div className="text-[10px] uppercase font-semibold text-slate-400">Effective Corporate Tax Rate</div>
-            <div className="text-2xl font-black text-emerald-400 font-mono mt-1">25.17%</div>
+            <div className="text-2xl font-black text-emerald-400 font-mono mt-1 group-hover:scale-105 group-hover:text-emerald-300 transition-all origin-left">25.17%</div>
           </div>
           <div className="text-[10px] text-slate-500 mt-2 pt-2 border-t border-slate-800/60 leading-tight">
             Base statutory 22% + 10% surcharge + 4% health & education cess
@@ -354,10 +354,10 @@ export default function DashboardPage() {
         </div>
 
         {/* Terminal Growth Cap */}
-        <div className="bg-[#111726] border border-slate-800 rounded-xl p-4 flex flex-col justify-between shadow-sm">
+        <div className="bg-[#111726] border border-slate-800 hover-glow-sky hover-lift rounded-xl p-4 flex flex-col justify-between shadow-sm group cursor-default">
           <div>
             <div className="text-[10px] uppercase font-semibold text-slate-400">Sustainable Terminal Growth Cap</div>
-            <div className="text-2xl font-black text-amber-400 font-mono mt-1">5.00%</div>
+            <div className="text-2xl font-black text-amber-400 font-mono mt-1 group-hover:scale-105 group-hover:text-amber-300 transition-all origin-left">5.00%</div>
           </div>
           <div className="text-[10px] text-slate-500 mt-2 pt-2 border-t border-slate-800/60 leading-tight">
             Prudent Gordon Growth rate capped below long-term nominal Indian GDP
@@ -369,12 +369,12 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <Link
           href="/screener"
-          className="p-4 rounded-xl bg-[#101728] border border-slate-800 hover:border-sky-500/40 transition-all group"
+          className="p-4 rounded-xl bg-[#101728] border border-slate-800 hover-glow-sky hover-lift active-press transition-all group"
         >
-          <div className="w-8 h-8 rounded-lg bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 mb-3 group-hover:scale-105 transition-transform">
-            <Search className="w-4 h-4" />
+          <div className="w-8 h-8 rounded-lg bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 mb-3 group-hover:scale-110 group-hover:-translate-y-0.5 group-hover:bg-sky-500/20 transition-all duration-200">
+            <Search className="w-4 h-4 hover-icon-pop" />
           </div>
-          <div className="font-bold text-xs text-white">501 NIFTY Screener</div>
+          <div className="font-bold text-xs text-white group-hover:text-sky-300 transition-colors">501 NIFTY Screener</div>
           <p className="text-[11px] text-slate-400 mt-1 leading-snug">
             Filter 501 companies across 20 official sectors with live Bhavcopy price quotes.
           </p>
@@ -382,12 +382,12 @@ export default function DashboardPage() {
 
         <Link
           href="/valuation/TCS"
-          className="p-4 rounded-xl bg-[#101728] border border-slate-800 hover:border-emerald-500/40 transition-all group"
+          className="p-4 rounded-xl bg-[#101728] border border-slate-800 hover-glow-emerald hover-lift active-press transition-all group"
         >
-          <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-3 group-hover:scale-105 transition-transform">
-            <Calculator className="w-4 h-4" />
+          <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-3 group-hover:scale-110 group-hover:-translate-y-0.5 group-hover:bg-emerald-500/20 transition-all duration-200">
+            <Calculator className="w-4 h-4 hover-icon-pop" />
           </div>
-          <div className="font-bold text-xs text-white">DCF Modeling Terminal</div>
+          <div className="font-bold text-xs text-white group-hover:text-emerald-300 transition-colors">DCF Modeling Terminal</div>
           <p className="text-[11px] text-slate-400 mt-1 leading-snug">
             5-Year explicit FCFF schedules, Gordon Growth terminal value, and sensitivity matrix.
           </p>
@@ -395,12 +395,12 @@ export default function DashboardPage() {
 
         <Link
           href="/reports"
-          className="p-4 rounded-xl bg-[#101728] border border-slate-800 hover:border-purple-500/40 transition-all group"
+          className="p-4 rounded-xl bg-[#101728] border border-slate-800 hover-glow-purple hover-lift active-press transition-all group"
         >
-          <div className="w-8 h-8 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-3 group-hover:scale-105 transition-transform">
-            <FileText className="w-4 h-4" />
+          <div className="w-8 h-8 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-3 group-hover:scale-110 group-hover:-translate-y-0.5 group-hover:bg-purple-500/20 transition-all duration-200">
+            <FileText className="w-4 h-4 hover-icon-pop" />
           </div>
-          <div className="font-bold text-xs text-white">Research Memos & Reports</div>
+          <div className="font-bold text-xs text-white group-hover:text-purple-300 transition-colors">Research Memos & Reports</div>
           <p className="text-[11px] text-slate-400 mt-1 leading-snug">
             Institutional research reports with downloadable PDFs and full mathematical provenance.
           </p>
@@ -408,12 +408,12 @@ export default function DashboardPage() {
 
         <Link
           href="/sources"
-          className="p-4 rounded-xl bg-[#101728] border border-slate-800 hover:border-amber-500/40 transition-all group"
+          className="p-4 rounded-xl bg-[#101728] border border-slate-800 hover-glow-sky hover-lift active-press transition-all group"
         >
-          <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mb-3 group-hover:scale-105 transition-transform">
-            <Database className="w-4 h-4" />
+          <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mb-3 group-hover:scale-110 group-hover:-translate-y-0.5 group-hover:bg-amber-500/20 transition-all duration-200">
+            <Database className="w-4 h-4 hover-icon-pop" />
           </div>
-          <div className="font-bold text-xs text-white">Data Integrity & MCP Gate</div>
+          <div className="font-bold text-xs text-white group-hover:text-amber-300 transition-colors">Data Integrity & MCP Gate</div>
           <p className="text-[11px] text-slate-400 mt-1 leading-snug">
             Audit trail of normalized Ind AS balance sheets and official NSE compliance status.
           </p>
@@ -427,9 +427,9 @@ export default function DashboardPage() {
             <h2 className="text-lg font-bold text-slate-100">Featured Indian Equities</h2>
             <p className="text-xs text-slate-400">Real-time CMP quotes and audited 5-year Ind AS valuation models.</p>
           </div>
-          <Link href="/screener" className="text-xs text-sky-400 hover:text-sky-300 font-semibold flex items-center gap-1">
+          <Link href="/screener" className="text-xs text-sky-400 hover:text-sky-300 font-semibold flex items-center gap-1 group">
             <span>View All 501 Equities</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
 
@@ -438,7 +438,7 @@ export default function DashboardPage() {
             <Link
               key={eq.symbol}
               href={`/valuation/${eq.symbol}`}
-              className={`bg-[#111726] border ${eq.color} rounded-xl p-4 sm:p-5 hover:bg-slate-800/40 transition-all shadow-md group flex flex-col justify-between`}
+              className={`bg-[#111726] border ${eq.color} rounded-xl p-4 sm:p-5 hover:bg-slate-800/40 hover-lift active-press transition-all shadow-md group flex flex-col justify-between`}
             >
               <div>
                 <div className="flex items-center justify-between">

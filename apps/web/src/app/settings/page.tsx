@@ -54,14 +54,14 @@ export default function SettingsPage() {
                   key={item.id}
                   type="button"
                   onClick={() => setTheme(item.id as any)}
-                  className={`p-4 rounded-xl border text-left transition-all flex flex-col justify-between ${
+                  className={`p-4 rounded-xl border text-left transition-all flex flex-col justify-between hover-lift active-press group ${
                     isSelected
                       ? "bg-sky-500/15 border-sky-500 text-sky-400 shadow-md ring-1 ring-sky-500/30"
                       : "bg-[#0c1220] border-slate-800 text-slate-300 hover:border-slate-700 hover:bg-slate-800/40"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-3">
-                    <item.icon className={`w-5 h-5 ${isSelected ? "text-sky-400" : "text-slate-400"}`} />
+                    <item.icon className={`w-5 h-5 group-hover:scale-115 transition-transform duration-200 ${isSelected ? "text-sky-400" : "text-slate-400 group-hover:text-sky-300"}`} />
                     {isSelected && (
                       <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 font-mono">
                         Active
@@ -69,7 +69,7 @@ export default function SettingsPage() {
                     )}
                   </div>
                   <div>
-                    <div className="font-bold text-xs">{item.label}</div>
+                    <div className="font-bold text-xs group-hover:text-white transition-colors">{item.label}</div>
                     <div className="text-[11px] text-slate-400 mt-0.5">{item.desc}</div>
                   </div>
                 </button>
@@ -173,7 +173,7 @@ export default function SettingsPage() {
         <div className="flex justify-end">
           <button
             type="submit"
-            className="bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-6 py-2 rounded-lg text-xs transition-colors shadow-lg shadow-sky-500/20"
+            className="bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-6 py-2 rounded-lg text-xs transition-colors shadow-lg shadow-sky-500/20 hover-lift active-press shimmer-sweep"
           >
             Save Settings
           </button>

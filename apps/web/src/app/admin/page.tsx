@@ -474,13 +474,13 @@ export default function AdminPage() {
         </div>
       </div>
 
-      {/* 4 Ultra-Compact Metric Cards */}
+      {/* 4 Ultra-Compact Metric Cards with ItsHover Style */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
         {/* Active Now */}
-        <div className="rounded-xl bg-[#0b0f19] border border-slate-800/90 p-3 flex items-center justify-between">
+        <div className="rounded-xl bg-[#0b0f19] border border-slate-800/90 hover-glow-emerald hover-lift p-3 flex items-center justify-between group transition-all">
           <div>
             <div className="text-[10px] uppercase font-semibold text-slate-400">Active Now</div>
-            <div className="text-xl font-black text-emerald-400 font-mono mt-0.5">
+            <div className="text-xl font-black text-emerald-400 font-mono mt-0.5 group-hover:scale-105 transition-transform origin-left">
               {stats?.activeNow ?? visitors.filter((v) => v.isOnline).length}
             </div>
             <p className="text-[10px] text-slate-500">Live in last 90 seconds</p>
@@ -489,41 +489,41 @@ export default function AdminPage() {
         </div>
 
         {/* Unique IP Addresses */}
-        <div className="rounded-xl bg-[#0b0f19] border border-slate-800/90 p-3 flex items-center justify-between">
+        <div className="rounded-xl bg-[#0b0f19] border border-slate-800/90 hover-glow-sky hover-lift p-3 flex items-center justify-between group transition-all">
           <div>
             <div className="text-[10px] uppercase font-semibold text-slate-400">Unique Visitors</div>
-            <div className="text-xl font-black text-white font-mono mt-0.5">
+            <div className="text-xl font-black text-white font-mono mt-0.5 group-hover:text-sky-300 group-hover:scale-105 transition-all origin-left">
               {stats?.uniqueIpsCount ?? new Set(visitors.map((v) => v.ip)).size}
             </div>
             <p className="text-[10px] text-slate-500">Distinct IP addresses</p>
           </div>
-          <Users className="w-4 h-4 text-sky-400" />
+          <Users className="w-4 h-4 text-sky-400 hover-icon-pop" />
         </div>
 
         {/* Avg Time & Total Time Spent */}
-        <div className="rounded-xl bg-[#0b0f19] border border-slate-800/90 p-3 flex items-center justify-between">
+        <div className="rounded-xl bg-[#0b0f19] border border-slate-800/90 hover-glow-sky hover-lift p-3 flex items-center justify-between group transition-all">
           <div>
             <div className="text-[10px] uppercase font-semibold text-slate-400">Time Spent</div>
-            <div className="text-xl font-black text-amber-400 font-mono mt-0.5">
+            <div className="text-xl font-black text-amber-400 font-mono mt-0.5 group-hover:scale-105 transition-transform origin-left">
               {stats?.avgDurationFormatted ?? formatDuration(stats?.avgDurationSeconds || 0)}
             </div>
             <p className="text-[10px] text-slate-500 font-mono">
               Total: {formatDuration(visitors.reduce((acc, v) => acc + (v.totalDurationSeconds || v.durationSeconds || 0), 0))}
             </p>
           </div>
-          <Timer className="w-4 h-4 text-amber-400" />
+          <Timer className="w-4 h-4 text-amber-400 hover-icon-pop" />
         </div>
 
         {/* Total Pageviews */}
-        <div className="rounded-xl bg-[#0b0f19] border border-slate-800/90 p-3 flex items-center justify-between">
+        <div className="rounded-xl bg-[#0b0f19] border border-slate-800/90 hover-glow-purple hover-lift p-3 flex items-center justify-between group transition-all">
           <div>
             <div className="text-[10px] uppercase font-semibold text-slate-400">Total Pageviews</div>
-            <div className="text-xl font-black text-purple-400 font-mono mt-0.5">
+            <div className="text-xl font-black text-purple-400 font-mono mt-0.5 group-hover:scale-105 transition-transform origin-left">
               {stats?.totalVisits ?? visitors.reduce((acc, v) => acc + (v.pageViewsCount || 1), 0)}
             </div>
             <p className="text-[10px] text-slate-500">Across {visitors.length} sessions</p>
           </div>
-          <Eye className="w-4 h-4 text-purple-400" />
+          <Eye className="w-4 h-4 text-purple-400 hover-icon-pop" />
         </div>
       </div>
 
