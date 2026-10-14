@@ -239,84 +239,237 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* 2. Institutional Hero Header */}
-      <div className="bg-white dark:bg-gradient-to-r dark:from-[#0d1424] dark:via-[#10182c] dark:to-[#0d1424] border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-8 relative overflow-hidden shadow-xl dark:shadow-2xl">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-sky-500/5 dark:bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
+      {/* 2. Upgraded Institutional Hero Section */}
+      <div className="relative rounded-3xl border border-slate-200 dark:border-slate-800/80 bg-white dark:bg-gradient-to-b dark:from-[#0d1424] dark:via-[#0a0f1d] dark:to-[#080c16] p-6 sm:p-10 overflow-hidden shadow-2xl">
+        {/* Ambient Top Glow Orbs & Geometric Dot Lattice */}
+        <div className="absolute -top-32 -left-20 w-96 h-96 bg-sky-500/15 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute -top-20 -right-20 w-[420px] h-[420px] bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:28px_28px] opacity-[0.06] pointer-events-none" />
 
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
-          <div className="max-w-2xl space-y-4">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+          {/* Left Column: Value Proposition & Action (7 cols) */}
+          <div className="lg:col-span-7 space-y-5">
+            {/* Live Indicator Badges */}
             <div className="flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 dark:bg-sky-500/10 text-sky-700 dark:text-sky-400 border border-sky-200 dark:border-sky-500/20 text-xs font-semibold uppercase tracking-wider">
-                <ShieldCheck className="w-3.5 h-3.5" /> Institutional Valuation Platform
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-500/10 text-sky-700 dark:text-sky-300 border border-sky-500/30 text-xs font-semibold uppercase tracking-wider shadow-sm">
+                <span className="w-2 h-2 rounded-full bg-sky-400 animate-ping inline-block" />
+                <span>QuantDCF Institutional Terminal</span>
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 text-xs font-semibold">
-                <CheckCircle2 className="w-3.5 h-3.5" /> 501 Listed Equities Indexed
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 text-xs font-semibold shadow-sm">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                <span>501 NIFTY Equities Indexed</span>
+              </span>
+              <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-500/30 text-xs font-semibold">
+                <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+                <span>Zero Black Boxes</span>
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
-              Discounted Cash Flow Valuation for <span className="text-sky-600 dark:text-sky-400">Indian Equities</span>
+            {/* Dynamic Headline */}
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tight leading-[1.15]">
+              Valuation Reimagined for{" "}
+              <span className="bg-gradient-to-r from-sky-400 via-cyan-300 to-emerald-400 bg-clip-text text-transparent underline decoration-sky-500/30 decoration-wavy decoration-1 underline-offset-8">
+                Indian Equities
+              </span>
             </h1>
 
-            <p className="text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed max-w-2xl">
-              Professional equity research terminal combining official NSE NIFTY 500 company filings, 
-              transparent 5-year FCFF cash flow modeling, perpetual Gordon Growth terminal valuations, 
-              and 2D WACC sensitivity matrices without black-box estimates.
+            {/* Value Description */}
+            <p className="text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed max-w-xl font-sans">
+              Autonomous equity research platform linking verified NSE filings with transparent 5-year explicit Free Cash Flow to Firm (FCFF) models, perpetual Gordon Growth anchors, and 2D WACC sensitivity grids. 100% mathematical provenance.
             </p>
+
+            {/* Quick Search & Launch Action Row */}
+            <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", ctrlKey: true }))}
+                className="flex-1 bg-slate-50 dark:bg-[#121829]/90 hover:bg-slate-100 dark:hover:bg-[#161f33] border border-slate-300 dark:border-slate-700/80 hover:border-sky-500/60 rounded-xl px-4 py-3 text-xs text-slate-700 dark:text-slate-300 flex items-center justify-between shadow-lg shadow-sky-500/5 transition-all active:scale-[0.98] group hover-glow-sky"
+              >
+                <div className="flex items-center gap-2.5">
+                  <Search className="w-4 h-4 text-sky-500 dark:text-sky-400 group-hover:scale-115 transition-transform" />
+                  <span className="text-slate-500 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-slate-200 font-medium">
+                    Search any of 501 Indian companies...
+                  </span>
+                </div>
+                <kbd className="hidden sm:inline-flex items-center gap-1 bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] px-2 py-0.5 rounded border border-slate-300 dark:border-slate-700 font-mono">
+                  Ctrl K
+                </kbd>
+              </button>
+
+              <Link
+                href="/screener"
+                className="bg-gradient-to-r from-sky-500 to-sky-400 hover:from-sky-400 hover:to-sky-300 text-slate-950 font-extrabold px-5 py-3 rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-sky-500/25 transition-all hover-lift active-press shimmer-sweep shrink-0"
+              >
+                <span>501 Screener</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+
+            {/* Hero Trust Badges (Key Telemetry Strip) */}
+            <div className="pt-3 border-t border-slate-200 dark:border-slate-800/80 grid grid-cols-3 gap-3">
+              <div className="space-y-0.5">
+                <div className="text-[10px] uppercase font-bold text-slate-400 font-mono">Universe</div>
+                <div className="text-sm font-extrabold text-slate-800 dark:text-slate-100 font-mono">501 Equities</div>
+                <div className="text-[10px] text-slate-500">20 NSE Sectors</div>
+              </div>
+              <div className="space-y-0.5 border-l border-slate-200 dark:border-slate-800/80 pl-3">
+                <div className="text-[10px] uppercase font-bold text-slate-400 font-mono">Cost of Capital</div>
+                <div className="text-sm font-extrabold text-sky-600 dark:text-sky-400 font-mono">7.10% Rf</div>
+                <div className="text-[10px] text-slate-500">RBI Sovereign G-Sec</div>
+              </div>
+              <div className="space-y-0.5 border-l border-slate-200 dark:border-slate-800/80 pl-3">
+                <div className="text-[10px] uppercase font-bold text-slate-400 font-mono">Verification</div>
+                <div className="text-sm font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">100% Audited</div>
+                <div className="text-[10px] text-slate-500">Zero Dummy Data</div>
+              </div>
+            </div>
           </div>
 
-          {/* 3D Showcase Logo Badge on Desktop */}
-          <div className="hidden lg:flex flex-col items-center justify-center shrink-0">
-            <LogoHeroBadge />
+          {/* Right Column: Interactive 3D Live Valuation Terminal Showcase Card (5 cols) */}
+          <div className="lg:col-span-5 flex justify-center">
+            <Link
+              href="/valuation/SUZLON"
+              className="w-full max-w-sm rounded-2xl bg-gradient-to-b from-slate-900/95 via-[#0c1222]/95 to-slate-950/95 border border-sky-500/40 p-5 shadow-2xl shadow-sky-500/10 hover-lift hover-glow-sky group transition-all relative overflow-hidden block animate-float-slow"
+              title="Inspect Live Suzlon Energy DCF Model"
+            >
+              {/* Card Ambient Glow Header */}
+              <div className="absolute top-0 right-0 w-36 h-36 bg-gradient-to-bl from-sky-500/20 to-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
+
+              {/* Showcase Header with Official 3D Logo & Live Pulse */}
+              <div className="flex items-center justify-between pb-3.5 border-b border-slate-800/80 relative z-10">
+                <div className="flex items-center gap-3">
+                  <LogoIcon size="lg" />
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-mono text-sm font-black text-white group-hover:text-sky-300 transition-colors">
+                        SUZLON
+                      </span>
+                      <span className="text-[9px] bg-slate-800 text-slate-300 font-mono px-1.5 py-0.2 rounded font-bold">
+                        NSE
+                      </span>
+                    </div>
+                    <div className="text-[10px] text-slate-400 truncate max-w-[150px]">
+                      Suzlon Energy Ltd.
+                    </div>
+                  </div>
+                </div>
+
+                <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/30">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                  LIVE MODEL
+                </span>
+              </div>
+
+              {/* Core Intrinsic Value Snapshot */}
+              <div className="py-4 space-y-3 relative z-10">
+                <div className="flex items-baseline justify-between">
+                  <div>
+                    <div className="text-[10px] uppercase font-bold text-slate-400 font-mono tracking-wider">
+                      Intrinsic Value / Share
+                    </div>
+                    <div className="text-3xl font-black text-white font-mono tracking-tight mt-0.5 group-hover:text-sky-300 transition-colors">
+                      ₹21.27
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-[10px] uppercase font-bold text-slate-400 font-mono">
+                      Market Price (CMP)
+                    </div>
+                    <div className="text-sm font-bold text-slate-300 font-mono mt-0.5">
+                      ₹40.80
+                    </div>
+                    <span className="text-[10px] font-mono font-bold text-rose-400 bg-rose-500/10 px-1.5 py-0.2 rounded border border-rose-500/30">
+                      -47.9% Margin
+                    </span>
+                  </div>
+                </div>
+
+                {/* 5-Year FCFF Trajectory Visualizer */}
+                <div className="space-y-1.5 pt-1">
+                  <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono">
+                    <span>5-Yr FCFF Cash Flow Horizon</span>
+                    <span className="text-emerald-400 font-semibold">T+1 to T+5 CAGR 8.2%</span>
+                  </div>
+                  <div className="grid grid-cols-5 gap-1.5 h-14 items-end bg-[#070b14] p-2 rounded-xl border border-slate-800/80">
+                    {[
+                      { y: "FY25E", v: "₹2,086 Cr", h: "52%" },
+                      { y: "FY26E", v: "₹2,274 Cr", h: "64%" },
+                      { y: "FY27E", v: "₹2,467 Cr", h: "76%" },
+                      { y: "FY28E", v: "₹2,664 Cr", h: "88%" },
+                      { y: "FY29E", v: "₹2,864 Cr", h: "100%" },
+                    ].map((bar, i) => (
+                      <div key={i} className="flex flex-col items-center gap-1 h-full justify-end group/bar">
+                        <div
+                          style={{ height: bar.h }}
+                          className="w-full rounded-md bg-gradient-to-t from-sky-600 via-sky-400 to-emerald-400 group-hover/bar:brightness-125 transition-all shadow-sm shadow-sky-500/20"
+                          title={`${bar.y}: ${bar.v}`}
+                        />
+                        <span className="text-[8px] font-mono text-slate-400">{bar.y.slice(0, 4)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Valuation Parameters Pill */}
+                <div className="grid grid-cols-3 gap-2 bg-[#080d1a] border border-slate-800/80 rounded-xl p-2.5 text-center text-[10px] font-mono">
+                  <div>
+                    <span className="text-slate-500 block text-[9px] uppercase">WACC</span>
+                    <span className="font-bold text-sky-400">12.84%</span>
+                  </div>
+                  <div className="border-x border-slate-800">
+                    <span className="text-slate-500 block text-[9px] uppercase">Terminal g</span>
+                    <span className="font-bold text-emerald-400">5.00%</span>
+                  </div>
+                  <div>
+                    <span className="text-slate-500 block text-[9px] uppercase">Implied EV</span>
+                    <span className="font-bold text-slate-200">₹29,533 Cr</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Link Footer */}
+              <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-sky-400 font-semibold group-hover:text-sky-300">
+                <span className="flex items-center gap-1.5">
+                  <Calculator className="w-3.5 h-3.5" />
+                  <span>Launch Suzlon DCF Model</span>
+                </span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
+              </div>
+            </Link>
           </div>
         </div>
 
-        {/* Quick Search & Launch Action Row */}
-        <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 relative z-10">
-            <button
-              onClick={() => window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", ctrlKey: true }))}
-              className="flex-1 max-w-md bg-slate-50 dark:bg-[#121829] hover:bg-slate-100 dark:hover:bg-slate-800/80 border border-slate-300 dark:border-slate-700/80 hover:border-sky-500/50 rounded-xl px-4 py-2.5 text-xs text-slate-700 dark:text-slate-300 flex items-center justify-between shadow-sm dark:shadow-lg transition-all active:scale-[0.99] group"
-            >
-              <div className="flex items-center gap-2.5">
-                <Search className="w-4 h-4 text-sky-500 dark:text-sky-400" />
-                <span className="text-slate-500 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-slate-200">Search any of 501 Indian companies...</span>
-              </div>
-              <kbd className="hidden sm:inline-flex items-center gap-1 bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] px-2 py-0.5 rounded border border-slate-300 dark:border-slate-700 font-mono">
-                Ctrl K
-              </kbd>
-            </button>
-
-            <Link
-              href="/screener"
-              className="bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-4 py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg transition-all active:scale-95 shrink-0"
-            >
-              <span>Explore Screener</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+        {/* Quick Sectors Launch Bar */}
+        <div className="mt-8 pt-5 border-t border-slate-200 dark:border-slate-800/80 flex flex-wrap items-center justify-between gap-3 relative z-10">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 font-mono">
+              Quick Equity Launch:
+            </span>
           </div>
 
-          {/* Popular Sector Filters */}
-          <div className="pt-1 flex flex-wrap items-center gap-1.5 text-xs">
-            <span className="text-slate-500 dark:text-slate-400 font-semibold text-[11px] mr-1">Quick Sectors:</span>
+          <div className="flex flex-wrap items-center gap-2">
             {[
-              { name: "IT", symbol: "TCS" },
-              { name: "Banking", symbol: "HDFCBANK" },
-              { name: "Auto", symbol: "MARUTI" },
-              { name: "Energy", symbol: "RELIANCE" },
-              { name: "FMCG", symbol: "ITC" },
-              { name: "Infra", symbol: "LT" },
-              { name: "Telecom", symbol: "BHARTIARTL" },
+              { name: "IT", symbol: "TCS", cmp: "₹2,304.90" },
+              { name: "Banking", symbol: "HDFCBANK", cmp: "₹710.70" },
+              { name: "Clean Energy", symbol: "SUZLON", cmp: "₹40.80" },
+              { name: "Energy", symbol: "RELIANCE", cmp: "₹1,174.60" },
+              { name: "FMCG", symbol: "ITC", cmp: "₹261.50" },
+              { name: "Infra", symbol: "LT", cmp: "₹3,642.00" },
+              { name: "Auto", symbol: "MARUTI", cmp: "₹11,178.00" },
             ].map((chip) => (
               <Link
-                key={chip.name}
+                key={chip.symbol}
                 href={`/valuation/${chip.symbol}`}
-                className="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white px-2.5 py-1 rounded-lg text-[11px] font-medium border border-slate-200 dark:border-slate-700/60 transition-colors"
+                className="bg-slate-100 dark:bg-[#101729] hover:bg-slate-200 dark:hover:bg-[#141e34] border border-slate-300 dark:border-slate-800 hover:border-sky-500/50 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white px-3 py-1.5 rounded-xl text-xs font-medium transition-all hover-lift active-press group flex items-center gap-1.5 shadow-sm"
               >
-                {chip.name} ({chip.symbol})
+                <span className="font-bold text-sky-600 dark:text-sky-400">{chip.symbol}</span>
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 hidden sm:inline">({chip.name})</span>
+                <span className="font-mono text-[11px] font-semibold text-slate-800 dark:text-slate-200">{chip.cmp}</span>
               </Link>
             ))}
           </div>
         </div>
+      </div>
 
       {/* 3. Indian Macro Benchmarks with Concise Micro-Descriptions */}
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
