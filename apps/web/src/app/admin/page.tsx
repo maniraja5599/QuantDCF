@@ -118,7 +118,20 @@ export default function AdminPage() {
     setStats(null);
   };
 
-  // Fetch visitors
+  // Load persistent local log cache immediately on mount
+  useEffect(() => {
+    try {
+      const cached = localStorage.getItem("quantdcf_admin_stored_visitors");
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setVisitors(parsed);
+        }
+      }
+    } catch (_) {}
+  }, []);
+
+  // Fetch visitors and merge with persistent history
   const fetchVisitors = useCallback(async () => {
     if (!isAuthenticated) return;
     setLoading(true);
@@ -132,7 +145,28 @@ export default function AdminPage() {
 
       if (res.ok) {
         const data = await res.json();
-        setVisitors(data.visitors || []);
+        const incoming: VisitorLog[] = data.visitors || [];
+        setVisitors((prev) => {
+          const map = new Map<string, VisitorLog>();
+          prev.forEach((v) => {
+            const key = v.visitorUid || v.id || v.sessionId || v.ip;
+            map.set(key, v);
+          });
+          incoming.forEach((v: VisitorLog) => {
+            const key = v.visitorUid || v.id || v.sessionId || v.ip;
+            const existing = map.get(key);
+            map.set(key, { ...existing, ...v });
+          });
+          const merged = Array.from(map.values()).sort(
+            (a, b) =>
+              new Date(b.lastSeen || b.timestamp).getTime() -
+              new Date(a.lastSeen || a.timestamp).getTime()
+          );
+          try {
+            localStorage.setItem("quantdcf_admin_stored_visitors", JSON.stringify(merged.slice(0, 500)));
+          } catch (_) {}
+          return merged;
+        });
         setStats(data.stats || null);
       } else if (res.status === 401) {
         handleLogout();
@@ -173,6 +207,9 @@ export default function AdminPage() {
       });
       if (res.ok) {
         setVisitors([]);
+        try {
+          localStorage.removeItem("quantdcf_admin_stored_visitors");
+        } catch (_) {}
         setStats({
           totalSessions: 0,
           totalVisits: 0,
@@ -197,9 +234,13 @@ export default function AdminPage() {
     if (!visitors.length) return;
     const headers = [
       "Session_ID",
+      "Visitor_UID",
       "IP_Address",
-      "Time_Spent_Seconds",
-      "Time_Spent_Formatted",
+      "Visits_Count",
+      "Session_Time_Seconds",
+      "Session_Time_Formatted",
+      "Total_Time_Seconds",
+      "Total_Time_Formatted",
       "Status",
       "First_Seen",
       "Last_Seen",
@@ -212,9 +253,13 @@ export default function AdminPage() {
     ];
     const rows = visitors.map((v) => [
       `"${v.sessionId || v.id}"`,
+      `"${v.visitorUid || ""}"`,
       `"${v.ip}"`,
+      `"${v.visitCount || 1}"`,
       `"${v.durationSeconds || 0}"`,
       `"${formatDuration(v.durationSeconds || 0)}"`,
+      `"${v.totalDurationSeconds || v.durationSeconds || 0}"`,
+      `"${formatDuration(v.totalDurationSeconds || v.durationSeconds || 0)}"`,
       `"${v.isOnline ? "Online" : "Offline"}"`,
       `"${v.firstSeen || v.timestamp}"`,
       `"${v.lastSeen || v.timestamp}"`,
@@ -455,14 +500,16 @@ export default function AdminPage() {
           <Users className="w-4 h-4 text-sky-400" />
         </div>
 
-        {/* Avg Time Spent */}
+        {/* Avg Time & Total Time Spent */}
         <div className="rounded-xl bg-[#0b0f19] border border-slate-800/90 p-3 flex items-center justify-between">
           <div>
-            <div className="text-[10px] uppercase font-semibold text-slate-400">Avg Time Spent</div>
+            <div className="text-[10px] uppercase font-semibold text-slate-400">Time Spent</div>
             <div className="text-xl font-black text-amber-400 font-mono mt-0.5">
               {stats?.avgDurationFormatted ?? formatDuration(stats?.avgDurationSeconds || 0)}
             </div>
-            <p className="text-[10px] text-slate-500">Average session duration</p>
+            <p className="text-[10px] text-slate-500 font-mono">
+              Total: {formatDuration(visitors.reduce((acc, v) => acc + (v.totalDurationSeconds || v.durationSeconds || 0), 0))}
+            </p>
           </div>
           <Timer className="w-4 h-4 text-amber-400" />
         </div>
@@ -571,29 +618,40 @@ export default function AdminPage() {
                   return (
                     <tr
                       key={v.id || v.sessionId}
-                      className="hover:bg-slate-800/30 transition-colors group text-slate-300"
+                      className="hover:bg-slate-800/40 transition-colors group text-slate-300 text-[11px]"
                     >
-                      {/* 1. Status Indicator */}
-                      <td className="py-2 px-3 whitespace-nowrap">
-                        {v.isOnline ? (
-                          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                            Online
+                      {/* 1. Status & Visits */}
+                      <td className="py-1.5 px-2.5 whitespace-nowrap">
+                        <div className="flex items-center gap-1.5">
+                          {v.isOnline ? (
+                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                              Live
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-800 text-slate-400 border border-slate-700/60">
+                              <span className="w-1.5 h-1.5 rounded-full bg-slate-500" />
+                              Offline
+                            </span>
+                          )}
+                          <span
+                            className={`px-1.5 py-0.2 rounded text-[9px] font-semibold ${
+                              v.visitCount && v.visitCount > 1
+                                ? "bg-amber-500/15 text-amber-300 border border-amber-500/30 font-sans"
+                                : "bg-slate-800/80 text-slate-400 border border-slate-700/50 font-sans"
+                            }`}
+                          >
+                            {v.visitCount && v.visitCount > 1 ? `🔥 ${v.visitCount} visits` : "1st visit"}
                           </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-800 text-slate-400 border border-slate-700/60">
-                            <span className="w-1.5 h-1.5 rounded-full bg-slate-500" />
-                            Offline
-                          </span>
-                        )}
+                        </div>
                       </td>
 
                       {/* 2. Time Spent (Duration) */}
-                      <td className="py-2 px-3 whitespace-nowrap">
+                      <td className="py-1.5 px-2.5 whitespace-nowrap">
                         <div className="flex items-center gap-1.5 font-bold">
                           <Timer className={`w-3.5 h-3.5 ${isLongSession ? "text-amber-400" : "text-sky-400"}`} />
                           <span
-                            className={`px-1.5 py-0.5 rounded text-[11px] ${
+                            className={`px-1.5 py-0.5 rounded text-[10px] ${
                               isLongSession
                                 ? "bg-amber-500/15 text-amber-300 border border-amber-500/30"
                                 : "bg-sky-500/10 text-sky-300 border border-sky-500/20"
@@ -601,20 +659,24 @@ export default function AdminPage() {
                           >
                             {durationText}
                           </span>
+                          {v.totalDurationSeconds && v.totalDurationSeconds > (v.durationSeconds || 0) && (
+                            <span className="text-[9px] px-1 py-0.2 rounded bg-purple-500/10 text-purple-300 border border-purple-500/20 font-mono">
+                              Total: {formatDuration(v.totalDurationSeconds)}
+                            </span>
+                          )}
                         </div>
                         <span className="text-[9px] text-slate-500 block mt-0.5 font-sans">
                           Started: {new Date(v.firstSeen || v.timestamp).toLocaleTimeString("en-IN", {
                             hour: "2-digit",
                             minute: "2-digit",
-                            second: "2-digit",
                           })}
                         </span>
                       </td>
 
                       {/* 3. IP Address */}
-                      <td className="py-2 px-3 whitespace-nowrap">
+                      <td className="py-1.5 px-2.5 whitespace-nowrap">
                         <div className="flex items-center gap-1.5">
-                          <span className="font-bold text-sky-400 bg-sky-950/60 px-1.5 py-0.5 rounded border border-sky-800/50">
+                          <span className="font-bold text-sky-400 bg-sky-950/60 px-1.5 py-0.5 rounded border border-sky-800/50 font-mono text-[11px]">
                             {v.ip}
                           </span>
                           <button
@@ -632,10 +694,10 @@ export default function AdminPage() {
                       </td>
 
                       {/* 4. Location */}
-                      <td className="py-2 px-3 whitespace-nowrap font-sans">
+                      <td className="py-1.5 px-2.5 whitespace-nowrap font-sans">
                         <div className="flex items-center gap-1">
                           <MapPin className="w-3 h-3 text-emerald-400 shrink-0" />
-                          <span className="text-slate-200 font-medium">
+                          <span className="text-slate-200 font-medium text-[11px]">
                             {v.city ? `${v.city}, ` : ""}
                             {v.country === "IN" ? "India 🇮🇳" : v.country || "India 🇮🇳"}
                           </span>
@@ -648,22 +710,22 @@ export default function AdminPage() {
                       </td>
 
                       {/* 5. Pages Browsed */}
-                      <td className="py-2 px-3 font-sans">
+                      <td className="py-1.5 px-2.5 font-sans">
                         <div className="flex items-center gap-1 flex-wrap max-w-xs">
-                          <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-200 border border-slate-700">
+                          <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-200 border border-slate-700 font-mono truncate max-w-[150px]">
                             {v.page}
                           </span>
                           {v.pagesVisited && v.pagesVisited.length > 1 && (
                             <span className="text-[9px] text-slate-400 font-mono">
-                              +{v.pagesVisited.length - 1} more ({v.pageViewsCount} hits)
+                              +{v.pagesVisited.length - 1} ({v.pageViewsCount} hits)
                             </span>
                           )}
                         </div>
                       </td>
 
                       {/* 6. Device & Browser */}
-                      <td className="py-2 px-3 whitespace-nowrap font-sans">
-                        <div className="flex items-center gap-1 text-slate-300">
+                      <td className="py-1.5 px-2.5 whitespace-nowrap font-sans">
+                        <div className="flex items-center gap-1 text-slate-300 text-[11px]">
                           {v.deviceType === "Mobile" ? (
                             <Smartphone className="w-3 h-3 text-pink-400 shrink-0" />
                           ) : (
@@ -677,10 +739,10 @@ export default function AdminPage() {
                       </td>
 
                       {/* 7. Last Active */}
-                      <td className="py-2 px-3 whitespace-nowrap">
+                      <td className="py-1.5 px-2.5 whitespace-nowrap">
                         <div className="flex items-center gap-1 font-sans">
                           <Clock className="w-3 h-3 text-slate-500 shrink-0" />
-                          <span className="text-slate-300 font-medium">
+                          <span className="text-slate-300 font-medium text-[11px]">
                             {getRelativeTime(v.lastSeen || v.timestamp)}
                           </span>
                         </div>

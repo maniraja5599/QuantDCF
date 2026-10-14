@@ -6,51 +6,80 @@ import { usePathname } from "next/navigation";
 export function VisitorTracker() {
   const pathname = usePathname();
   const sessionRef = useRef<{
-    id: string;
-    startTime: number;
+    visitorUid: string;
+    sessionId: string;
+    sessionStartTime: number;
+    visitCount: number;
+    firstSeen: string;
   } | null>(null);
 
-  // Initialize or restore session
+  // Initialize or restore persistent visitor profile
   useEffect(() => {
     if (typeof window === "undefined") return;
 
+    // 1. Persistent Lifetime Visitor UID across browser sessions
+    let vUid = localStorage.getItem("quantdcf_vuid");
+    let visitCount = Number(localStorage.getItem("quantdcf_vcount") || "0");
+    let firstSeen = localStorage.getItem("quantdcf_vfirst");
+
+    if (!vUid) {
+      vUid = `u_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+      localStorage.setItem("quantdcf_vuid", vUid);
+    }
+    if (!firstSeen) {
+      firstSeen = new Date().toISOString();
+      localStorage.setItem("quantdcf_vfirst", firstSeen);
+    }
+
+    // 2. Active Session ID (sessionStorage)
     let sId = sessionStorage.getItem("quantdcf_session_id");
     let sStart = Number(sessionStorage.getItem("quantdcf_session_start"));
 
     if (!sId || !sStart || isNaN(sStart)) {
       sId = `s_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
       sStart = Date.now();
+      visitCount += 1;
+      localStorage.setItem("quantdcf_vcount", String(visitCount));
       sessionStorage.setItem("quantdcf_session_id", sId);
       sessionStorage.setItem("quantdcf_session_start", String(sStart));
     }
 
     sessionRef.current = {
-      id: sId,
-      startTime: sStart,
+      visitorUid: vUid,
+      sessionId: sId,
+      sessionStartTime: sStart,
+      visitCount: Math.max(1, visitCount),
+      firstSeen: firstSeen,
     };
   }, []);
 
   const sendBeacon = (page: string, isHeartbeat = false) => {
     if (typeof window === "undefined") return;
 
-    let sId = sessionRef.current?.id || sessionStorage.getItem("quantdcf_session_id");
-    let sStart = sessionRef.current?.startTime || Number(sessionStorage.getItem("quantdcf_session_start"));
+    const vUid = sessionRef.current?.visitorUid || localStorage.getItem("quantdcf_vuid") || `u_${Date.now()}`;
+    const sId = sessionRef.current?.sessionId || sessionStorage.getItem("quantdcf_session_id") || `s_${Date.now()}`;
+    const sStart = sessionRef.current?.sessionStartTime || Number(sessionStorage.getItem("quantdcf_session_start")) || Date.now();
+    const visitCount = sessionRef.current?.visitCount || Number(localStorage.getItem("quantdcf_vcount") || "1");
+    const firstSeen = sessionRef.current?.firstSeen || localStorage.getItem("quantdcf_vfirst") || new Date().toISOString();
 
-    if (!sId || !sStart) {
-      sId = `s_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
-      sStart = Date.now();
-      sessionStorage.setItem("quantdcf_session_id", sId);
-      sessionStorage.setItem("quantdcf_session_start", String(sStart));
-      sessionRef.current = { id: sId, startTime: sStart };
+    const sessionDuration = Math.max(0, Math.round((Date.now() - sStart) / 1000));
+    
+    // Accumulate lifetime time on site
+    const prevLifetime = Number(localStorage.getItem("quantdcf_total_time") || "0");
+    const totalDurationSeconds = prevLifetime + (isHeartbeat ? 15 : 0);
+    if (isHeartbeat) {
+      localStorage.setItem("quantdcf_total_time", String(totalDurationSeconds));
     }
-
-    const durationSeconds = Math.max(0, Math.round((Date.now() - sStart) / 1000));
 
     try {
       const payload = JSON.stringify({
+        visitorUid: vUid,
         sessionId: sId,
+        visitCount,
+        firstSeen,
         page,
-        durationSeconds,
+        durationSeconds: sessionDuration,
+        totalDurationSeconds: Math.max(sessionDuration, totalDurationSeconds),
         referrer: typeof document !== "undefined" ? document.referrer : "",
         userAgent: typeof navigator !== "undefined" ? navigator.userAgent : "",
         isHeartbeat,

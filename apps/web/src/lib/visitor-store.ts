@@ -1,6 +1,7 @@
 export interface VisitorLog {
   id: string;
   sessionId: string;
+  visitorUid?: string;
   ip: string;
   city?: string;
   country?: string;
@@ -12,10 +13,12 @@ export interface VisitorLog {
   page: string;
   pagesVisited: string[];
   pageViewsCount: number;
+  visitCount?: number;
   referrer?: string;
   firstSeen: string;
   lastSeen: string;
   durationSeconds: number;
+  totalDurationSeconds?: number;
   isOnline: boolean;
   timestamp: string;
 }
@@ -48,19 +51,15 @@ function loadPersistedLogs(): VisitorLog[] {
   return [];
 }
 
-let saveTimeout: any = null;
-function persistLogsDebounced(logs: VisitorLog[]) {
+function persistLogsImmediate(logs: VisitorLog[]) {
   if (typeof window !== "undefined") return;
-  if (saveTimeout) clearTimeout(saveTimeout);
-  saveTimeout = setTimeout(() => {
-    try {
-      const fs = eval("require")("fs");
-      const filePath = getLogFilePath();
-      if (filePath) {
-        fs.writeFileSync(filePath, JSON.stringify(logs.slice(0, 500)), "utf-8");
-      }
-    } catch (_) {}
-  }, 1000);
+  try {
+    const fs = eval("require")("fs");
+    const filePath = getLogFilePath();
+    if (filePath) {
+      fs.writeFileSync(filePath, JSON.stringify(logs.slice(0, 500)), "utf-8");
+    }
+  } catch (_) {}
 }
 
 // Global in-memory storage (persists across warm serverless requests)
@@ -87,7 +86,10 @@ export function formatDuration(seconds: number): string {
 }
 
 export function recordVisitorLog(data: {
+  visitorUid?: string;
   sessionId?: string;
+  visitCount?: number;
+  firstSeen?: string;
   ip: string;
   city?: string;
   country?: string;
@@ -99,17 +101,24 @@ export function recordVisitorLog(data: {
   page: string;
   referrer?: string;
   durationSeconds?: number;
+  totalDurationSeconds?: number;
 }): VisitorLog {
-  const visitors = globalStore.__QUANTDCF_VISITORS__ || [];
+  let visitors = globalStore.__QUANTDCF_VISITORS__ || [];
+  if (visitors.length === 0) {
+    visitors = loadPersistedLogs();
+  }
+
   const now = new Date().toISOString();
   const sId = data.sessionId || `s_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+  const vUid = data.visitorUid || `u_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
 
-  // Find existing session by sessionId or match IP if active in last 15 minutes
+  // Find existing session by visitorUid, sessionId, or same IP within active 30 min window
   const existingIdx = visitors.findIndex(
     (v) =>
+      (data.visitorUid && v.visitorUid === data.visitorUid) ||
       v.sessionId === sId ||
       (v.ip === data.ip &&
-        Date.now() - new Date(v.lastSeen || v.timestamp).getTime() < 15 * 60 * 1000)
+        Date.now() - new Date(v.lastSeen || v.timestamp).getTime() < 30 * 60 * 1000)
   );
 
   let result: VisitorLog;
@@ -121,19 +130,28 @@ export function recordVisitorLog(data: {
 
     const computedDuration = Math.max(
       existing.durationSeconds || 0,
-      data.durationSeconds || 0,
-      Math.round((Date.now() - new Date(existing.firstSeen || existing.timestamp).getTime()) / 1000)
+      data.durationSeconds || 0
+    );
+
+    const computedTotal = Math.max(
+      existing.totalDurationSeconds || 0,
+      data.totalDurationSeconds || 0,
+      computedDuration
     );
 
     result = {
       ...existing,
+      visitorUid: vUid || existing.visitorUid,
       sessionId: existing.sessionId || sId,
+      visitCount: Math.max(existing.visitCount || 1, data.visitCount || 1),
+      firstSeen: existing.firstSeen || data.firstSeen || now,
       page: data.page,
       pagesVisited: newPages,
       pageViewsCount: (existing.pageViewsCount || 1) + (existing.page !== data.page ? 1 : 0),
       lastSeen: now,
       timestamp: now,
       durationSeconds: computedDuration,
+      totalDurationSeconds: computedTotal,
       isOnline: true,
       city: data.city || existing.city,
       country: data.country || existing.country,
@@ -149,7 +167,9 @@ export function recordVisitorLog(data: {
   } else {
     result = {
       id: `v-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      visitorUid: vUid,
       sessionId: sId,
+      visitCount: data.visitCount || 1,
       ip: data.ip,
       city: data.city,
       country: data.country,
@@ -162,9 +182,10 @@ export function recordVisitorLog(data: {
       pagesVisited: [data.page],
       pageViewsCount: 1,
       referrer: data.referrer,
-      firstSeen: now,
+      firstSeen: data.firstSeen || now,
       lastSeen: now,
       durationSeconds: data.durationSeconds || 0,
+      totalDurationSeconds: data.totalDurationSeconds || data.durationSeconds || 0,
       isOnline: true,
       timestamp: now,
     };
@@ -176,12 +197,16 @@ export function recordVisitorLog(data: {
     visitors.length = 500;
   }
   globalStore.__QUANTDCF_VISITORS__ = visitors;
-  persistLogsDebounced(visitors);
+  persistLogsImmediate(visitors);
   return result;
 }
 
 export function getVisitorLogs(): VisitorLog[] {
-  const visitors = globalStore.__QUANTDCF_VISITORS__ || [];
+  let visitors = globalStore.__QUANTDCF_VISITORS__ || [];
+  if (visitors.length === 0) {
+    visitors = loadPersistedLogs();
+    globalStore.__QUANTDCF_VISITORS__ = visitors;
+  }
   const ninetySecondsAgo = Date.now() - 90 * 1000;
   // Dynamically recalculate isOnline based on lastSeen
   return visitors.map((v) => ({

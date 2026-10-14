@@ -39,10 +39,17 @@ export async function POST(req: NextRequest) {
     const page = body.page || "/";
     const referrer = body.referrer || req.headers.get("referer") || "Direct";
     const sessionId = body.sessionId;
+    const visitorUid = body.visitorUid;
+    const visitCount = typeof body.visitCount === "number" ? body.visitCount : undefined;
+    const firstSeen = body.firstSeen;
     const durationSeconds = typeof body.durationSeconds === "number" ? body.durationSeconds : undefined;
+    const totalDurationSeconds = typeof body.totalDurationSeconds === "number" ? body.totalDurationSeconds : undefined;
 
     const logged = recordVisitorLog({
+      visitorUid,
       sessionId,
+      visitCount,
+      firstSeen,
       ip,
       city: city !== "Unknown" ? decodeURIComponent(city) : undefined,
       country,
@@ -54,6 +61,7 @@ export async function POST(req: NextRequest) {
       page,
       referrer,
       durationSeconds,
+      totalDurationSeconds,
     });
 
     return NextResponse.json({ ok: true, id: logged.id, ip: logged.ip });
