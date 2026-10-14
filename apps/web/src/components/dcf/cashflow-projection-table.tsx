@@ -160,7 +160,11 @@ export function CashflowProjectionTable({ output }: CashflowProjectionTableProps
             <tr className="hover:bg-slate-800/20 text-slate-400 text-[11px]">
               <td className="py-2 px-4 font-sans">
                 <div>Discount Period (t)</div>
-                <div className="text-[10px] text-slate-500">Compounding period (mid-year adjusted)</div>
+                <div className="text-[10px] text-slate-500">
+                  {years[0]?.discount_period % 1 !== 0
+                    ? "Compounding period (mid-year adjusted, t - 0.5)"
+                    : "Compounding period (end-of-year convention)"}
+                </div>
               </td>
               {years.map((y) => (
                 <td key={y.year_index} className="py-2 px-4 text-right">
