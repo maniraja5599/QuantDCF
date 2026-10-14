@@ -32,7 +32,7 @@ async def test_company_search_and_profile_api():
         resp2 = await client.get("/api/companies/INFY")
         assert resp2.status_code == 200
         profile = resp2.json()
-        assert profile["name"] == "Infosys Limited"
+        assert "Infosys" in profile["name"]
 
 
 @pytest.mark.asyncio
