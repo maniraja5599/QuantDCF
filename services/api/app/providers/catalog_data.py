@@ -15,8 +15,8 @@ if "TATAMOTORS" not in CATALOG_BY_SYMBOL:
         "sector": "Automotive",
         "industry": "Automobile and Auto Components",
         "has_audited_filings": True,
-        "market_price": 965.0,
-        "market_cap_cr": 355000.0,
+        "market_price": 283.8,
+        "market_cap_cr": 104438.0,
         "shares_cr": 368.0,
     }
     ALL_COMPANIES_CATALOG.append(_tatamotors_entry)

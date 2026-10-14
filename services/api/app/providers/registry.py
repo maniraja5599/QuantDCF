@@ -129,11 +129,17 @@ class ProviderRegistry:
             if (datetime.now(timezone.utc) - ts).total_seconds() < 300:
                 return cached_quote
 
+        # Map demerged / reorganized tickers on NSE (e.g. TATAMOTORS -> TMPV)
+        ticker_map = {
+            "TATAMOTORS": "TMPV",
+        }
+        yahoo_sym = ticker_map.get(sym, sym)
+
         # 2. Try fetching live quote snapshot via Yahoo Finance chart API (.NS)
         try:
-            async with httpx.AsyncClient(timeout=2.0) as client:
+            async with httpx.AsyncClient(timeout=3.0) as client:
                 res = await client.get(
-                    f"https://query1.finance.yahoo.com/v8/finance/chart/{sym}.NS",
+                    f"https://query1.finance.yahoo.com/v8/finance/chart/{yahoo_sym}.NS",
                     headers={"User-Agent": "Mozilla/5.0"}
                 )
                 if res.status_code == 200:
@@ -142,9 +148,22 @@ class ProviderRegistry:
                     if results:
                         meta = results[0].get("meta", {})
                         price = float(meta.get("regularMarketPrice") or meta.get("chartPreviousClose") or 0.0)
-                        prev_close = float(meta.get("previousClose") or meta.get("chartPreviousClose") or price)
-                        change = round(price - prev_close, 2)
-                        p_change = round((change / prev_close * 100) if prev_close > 0 else 0.0, 2)
+
+                        if "fulldayChange" in meta and meta["fulldayChange"] is not None:
+                            change = round(float(meta["fulldayChange"]), 2)
+                        elif "regularMarketChange" in meta and meta["regularMarketChange"] is not None:
+                            change = round(float(meta["regularMarketChange"]), 2)
+                        else:
+                            prev_close = float(meta.get("previousClose") or meta.get("chartPreviousClose") or price)
+                            change = round(price - prev_close, 2)
+
+                        if "fulldayChangePercent" in meta and meta["fulldayChangePercent"] is not None:
+                            p_change = round(float(meta["fulldayChangePercent"]), 2)
+                        elif "regularMarketChangePercent" in meta and meta["regularMarketChangePercent"] is not None:
+                            p_change = round(float(meta["regularMarketChangePercent"]), 2)
+                        else:
+                            prev_close = float(meta.get("previousClose") or meta.get("chartPreviousClose") or (price - change) or 1.0)
+                            p_change = round((change / prev_close * 100) if prev_close > 0 else 0.0, 2)
                         
                         comp = CATALOG_BY_SYMBOL.get(sym, {})
                         shares_cr = comp.get("shares_cr") or 100.0
@@ -292,10 +311,24 @@ class ProviderRegistry:
                     results = data.get("chart", {}).get("result", [])
                     if results:
                         meta = results[0].get("meta", {})
-                        price = float(meta.get("regularMarketPrice") or meta.get("chartPreviousClose") or 0.0)
-                        prev_close = float(meta.get("previousClose") or meta.get("chartPreviousClose") or price)
-                        change = round(price - prev_close, 2)
-                        p_change = round((change / prev_close * 100) if prev_close > 0 else 0.0, 2)
+                        price = float(meta.get("regularMarketPrice") or meta.get("chartPreviousClose") or 22622.7)
+
+                        if "fulldayChange" in meta and meta["fulldayChange"] is not None:
+                            change = round(float(meta["fulldayChange"]), 2)
+                        elif "regularMarketChange" in meta and meta["regularMarketChange"] is not None:
+                            change = round(float(meta["regularMarketChange"]), 2)
+                        else:
+                            prev_close = float(meta.get("previousClose") or meta.get("chartPreviousClose") or price)
+                            change = round(price - prev_close, 2)
+
+                        if "fulldayChangePercent" in meta and meta["fulldayChangePercent"] is not None:
+                            p_change = round(float(meta["fulldayChangePercent"]), 2)
+                        elif "regularMarketChangePercent" in meta and meta["regularMarketChangePercent"] is not None:
+                            p_change = round(float(meta["regularMarketChangePercent"]), 2)
+                        else:
+                            prev_close = float(meta.get("previousClose") or meta.get("chartPreviousClose") or (price - change) or 1.0)
+                            p_change = round((change / prev_close * 100) if prev_close > 0 else 0.0, 2)
+
                         day_high = float(meta.get("regularMarketDayHigh")) if meta.get("regularMarketDayHigh") else price
                         day_low = float(meta.get("regularMarketDayLow")) if meta.get("regularMarketDayLow") else price
 
@@ -318,9 +351,9 @@ class ProviderRegistry:
         # 4. Verified official exchange Bhavcopy snapshot fallback
         return {
             "symbol": "NIFTY 50",
-            "current_price": 22648.50,
-            "change": -73.45,
-            "percent_change": -0.32,
+            "current_price": 22622.7,
+            "change": -99.25,
+            "percent_change": -0.44,
             "day_high": 22757.95,
             "day_low": 22558.95,
             "timestamp": now.isoformat(),
@@ -348,7 +381,7 @@ class ProviderRegistry:
             {"s": "BHARTIARTL", "ticker": "BHARTIARTL.NS", "type": "stock"},
             {"s": "ITC", "ticker": "ITC.NS", "type": "stock"},
             {"s": "LT", "ticker": "LT.NS", "type": "stock"},
-            {"s": "TATAMOTORS", "ticker": "TATAMOTORS.NS", "type": "stock"},
+            {"s": "TATAMOTORS", "ticker": "TMPV.NS", "type": "stock"},
             {"s": "TITAN", "ticker": "TITAN.NS", "type": "stock"},
             {"s": "MARUTI", "ticker": "MARUTI.NS", "type": "stock"},
             {"s": "SUNPHARMA", "ticker": "SUNPHARMA.NS", "type": "stock"},
@@ -369,9 +402,23 @@ class ProviderRegistry:
                         if results:
                             meta = results[0].get("meta", {})
                             price = float(meta.get("regularMarketPrice") or meta.get("chartPreviousClose") or 0.0)
-                            prev_close = float(meta.get("previousClose") or meta.get("chartPreviousClose") or price)
-                            change = round(price - prev_close, 2)
-                            p_change = round((change / prev_close * 100) if prev_close > 0 else 0.0, 2)
+
+                            if "fulldayChange" in meta and meta["fulldayChange"] is not None:
+                                change = round(float(meta["fulldayChange"]), 2)
+                            elif "regularMarketChange" in meta and meta["regularMarketChange"] is not None:
+                                change = round(float(meta["regularMarketChange"]), 2)
+                            else:
+                                prev_close = float(meta.get("previousClose") or meta.get("chartPreviousClose") or price)
+                                change = round(price - prev_close, 2)
+
+                            if "fulldayChangePercent" in meta and meta["fulldayChangePercent"] is not None:
+                                p_change = round(float(meta["fulldayChangePercent"]), 2)
+                            elif "regularMarketChangePercent" in meta and meta["regularMarketChangePercent"] is not None:
+                                p_change = round(float(meta["regularMarketChangePercent"]), 2)
+                            else:
+                                prev_close = float(meta.get("previousClose") or meta.get("chartPreviousClose") or (price - change) or 1.0)
+                                p_change = round((change / prev_close * 100) if prev_close > 0 else 0.0, 2)
+
                             return {
                                 "s": sym,
                                 "price": price,
@@ -384,21 +431,21 @@ class ProviderRegistry:
                 pass
 
             fallbacks = {
-                "NIFTY 50": {"price": 22721.95, "change": 358.60, "p_change": 1.60},
-                "SENSEX": {"price": 73047.00, "change": 450.00, "p_change": 0.62},
-                "BANK NIFTY": {"price": 55420.00, "change": 210.00, "p_change": 0.38},
-                "RELIANCE": {"price": 2940.0, "change": 35.0, "p_change": 1.2},
-                "TCS": {"price": 3980.0, "change": 31.0, "p_change": 0.8},
-                "HDFCBANK": {"price": 1680.0, "change": -6.7, "p_change": -0.4},
-                "INFY": {"price": 1890.0, "change": 29.8, "p_change": 1.6},
-                "ICICIBANK": {"price": 1245.0, "change": 11.1, "p_change": 0.9},
-                "BHARTIARTL": {"price": 1650.0, "change": 22.8, "p_change": 1.4},
-                "ITC": {"price": 495.0, "change": 2.9, "p_change": 0.6},
-                "LT": {"price": 3560.0, "change": 14.2, "p_change": 0.4},
-                "TATAMOTORS": {"price": 960.0, "change": -2.9, "p_change": -0.3},
-                "TITAN": {"price": 4487.0, "change": 48.8, "p_change": 1.1},
-                "MARUTI": {"price": 12850.0, "change": -25.7, "p_change": -0.2},
-                "SUNPHARMA": {"price": 1880.0, "change": 13.1, "p_change": 0.7},
+                "NIFTY 50": {"price": 22622.7, "change": -99.25, "p_change": -0.44},
+                "SENSEX": {"price": 72781.89, "change": -251.89, "p_change": -0.35},
+                "BANK NIFTY": {"price": 55316.00, "change": -165.05, "p_change": -0.30},
+                "RELIANCE": {"price": 1174.6, "change": 7.9, "p_change": 0.68},
+                "TCS": {"price": 2304.9, "change": 35.6, "p_change": 1.57},
+                "HDFCBANK": {"price": 710.7, "change": -3.3, "p_change": -0.46},
+                "INFY": {"price": 1088.0, "change": 25.9, "p_change": 2.44},
+                "ICICIBANK": {"price": 1338.6, "change": -21.6, "p_change": -1.59},
+                "BHARTIARTL": {"price": 1794.6, "change": -11.9, "p_change": -0.66},
+                "ITC": {"price": 261.5, "change": 0.5, "p_change": 0.19},
+                "LT": {"price": 3642.0, "change": -33.0, "p_change": -0.90},
+                "TATAMOTORS": {"price": 283.8, "change": -2.05, "p_change": -0.72},
+                "TITAN": {"price": 4444.0, "change": -43.0, "p_change": -0.96},
+                "MARUTI": {"price": 11178.0, "change": -67.0, "p_change": -0.60},
+                "SUNPHARMA": {"price": 1746.4, "change": -24.3, "p_change": -1.37},
             }
             fb = fallbacks.get(sym, {"price": 1000.0, "change": 0.0, "p_change": 0.0})
             return {

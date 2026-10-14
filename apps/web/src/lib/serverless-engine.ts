@@ -96,27 +96,58 @@ export function getCompany(symbol: string): Company | null {
   };
 }
 
-// Benchmark Prices & Diluted Shares for Key Indian Equities
+// Helper: Extract precise real-time market price, change, and percentage from exchange chart meta
+function extractQuoteMeta(meta: any, fallbackPrice: number = 0, fallbackChange: number = 0, fallbackPct: number = 0) {
+  const price = Number(meta?.regularMarketPrice || meta?.chartPreviousClose || fallbackPrice);
+  let change: number;
+  let pChange: number;
+
+  if (typeof meta?.fulldayChange === "number") {
+    change = Number(meta.fulldayChange.toFixed(2));
+  } else if (typeof meta?.regularMarketChange === "number") {
+    change = Number(meta.regularMarketChange.toFixed(2));
+  } else {
+    const prev = Number(meta?.previousClose || meta?.chartPreviousClose || price);
+    change = Number((price - prev).toFixed(2));
+  }
+
+  if (typeof meta?.fulldayChangePercent === "number") {
+    pChange = Number(meta.fulldayChangePercent.toFixed(2));
+  } else if (typeof meta?.regularMarketChangePercent === "number") {
+    pChange = Number(meta.regularMarketChangePercent.toFixed(2));
+  } else {
+    const prev = Number(meta?.previousClose || meta?.chartPreviousClose || (price - change) || 1);
+    pChange = Number(((change / prev) * 100).toFixed(2));
+  }
+
+  return { price, change, pChange };
+}
+
+// Benchmark Prices & Diluted Shares for Key Indian Equities (Official Exchange Settlement)
 const STATIC_BENCHMARKS: Record<
   string,
   { price: number; mcap: number; shares: number }
 > = {
-  TCS: { price: 2269.3, mcap: 820924.0, shares: 361.8 },
-  INFY: { price: 1047.85, mcap: 435020.0, shares: 415.1 },
-  HCLTECH: { price: 1324.0, mcap: 359330.0, shares: 271.4 },
-  WIPRO: { price: 542.0, mcap: 283100.0, shares: 522.0 },
-  RELIANCE: { price: 1166.7, mcap: 1578545.0, shares: 1353.0 },
-  LT: { price: 3645.0, mcap: 501180.0, shares: 137.5 },
-  ADANIENT: { price: 2850.0, mcap: 324900.0, shares: 114.0 },
-  HDFCBANK: { price: 714.0, mcap: 1085280.0, shares: 1520.0 },
-  ICICIBANK: { price: 1351.0, mcap: 950000.0, shares: 703.0 },
-  SBIN: { price: 957.0, mcap: 853600.0, shares: 892.4 },
-  KOTAKBANK: { price: 442.0, mcap: 439000.0, shares: 993.0 },
-  AXISBANK: { price: 1268.0, mcap: 392400.0, shares: 309.5 },
-  BAJFINANCE: { price: 978.0, mcap: 604000.0, shares: 618.0 },
-  ITC: { price: 462.0, mcap: 576500.0, shares: 1248.0 },
-  BHARTIARTL: { price: 1773.4, mcap: 1050000.0, shares: 592.0 },
-  TATAMOTORS: { price: 965.0, mcap: 355000.0, shares: 368.0 },
+  TCS: { price: 2304.9, mcap: 833913.0, shares: 361.8 },
+  INFY: { price: 1088.0, mcap: 451628.0, shares: 415.1 },
+  HCLTECH: { price: 1327.0, mcap: 360147.0, shares: 271.4 },
+  WIPRO: { price: 170.9, mcap: 89209.0, shares: 522.0 },
+  RELIANCE: { price: 1174.6, mcap: 1589233.0, shares: 1353.0 },
+  LT: { price: 3642.0, mcap: 500775.0, shares: 137.5 },
+  ADANIENT: { price: 2722.6, mcap: 310376.0, shares: 114.0 },
+  HDFCBANK: { price: 710.7, mcap: 1080264.0, shares: 1520.0 },
+  ICICIBANK: { price: 1338.6, mcap: 941035.0, shares: 703.0 },
+  SBIN: { price: 954.9, mcap: 852152.0, shares: 892.4 },
+  KOTAKBANK: { price: 438.0, mcap: 434934.0, shares: 993.0 },
+  AXISBANK: { price: 1264.6, mcap: 391393.0, shares: 309.5 },
+  BAJFINANCE: { price: 957.0, mcap: 591426.0, shares: 618.0 },
+  ITC: { price: 261.5, mcap: 326352.0, shares: 1248.0 },
+  BHARTIARTL: { price: 1794.6, mcap: 1062403.0, shares: 592.0 },
+  TATAMOTORS: { price: 283.8, mcap: 104438.0, shares: 368.0 },
+  TMPV: { price: 283.8, mcap: 104438.0, shares: 368.0 },
+  TITAN: { price: 4444.0, mcap: 394500.0, shares: 88.8 },
+  MARUTI: { price: 11178.0, mcap: 351440.0, shares: 31.4 },
+  SUNPHARMA: { price: 1746.4, mcap: 419000.0, shares: 239.9 },
 };
 
 // 3. Quotes (Live Yahoo chart API with static fallback)
@@ -128,10 +159,16 @@ export async function getMarketQuote(symbol: string): Promise<MarketQuote | null
   );
   const benchmark = STATIC_BENCHMARKS[sym];
 
+  // Map demerged / reorganized tickers on NSE (e.g. TATAMOTORS -> TMPV)
+  const tickerMap: Record<string, string> = {
+    TATAMOTORS: "TMPV",
+  };
+  const yahooTicker = tickerMap[sym] || sym;
+
   // Try live snapshot from Yahoo Finance (.NS)
   try {
     const res = await fetch(
-      `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}.NS`,
+      `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(yahooTicker)}.NS`,
       {
         headers: { "User-Agent": "Mozilla/5.0" },
         next: { revalidate: 60 },
@@ -141,10 +178,7 @@ export async function getMarketQuote(symbol: string): Promise<MarketQuote | null
       const data = await res.json();
       const meta = data?.chart?.result?.[0]?.meta;
       if (meta) {
-        const price = Number(meta.regularMarketPrice || meta.chartPreviousClose || 0);
-        const prev = Number(meta.previousClose || meta.chartPreviousClose || price);
-        const change = Number((price - prev).toFixed(2));
-        const pChange = Number(((change / (prev || 1)) * 100).toFixed(2));
+        const { price, change, pChange } = extractQuoteMeta(meta, benchmark?.price || 0);
         const shares = benchmark?.shares || catalogItem?.sharesCr || 100.0;
         const mcap = benchmark?.mcap || Math.round(price * shares);
 
@@ -216,10 +250,7 @@ export async function getNiftyQuote() {
       const data = await res.json();
       const meta = data?.chart?.result?.[0]?.meta;
       if (meta) {
-        const price = Number(meta.regularMarketPrice || meta.chartPreviousClose || 24350.0);
-        const prev = Number(meta.previousClose || meta.chartPreviousClose || price);
-        const change = Number((price - prev).toFixed(2));
-        const pChange = Number(((change / (prev || 1)) * 100).toFixed(2));
+        const { price, change, pChange } = extractQuoteMeta(meta, 22622.7, -99.25, -0.44);
         return {
           symbol: "NIFTY 50",
           current_price: price,
@@ -237,9 +268,11 @@ export async function getNiftyQuote() {
 
   return {
     symbol: "NIFTY 50",
-    current_price: 24367.5,
-    change: 45.2,
-    percent_change: 0.19,
+    current_price: 22622.7,
+    change: -99.25,
+    percent_change: -0.44,
+    day_high: 22757.95,
+    day_low: 22558.95,
     timestamp: new Date().toISOString(),
     source: "Exchange Daily Settlement Bhavcopy",
     is_live: false,
@@ -248,12 +281,21 @@ export async function getNiftyQuote() {
 
 export async function getMarketLeaders() {
   const leadersConfig = [
-    { s: "NIFTY 50", sym: "^NSEI", type: "index" as const, defPrice: 24367.5, defChange: 45.2, defPct: 0.19 },
-    { s: "SENSEX", sym: "^BSESN", type: "index" as const, defPrice: 80145.0, defChange: 152.0, defPct: 0.19 },
-    { s: "BANK NIFTY", sym: "^NSEBANK", type: "index" as const, defPrice: 52180.0, defChange: -84.0, defPct: -0.16 },
-    { s: "RELIANCE", sym: "RELIANCE.NS", type: "stock" as const, defPrice: 1166.7, defChange: 12.4, defPct: 1.07 },
-    { s: "TCS", sym: "TCS.NS", type: "stock" as const, defPrice: 2269.3, defChange: -15.8, defPct: -0.69 },
-    { s: "HDFCBANK", sym: "HDFCBANK.NS", type: "stock" as const, defPrice: 714.0, defChange: 3.5, defPct: 0.49 },
+    { s: "NIFTY 50", sym: "^NSEI", type: "index" as const, defPrice: 22622.7, defChange: -99.25, defPct: -0.44 },
+    { s: "SENSEX", sym: "^BSESN", type: "index" as const, defPrice: 72781.89, defChange: -251.89, defPct: -0.35 },
+    { s: "BANK NIFTY", sym: "^NSEBANK", type: "index" as const, defPrice: 55316.0, defChange: -165.05, defPct: -0.30 },
+    { s: "RELIANCE", sym: "RELIANCE.NS", type: "stock" as const, defPrice: 1174.6, defChange: 7.9, defPct: 0.68 },
+    { s: "TCS", sym: "TCS.NS", type: "stock" as const, defPrice: 2304.9, defChange: 35.6, defPct: 1.57 },
+    { s: "HDFCBANK", sym: "HDFCBANK.NS", type: "stock" as const, defPrice: 710.7, defChange: -3.3, defPct: -0.46 },
+    { s: "INFY", sym: "INFY.NS", type: "stock" as const, defPrice: 1088.0, defChange: 25.9, defPct: 2.44 },
+    { s: "ICICIBANK", sym: "ICICIBANK.NS", type: "stock" as const, defPrice: 1338.6, defChange: -21.6, defPct: -1.59 },
+    { s: "BHARTIARTL", sym: "BHARTIARTL.NS", type: "stock" as const, defPrice: 1794.6, defChange: -11.9, defPct: -0.66 },
+    { s: "ITC", sym: "ITC.NS", type: "stock" as const, defPrice: 261.5, defChange: 0.5, defPct: 0.19 },
+    { s: "LT", sym: "LT.NS", type: "stock" as const, defPrice: 3642.0, defChange: -33.0, defPct: -0.90 },
+    { s: "TATAMOTORS", sym: "TMPV.NS", type: "stock" as const, defPrice: 283.8, defChange: -2.05, defPct: -0.72 },
+    { s: "TITAN", sym: "TITAN.NS", type: "stock" as const, defPrice: 4444.0, defChange: -43.0, defPct: -0.96 },
+    { s: "MARUTI", sym: "MARUTI.NS", type: "stock" as const, defPrice: 11178.0, defChange: -67.0, defPct: -0.60 },
+    { s: "SUNPHARMA", sym: "SUNPHARMA.NS", type: "stock" as const, defPrice: 1746.4, defChange: -24.3, defPct: -1.37 },
   ];
 
   const results = await Promise.all(
@@ -270,10 +312,7 @@ export async function getMarketLeaders() {
           const data = await res.json();
           const meta = data?.chart?.result?.[0]?.meta;
           if (meta) {
-            const price = Number(meta.regularMarketPrice || meta.chartPreviousClose || item.defPrice);
-            const prev = Number(meta.previousClose || meta.chartPreviousClose || price);
-            const change = Number((price - prev).toFixed(2));
-            const pChange = Number(((change / (prev || 1)) * 100).toFixed(2));
+            const { price, change, pChange } = extractQuoteMeta(meta, item.defPrice, item.defChange, item.defPct);
             return {
               s: item.s,
               price,

@@ -28,21 +28,112 @@ export default function DashboardPage() {
   const [providerHealth, setProviderHealth] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [tickerItems, setTickerItems] = useState([
-    { s: "NIFTY 50", p: "₹22,686.55", c: "-0.12%", isLive: true, type: "index" },
-    { s: "SENSEX", p: "₹73,047.00", c: "+0.62%", isLive: true, type: "index" },
-    { s: "BANK NIFTY", p: "₹55,420.00", c: "+0.38%", isLive: true, type: "index" },
-    { s: "RELIANCE", p: "₹2,940", c: "+1.2%", isLive: false, type: "stock" },
-    { s: "TCS", p: "₹3,980", c: "+0.8%", isLive: false, type: "stock" },
-    { s: "HDFCBANK", p: "₹1,680", c: "-0.4%", isLive: false, type: "stock" },
-    { s: "INFY", p: "₹1,890", c: "+1.6%", isLive: false, type: "stock" },
-    { s: "ICICIBANK", p: "₹1,245", c: "+0.9%", isLive: false, type: "stock" },
-    { s: "BHARTIARTL", p: "₹1,650", c: "+1.4%", isLive: false, type: "stock" },
-    { s: "ITC", p: "₹495", c: "+0.6%", isLive: false, type: "stock" },
-    { s: "LT", p: "₹3,560", c: "+0.4%", isLive: false, type: "stock" },
-    { s: "TATAMOTORS", p: "₹960", c: "-0.3%", isLive: false, type: "stock" },
-    { s: "TITAN", p: "₹4,487", c: "+1.1%", isLive: false, type: "stock" },
-    { s: "MARUTI", p: "₹12,850", c: "-0.2%", isLive: false, type: "stock" },
-    { s: "SUNPHARMA", p: "₹1,880", c: "+0.7%", isLive: false, type: "stock" },
+    { s: "NIFTY 50", p: "₹22,622.70", c: "-0.44%", isLive: true, type: "index" },
+    { s: "SENSEX", p: "₹72,781.89", c: "-0.35%", isLive: true, type: "index" },
+    { s: "BANK NIFTY", p: "₹55,316.00", c: "-0.30%", isLive: true, type: "index" },
+    { s: "RELIANCE", p: "₹1,174.60", c: "+0.68%", isLive: true, type: "stock" },
+    { s: "TCS", p: "₹2,304.90", c: "+1.57%", isLive: true, type: "stock" },
+    { s: "HDFCBANK", p: "₹710.70", c: "-0.46%", isLive: true, type: "stock" },
+    { s: "INFY", p: "₹1,088.00", c: "+2.44%", isLive: true, type: "stock" },
+    { s: "ICICIBANK", p: "₹1,338.60", c: "-1.59%", isLive: true, type: "stock" },
+    { s: "BHARTIARTL", p: "₹1,794.60", c: "-0.66%", isLive: true, type: "stock" },
+    { s: "ITC", p: "₹261.50", c: "+0.19%", isLive: true, type: "stock" },
+    { s: "LT", p: "₹3,642.00", c: "-0.90%", isLive: true, type: "stock" },
+    { s: "TATAMOTORS", p: "₹283.80", c: "-0.72%", isLive: true, type: "stock" },
+    { s: "TITAN", p: "₹4,444.00", c: "-0.96%", isLive: true, type: "stock" },
+    { s: "MARUTI", p: "₹11,178.00", c: "-0.60%", isLive: true, type: "stock" },
+    { s: "SUNPHARMA", p: "₹1,746.40", c: "-1.37%", isLive: true, type: "stock" },
+  ]);
+
+  const [benchmarkEquities, setBenchmarkEquities] = useState([
+    {
+      symbol: "TCS",
+      name: "Tata Consultancy Services Ltd",
+      sector: "Information Technology",
+      cmp: "₹2,304.90",
+      change: "+1.57%",
+      isUp: true,
+      marketCap: "₹8,33,913 Cr",
+      status: "Audited Filings Verified",
+      color: "border-sky-500/40 hover:border-sky-400",
+    },
+    {
+      symbol: "RELIANCE",
+      name: "Reliance Industries Limited",
+      sector: "Energy & Conglomerate",
+      cmp: "₹1,174.60",
+      change: "+0.68%",
+      isUp: true,
+      marketCap: "₹15,89,233 Cr",
+      status: "Audited Filings Verified",
+      color: "border-indigo-500/40 hover:border-indigo-400",
+    },
+    {
+      symbol: "HDFCBANK",
+      name: "HDFC Bank Limited",
+      sector: "Financial Services",
+      cmp: "₹710.70",
+      change: "-0.46%",
+      isUp: false,
+      marketCap: "₹10,80,264 Cr",
+      status: "BFSI Valuation Active",
+      color: "border-blue-500/40 hover:border-blue-400",
+    },
+    {
+      symbol: "INFY",
+      name: "Infosys Limited",
+      sector: "Information Technology",
+      cmp: "₹1,088.00",
+      change: "+2.44%",
+      isUp: true,
+      marketCap: "₹4,51,628 Cr",
+      status: "Audited Filings Verified",
+      color: "border-emerald-500/40 hover:border-emerald-400",
+    },
+    {
+      symbol: "ICICIBANK",
+      name: "ICICI Bank Limited",
+      sector: "Financial Services",
+      cmp: "₹1,338.60",
+      change: "-1.59%",
+      isUp: false,
+      marketCap: "₹9,41,035 Cr",
+      status: "BFSI Valuation Active",
+      color: "border-rose-500/40 hover:border-rose-400",
+    },
+    {
+      symbol: "BHARTIARTL",
+      name: "Bharti Airtel Limited",
+      sector: "Telecommunications",
+      cmp: "₹1,794.60",
+      change: "-0.66%",
+      isUp: false,
+      marketCap: "₹10,62,403 Cr",
+      status: "Audited Filings Verified",
+      color: "border-red-500/40 hover:border-red-400",
+    },
+    {
+      symbol: "LT",
+      name: "Larsen & Toubro Limited",
+      sector: "Infrastructure & EPC",
+      cmp: "₹3,642.00",
+      change: "-0.90%",
+      isUp: false,
+      marketCap: "₹5,00,775 Cr",
+      status: "Audited Filings Verified",
+      color: "border-amber-500/40 hover:border-amber-400",
+    },
+    {
+      symbol: "MARUTI",
+      name: "Maruti Suzuki India Limited",
+      sector: "Automobile & Auto Components",
+      cmp: "₹11,178.00",
+      change: "-0.60%",
+      isUp: false,
+      marketCap: "₹3,51,440 Cr",
+      status: "NIFTY 500 Active",
+      color: "border-cyan-500/40 hover:border-cyan-400",
+    },
   ]);
 
   useEffect(() => {
@@ -78,6 +169,22 @@ export default function DashboardPage() {
               type: item.type,
             }))
           );
+
+          setBenchmarkEquities((prev) =>
+            prev.map((eq) => {
+              const matched = leaders.find((l) => l.s === eq.symbol);
+              if (!matched) return eq;
+              return {
+                ...eq,
+                cmp: `₹${matched.price.toLocaleString("en-IN", {
+                  minimumFractionDigits: matched.price < 500 ? 2 : 2,
+                  maximumFractionDigits: 2,
+                })}`,
+                change: `${matched.p_change >= 0 ? "+" : ""}${matched.p_change.toFixed(2)}%`,
+                isUp: matched.p_change >= 0,
+              };
+            })
+          );
         }
       } catch (err) {
         console.error("Failed to load live market leaders:", err);
@@ -92,97 +199,6 @@ export default function DashboardPage() {
       clearInterval(interval);
     };
   }, []);
-
-  const benchmarkEquities = [
-    {
-      symbol: "TCS",
-      name: "Tata Consultancy Services Ltd",
-      sector: "Information Technology",
-      cmp: "₹3,980.00",
-      change: "+0.85%",
-      isUp: true,
-      marketCap: "₹14,35,000 Cr",
-      status: "Audited Filings Verified",
-      color: "border-sky-500/40 hover:border-sky-400",
-    },
-    {
-      symbol: "RELIANCE",
-      name: "Reliance Industries Limited",
-      sector: "Energy & Conglomerate",
-      cmp: "₹2,940.00",
-      change: "+1.20%",
-      isUp: true,
-      marketCap: "₹19,89,000 Cr",
-      status: "Audited Filings Verified",
-      color: "border-indigo-500/40 hover:border-indigo-400",
-    },
-    {
-      symbol: "HDFCBANK",
-      name: "HDFC Bank Limited",
-      sector: "Financial Services",
-      cmp: "₹1,680.00",
-      change: "-0.40%",
-      isUp: false,
-      marketCap: "₹12,78,000 Cr",
-      status: "BFSI Valuation Active",
-      color: "border-blue-500/40 hover:border-blue-400",
-    },
-    {
-      symbol: "INFY",
-      name: "Infosys Limited",
-      sector: "Information Technology",
-      cmp: "₹1,890.00",
-      change: "+1.65%",
-      isUp: true,
-      marketCap: "₹7,85,000 Cr",
-      status: "Audited Filings Verified",
-      color: "border-emerald-500/40 hover:border-emerald-400",
-    },
-    {
-      symbol: "ICICIBANK",
-      name: "ICICI Bank Limited",
-      sector: "Financial Services",
-      cmp: "₹1,245.00",
-      change: "+0.90%",
-      isUp: true,
-      marketCap: "₹8,75,000 Cr",
-      status: "BFSI Valuation Active",
-      color: "border-rose-500/40 hover:border-rose-400",
-    },
-    {
-      symbol: "BHARTIARTL",
-      name: "Bharti Airtel Limited",
-      sector: "Telecommunications",
-      cmp: "₹1,650.00",
-      change: "+1.40%",
-      isUp: true,
-      marketCap: "₹9,80,000 Cr",
-      status: "Audited Filings Verified",
-      color: "border-red-500/40 hover:border-red-400",
-    },
-    {
-      symbol: "LT",
-      name: "Larsen & Toubro Limited",
-      sector: "Infrastructure & EPC",
-      cmp: "₹3,560.00",
-      change: "+0.35%",
-      isUp: true,
-      marketCap: "₹4,89,000 Cr",
-      status: "Audited Filings Verified",
-      color: "border-amber-500/40 hover:border-amber-400",
-    },
-    {
-      symbol: "MARUTI",
-      name: "Maruti Suzuki India Limited",
-      sector: "Automobile & Auto Components",
-      cmp: "₹12,850.00",
-      change: "-0.25%",
-      isUp: false,
-      marketCap: "₹4,04,000 Cr",
-      status: "NIFTY 500 Active",
-      color: "border-cyan-500/40 hover:border-cyan-400",
-    },
-  ];
 
   return (
     <div className="space-y-6 sm:space-y-8 max-w-7xl mx-auto">

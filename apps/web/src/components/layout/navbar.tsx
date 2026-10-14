@@ -148,13 +148,13 @@ export function Navbar({ onToggleMobileMenu, isCollapsed = false, onToggleCollap
 
   const niftyPrice = nifty
     ? nifty.current_price.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-    : "22,648.50";
+    : "22,622.70";
   const niftyChangeText = nifty
     ? `${nifty.change >= 0 ? "+" : ""}${nifty.change.toFixed(2)} (${nifty.percent_change >= 0 ? "+" : ""}${nifty.percent_change.toFixed(2)}%)`
-    : "-73.45 (-0.32%)";
+    : "-99.25 (-0.44%)";
   const niftyCompactChange = nifty
     ? `${nifty.percent_change >= 0 ? "+" : ""}${nifty.percent_change.toFixed(1)}%`
-    : "-0.3%";
+    : "-0.4%";
   const isPositive = nifty ? nifty.change >= 0 : false;
 
   return (
