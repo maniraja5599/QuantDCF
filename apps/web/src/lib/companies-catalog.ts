@@ -1641,17 +1641,6 @@ export const ALL_NIFTY_COMPANIES: CatalogCompany[] = [
     "hasAuditedFilings": false
   },
   {
-    "symbol": "DUMMYHEG",
-    "name": "Dummy HEG Ltd.",
-    "exchange": "NSE",
-    "isin": "DUM545A01024",
-    "sector": "Capital Goods & Engineering",
-    "industry": "Capital Goods",
-    "marketCap": "Audited Filings Pending",
-    "sharesCr": 100.0,
-    "hasAuditedFilings": false
-  },
-  {
     "symbol": "EIDPARRY",
     "name": "E.I.D. Parry (India) Ltd.",
     "exchange": "NSE",

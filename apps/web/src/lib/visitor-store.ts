@@ -19,66 +19,8 @@ const globalStore = global as unknown as {
 };
 
 if (!globalStore.__QUANTDCF_VISITORS__) {
-  const now = Date.now();
-  // Initial activity log entries
-  globalStore.__QUANTDCF_VISITORS__ = [
-    {
-      id: "v-seed-1",
-      ip: "103.212.144.62",
-      city: "Chennai",
-      country: "IN",
-      region: "Tamil Nadu",
-      userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/129.0.0.0",
-      deviceType: "Desktop",
-      browser: "Chrome",
-      os: "Windows 11",
-      page: "/valuation/TCS",
-      referrer: "Direct",
-      timestamp: new Date(now - 1000 * 60 * 2).toISOString(),
-    },
-    {
-      id: "v-seed-2",
-      ip: "49.207.218.15",
-      city: "Bengaluru",
-      country: "IN",
-      region: "Karnataka",
-      userAgent: "Mozilla/5.0 (iPhone; CPU iPhone OS 17_6 like Mac OS X) AppleWebKit/605.1.15",
-      deviceType: "Mobile",
-      browser: "Mobile Safari",
-      os: "iOS 17.6",
-      page: "/screener",
-      referrer: "https://t.co/",
-      timestamp: new Date(now - 1000 * 60 * 8).toISOString(),
-    },
-    {
-      id: "v-seed-3",
-      ip: "152.58.16.89",
-      city: "Mumbai",
-      country: "IN",
-      region: "Maharashtra",
-      userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
-      deviceType: "Desktop",
-      browser: "Chrome",
-      os: "macOS Sonoma",
-      page: "/valuation/RELIANCE",
-      referrer: "https://www.google.com/",
-      timestamp: new Date(now - 1000 * 60 * 15).toISOString(),
-    },
-    {
-      id: "v-seed-4",
-      ip: "106.213.80.112",
-      city: "Hyderabad",
-      country: "IN",
-      region: "Telangana",
-      userAgent: "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36",
-      deviceType: "Mobile",
-      browser: "Chrome Mobile",
-      os: "Android 14",
-      page: "/",
-      referrer: "Direct",
-      timestamp: new Date(now - 1000 * 60 * 24).toISOString(),
-    },
-  ];
+  // Pure live capture only - strictly zero dummy records
+  globalStore.__QUANTDCF_VISITORS__ = [];
 }
 
 export function recordVisitorLog(log: Omit<VisitorLog, "id">): VisitorLog {
@@ -137,7 +79,7 @@ export function getVisitorStats() {
   return {
     totalVisits: visitors.length,
     uniqueIpsCount: uniqueIps.size,
-    activeNow: Math.max(1, activeNow),
+    activeNow: activeNow,
     topPages: sortedPages,
     devices: deviceCounts,
   };
