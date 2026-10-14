@@ -38,8 +38,11 @@ export async function POST(req: NextRequest) {
 
     const page = body.page || "/";
     const referrer = body.referrer || req.headers.get("referer") || "Direct";
+    const sessionId = body.sessionId;
+    const durationSeconds = typeof body.durationSeconds === "number" ? body.durationSeconds : undefined;
 
     const logged = recordVisitorLog({
+      sessionId,
       ip,
       city: city !== "Unknown" ? decodeURIComponent(city) : undefined,
       country,
@@ -50,7 +53,7 @@ export async function POST(req: NextRequest) {
       os,
       page,
       referrer,
-      timestamp: new Date().toISOString(),
+      durationSeconds,
     });
 
     return NextResponse.json({ ok: true, id: logged.id, ip: logged.ip });

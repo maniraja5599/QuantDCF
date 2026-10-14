@@ -49,3 +49,5 @@ pnpm-debug.log*
 temp/
 screenshots/
 capture_all_pages.js
+.visitor_sessions.json
+quantdcf_visitors.json
