@@ -5522,5 +5522,16 @@ export const ALL_NIFTY_COMPANIES: CatalogCompany[] = [
     "marketCap": "Audited Filings Pending",
     "sharesCr": 100.0,
     "hasAuditedFilings": false
+  },
+  {
+    "symbol": "TATAMOTORS",
+    "name": "Tata Motors Ltd.",
+    "exchange": "NSE",
+    "isin": "INE155A01022",
+    "sector": "Automotive",
+    "industry": "Automobile and Auto Components",
+    "marketCap": "₹3,55,000 Cr",
+    "sharesCr": 368.0,
+    "hasAuditedFilings": true
   }
 ];

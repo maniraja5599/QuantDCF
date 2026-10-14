@@ -1,19 +1,21 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Support deployment when backend API is hosted separately
   env: {
-    NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000",
+    NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL || "",
   },
   async rewrites() {
-    // Proxy /api requests to FastAPI backend so mobile devices and desktop share the same origin
-    const apiBase = process.env.BACKEND_API_URL || "http://127.0.0.1:8000";
-    return [
-      {
-        source: "/api/:path*",
-        destination: `${apiBase}/api/:path*`,
-      },
-    ];
+    // If an external backend is explicitly configured via environment variable, proxy /api requests to it.
+    // Otherwise on Vercel or standalone cloud, Next.js handles all /api routes natively via Serverless Functions.
+    if (process.env.BACKEND_API_URL) {
+      return [
+        {
+          source: "/api/:path*",
+          destination: `${process.env.BACKEND_API_URL}/api/:path*`,
+        },
+      ];
+    }
+    return [];
   },
 };
 
