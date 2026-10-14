@@ -13,18 +13,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  // Initialize collapse preference from localStorage or auto-collapse on narrower screens
+  // Desktop view: sidebar is strictly ON (open / expanded) by default
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("quantdcf_sidebar_collapsed");
+      const saved = localStorage.getItem("quantdcf_sidebar_user_collapsed");
       if (saved !== null) {
         setIsCollapsed(saved === "true");
-      } else if (window.innerWidth < 1280) {
-        // Auto-collapse on laptop screens (< 1280px) to maximize financial table space
-        setIsCollapsed(true);
+      } else {
+        // Always ON by default on desktop
+        setIsCollapsed(false);
       }
     } catch {
-      // Fallback if localStorage is inaccessible
+      setIsCollapsed(false);
     }
   }, []);
 
@@ -32,7 +32,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     setIsCollapsed((prev) => {
       const next = !prev;
       try {
-        localStorage.setItem("quantdcf_sidebar_collapsed", String(next));
+        localStorage.setItem("quantdcf_sidebar_user_collapsed", String(next));
       } catch {
         // Ignored
       }
