@@ -2,7 +2,7 @@
 Valuation Endpoints: DCF, WACC, Sensitivity Analysis, and Scenario Modeling
 """
 from fastapi import APIRouter, HTTPException
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from ..engine.models import (
     DCFCalculationInput,
     DCFCalculationOutput,
@@ -12,6 +12,9 @@ from ..engine.dcf import calculate_dcf
 from ..engine.wacc import calculate_wacc
 from ..engine.sensitivity import calculate_sensitivity_matrix
 from ..engine.scenarios import calculate_scenarios
+from ..engine.peer_comps import calculate_peer_comps, PeerCompsResponse
+from ..engine.bfsi import calculate_bfsi_valuation, BFSIValuationInput, BFSIValuationOutput
+from ..engine.sotp import calculate_sotp, SOTPValuationInput, SOTPValuationOutput
 
 router = APIRouter(prefix="/api/valuation", tags=["Valuation Engine"])
 
@@ -66,3 +69,45 @@ async def run_scenarios(payload: DCFCalculationInput):
         return calculate_scenarios(payload)
     except Exception as e:
         raise HTTPException(status_code=422, detail=f"Scenario generation failed: {str(e)}")
+
+
+@router.get("/peers/{symbol}", response_model=PeerCompsResponse)
+async def get_peer_comps_endpoint(
+    symbol: str,
+    eps: Optional[float] = None,
+    ebit: Optional[float] = None,
+    revenue: Optional[float] = None,
+):
+    """
+    Returns comparable sector peer multiples, sector medians, and peer-implied valuation.
+    """
+    try:
+        return calculate_peer_comps(symbol, target_eps=eps, target_ebit=ebit, target_revenue=revenue)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Peer comps calculation failed: {str(e)}")
+
+
+@router.post("/bfsi", response_model=BFSIValuationOutput)
+async def run_bfsi_valuation(payload: BFSIValuationInput):
+    """
+    Executes banking/NBFC valuation using Justified P/B, Dividend Discount Model (DDM), and Residual Income.
+    """
+    try:
+        return calculate_bfsi_valuation(payload)
+    except ValueError as ve:
+        raise HTTPException(status_code=422, detail=str(ve))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"BFSI calculation failed: {str(e)}")
+
+
+@router.post("/sotp", response_model=SOTPValuationOutput)
+async def run_sotp_valuation(payload: SOTPValuationInput):
+    """
+    Executes Sum-of-the-Parts (SOTP) conglomerate valuation with holding company discount.
+    """
+    try:
+        return calculate_sotp(payload)
+    except ValueError as ve:
+        raise HTTPException(status_code=422, detail=str(ve))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"SOTP calculation failed: {str(e)}")

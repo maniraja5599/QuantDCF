@@ -6,11 +6,11 @@ const nextConfig = {
     NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000",
   },
   async rewrites() {
-    // In local development, proxy /api requests to FastAPI backend if desired
-    const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
+    // Proxy /api requests to FastAPI backend so mobile devices and desktop share the same origin
+    const apiBase = process.env.BACKEND_API_URL || "http://127.0.0.1:8000";
     return [
       {
-        source: "/api/proxy/:path*",
+        source: "/api/:path*",
         destination: `${apiBase}/api/:path*`,
       },
     ];

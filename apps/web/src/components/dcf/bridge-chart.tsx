@@ -43,6 +43,15 @@ export function ValuationBridgeChart({ output }: BridgeChartProps) {
       amount: -output.total_debt,
       fill: "#f43f5e", // Rose
     },
+    ...(output.minority_interest > 0
+      ? [
+          {
+            name: "(-) Minority",
+            amount: -output.minority_interest,
+            fill: "#f59e0b", // Amber
+          },
+        ]
+      : []),
     {
       name: "Equity Value",
       amount: output.equity_value,

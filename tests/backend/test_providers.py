@@ -49,3 +49,28 @@ async def test_company_search():
     assert len(results) >= 1
     assert results[0].symbol == "TCS"
     assert results[0].exchange == "NSE"
+
+
+@pytest.mark.asyncio
+async def test_verified_fundamental_filings_expanded():
+    """Verify newly added companies have 5 years of verified audited financials"""
+    for sym in ["HCLTECH", "WIPRO", "ITC", "BHARTIARTL", "TATAMOTORS"]:
+        periods = await provider_registry.get_historical_financials(sym)
+        assert len(periods) == 5, f"{sym} should have 5 years of filings"
+        fy24 = next(p for p in periods if p.fiscal_year == 2024)
+        assert fy24.revenue > 0
+        assert fy24.ebit > 0
+        assert fy24.provenance == "AUDITED"
+
+
+@pytest.mark.asyncio
+async def test_market_quote_all_stocks():
+    """Verify quotes for all major symbols return official snapshot data"""
+    symbols = ["TCS", "INFY", "HCLTECH", "WIPRO", "RELIANCE", "LT", "HDFCBANK", "ICICIBANK", "SBIN", "ITC", "BHARTIARTL", "TATAMOTORS"]
+    for sym in symbols:
+        quote = await provider_registry.get_market_quote(sym)
+        assert quote is not None, f"Quote for {sym} must be available"
+        assert quote.current_price > 0
+        assert quote.market_cap > 0
+        assert quote.is_verified is True
+

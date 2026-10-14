@@ -196,3 +196,110 @@ export interface SavedValuation {
   created_at: string;
   updated_at: string;
 }
+
+export interface PeerMetric {
+  symbol: string;
+  name: string;
+  current_price: number;
+  market_cap_cr: number;
+  forward_pe: number;
+  ev_ebit: number;
+  ev_sales: number;
+  price_to_book: number;
+  roic_pct: number;
+  ebit_margin_pct: number;
+  revenue_cagr_pct: number;
+  fcf_conversion_pct: number;
+}
+
+export interface PeerCompsResponse {
+  target_symbol: string;
+  sector: string;
+  peers: PeerMetric[];
+  sector_medians: Record<string, number>;
+  implied_valuation: {
+    by_pe?: number | null;
+    by_ev_ebit?: number | null;
+    by_ev_sales?: number | null;
+  };
+  valuation_spread_analysis: string;
+}
+
+export interface BFSIValuationInput {
+  symbol: string;
+  book_value_per_share: number;
+  eps: number;
+  dividend_payout_ratio_pct?: number;
+  sustainable_roe_pct?: number;
+  cost_of_equity_ke_pct?: number;
+  perpetual_growth_rate_pct?: number;
+  current_market_price?: number;
+  net_interest_margin_pct?: number;
+  gnpa_pct?: number;
+  nnpa_pct?: number;
+  provision_coverage_ratio_pct?: number;
+  casa_ratio_pct?: number;
+  tier1_crar_pct?: number;
+}
+
+export interface BFSIValuationOutput {
+  symbol: string;
+  book_value_per_share: number;
+  sustainable_roe_pct: number;
+  cost_of_equity_ke_pct: number;
+  perpetual_growth_rate_pct: number;
+  justified_pb_multiple: number;
+  implied_price_justified_pb: number;
+  d1_dividend: number;
+  implied_price_ddm: number;
+  economic_spread_pct: number;
+  implied_price_residual_income: number;
+  blended_intrinsic_value_per_share: number;
+  current_market_price?: number;
+  implied_upside_downside_pct?: number;
+  health_rating: string;
+  banking_metrics: Record<string, any>;
+  formula_audit: Record<string, string>;
+}
+
+export interface SOTPSegmentInput {
+  segment_name: string;
+  valuation_metric_label: string;
+  metric_value_cr: number;
+  target_multiple: number;
+  ownership_stake_pct?: number;
+}
+
+export interface SOTPValuationInput {
+  conglomerate_symbol: string;
+  company_name: string;
+  segments: SOTPSegmentInput[];
+  consolidated_net_debt_cr: number;
+  holding_company_discount_pct?: number;
+  diluted_shares_cr: number;
+  current_market_price?: number;
+}
+
+export interface SOTPSegmentResult {
+  segment_name: string;
+  metric_value_cr: number;
+  target_multiple: number;
+  enterprise_value_cr: number;
+  effective_value_cr: number;
+  share_of_total_ev_pct: number;
+}
+
+export interface SOTPValuationOutput {
+  conglomerate_symbol: string;
+  company_name: string;
+  segments: SOTPSegmentResult[];
+  gross_enterprise_value_cr: number;
+  consolidated_net_debt_cr: number;
+  holding_company_discount_pct: number;
+  discount_amount_cr: number;
+  net_equity_value_cr: number;
+  diluted_shares_cr: number;
+  intrinsic_value_per_share: number;
+  current_market_price?: number;
+  implied_upside_downside_pct?: number;
+}

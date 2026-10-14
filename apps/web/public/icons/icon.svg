@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Background Shield Gradients -->
+    <linearGradient id="iconBg3D" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="50%" stop-color="#0a0f1d"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+
+    <linearGradient id="iconRim3D" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.8"/>
+      <stop offset="40%" stop-color="#0284c7" stop-opacity="0.4"/>
+      <stop offset="80%" stop-color="#10b981" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#047857" stop-opacity="0.2"/>
+    </linearGradient>
+
+    <linearGradient id="iconGloss3D" x1="0%" y1="0%" x2="70%" y2="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.0"/>
+    </linearGradient>
+
+    <!-- Column 1: Historical DCF Pillar -->
+    <linearGradient id="iconP1Top" x1="120" y1="240" x2="220" y2="290" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#7dd3fc"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+    <linearGradient id="iconP1Left" x1="120" y1="250" x2="170" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#0369a1"/>
+    </linearGradient>
+    <linearGradient id="iconP1Right" x1="170" y1="290" x2="220" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0c4a6e"/>
+      <stop offset="100%" stop-color="#082f49"/>
+    </linearGradient>
+
+    <!-- Column 2: Forecast DCF Pillar -->
+    <linearGradient id="iconP2Top" x1="210" y1="170" x2="310" y2="210" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#34d399"/>
+    </linearGradient>
+    <linearGradient id="iconP2Left" x1="210" y1="180" x2="260" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="iconP2Right" x1="260" y1="210" x2="310" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#065f46"/>
+      <stop offset="100%" stop-color="#064e3b"/>
+    </linearGradient>
+
+    <!-- Column 3: Terminal Value Monolith -->
+    <linearGradient id="iconP3Top" x1="300" y1="95" x2="400" y2="140" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#6ee7b7"/>
+      <stop offset="100%" stop-color="#a7f3d0"/>
+    </linearGradient>
+    <linearGradient id="iconP3Left" x1="300" y1="105" x2="350" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="iconP3Right" x1="350" y1="140" x2="400" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#064e3b"/>
+      <stop offset="100%" stop-color="#022c22"/>
+    </linearGradient>
+
+    <!-- 3D Kinetic Momentum Ribbon -->
+    <linearGradient id="iconRibbon" x1="100" y1="310" x2="420" y2="80" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="50%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#34d399"/>
+    </linearGradient>
+
+    <!-- Apex 3D Diamond / Star Node -->
+    <linearGradient id="iconDiaTop" x1="400" y1="35" x2="450" y2="85" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e0f2fe"/>
+    </linearGradient>
+    <linearGradient id="iconDiaLeft" x1="375" y1="85" x2="420" y2="140" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="iconDiaRight" x1="420" y1="85" x2="465" y2="140" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+
+    <filter id="iconGlow3D" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="18" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- 1. Base 3D Shield Squircle -->
+  <rect x="12" y="12" width="488" height="488" rx="124" fill="url(#iconBg3D)" stroke="url(#iconRim3D)" stroke-width="12"/>
+
+  <!-- 2. Glassmorphic Ambient Gloss Reflection -->
+  <path d="M 24 140 C 24 76, 76 24, 140 24 L 380 24 C 240 88, 110 196, 24 360 Z" fill="url(#iconGloss3D)"/>
+
+  <!-- 3. Isometric Grid Base Lines -->
+  <line x1="80" y1="420" x2="432" y2="420" stroke="#1e293b" stroke-width="6" stroke-dasharray="14 14" opacity="0.6"/>
+  <line x1="120" y1="365" x2="392" y2="365" stroke="#1e293b" stroke-width="4" stroke-dasharray="10 10" opacity="0.4"/>
+
+  <!-- 4. Pillar 1: Historical DCF (Isometric Left) -->
+  <polygon points="125,248 175,226 220,248 170,270" fill="url(#iconP1Top)"/>
+  <polygon points="125,248 170,270 170,420 125,398" fill="url(#iconP1Left)"/>
+  <polygon points="170,270 220,248 220,398 170,420" fill="url(#iconP1Right)"/>
+  <line x1="170" y1="270" x2="170" y2="420" stroke="#7dd3fc" stroke-width="4" opacity="0.8"/>
+
+  <!-- 5. Pillar 2: 5-Year Forecast DCF (Isometric Center) -->
+  <polygon points="215,172 265,150 310,172 260,194" fill="url(#iconP2Top)"/>
+  <polygon points="215,172 260,194 260,420 215,398" fill="url(#iconP2Left)"/>
+  <polygon points="260,194 310,172 310,398 260,420" fill="url(#iconP2Right)"/>
+  <line x1="260" y1="194" x2="260" y2="420" stroke="#67e8f9" stroke-width="4" opacity="0.9"/>
+
+  <!-- 6. Pillar 3: Terminal Value Monolith (Isometric Right) -->
+  <polygon points="305,96 355,74 400,96 350,118" fill="url(#iconP3Top)"/>
+  <polygon points="305,96 350,118 350,420 305,398" fill="url(#iconP3Left)"/>
+  <polygon points="350,118 400,96 400,398 350,420" fill="url(#iconP3Right)"/>
+  <line x1="350" y1="118" x2="350" y2="420" stroke="#a7f3d0" stroke-width="4" opacity="0.9"/>
+
+  <!-- 7. 3D Kinetic Momentum Ribbon Curve -->
+  <!-- Shadow -->
+  <path d="M 95 315 C 175 295, 260 215, 420 85" fill="none" stroke="#000000" stroke-width="38" stroke-linecap="round" opacity="0.4"/>
+  <!-- Glowing Path -->
+  <path d="M 95 295 C 175 275, 260 195, 410 75" fill="none" stroke="url(#iconRibbon)" stroke-width="30" stroke-linecap="round" filter="url(#iconGlow3D)"/>
+  <path d="M 95 295 C 175 275, 260 195, 410 75" fill="none" stroke="#ffffff" stroke-width="10" stroke-linecap="round" opacity="0.8"/>
+
+  <!-- 8. Floating Apex 3D Diamond / Target Node -->
+  <g filter="url(#iconGlow3D)">
+    <!-- Top Face -->
+    <polygon points="410,25 455,70 410,82 365,70" fill="url(#iconDiaTop)"/>
+    <!-- Left Facet -->
+    <polygon points="365,70 410,82 410,138" fill="url(#iconDiaLeft)"/>
+    <!-- Right Facet -->
+    <polygon points="410,82 455,70 410,138" fill="url(#iconDiaRight)"/>
+    <!-- Specular Highlight -->
+    <circle cx="410" cy="74" r="14" fill="#ffffff"/>
+  </g>
+</svg>

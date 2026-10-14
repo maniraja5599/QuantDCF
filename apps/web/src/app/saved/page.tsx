@@ -78,7 +78,7 @@ export default function SavedValuationsPage() {
                   <span className="font-mono text-base font-extrabold text-sky-400">
                     {v.company_symbol}
                   </span>
-                  <span className="text-[10px] text-slate-400 font-mono">
+                  <span suppressHydrationWarning className="text-[10px] text-slate-400 font-mono">
                     {new Date(v.created_at).toLocaleDateString()}
                   </span>
                 </div>

@@ -15,7 +15,7 @@ export function SensitivityMatrixTable({ data }: SensitivityMatrixProps) {
 
   return (
     <div className="bg-[#111726] border border-slate-800 rounded-xl overflow-hidden shadow-lg">
-      <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+      <div className="px-4 sm:px-6 py-4 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider flex items-center gap-2">
             <Grid3X3 className="w-4 h-4 text-sky-400" />
@@ -25,7 +25,7 @@ export function SensitivityMatrixTable({ data }: SensitivityMatrixProps) {
             Intrinsic value per diluted share (₹) across varying WACC discount rates and perpetual terminal growth rates (g).
           </p>
         </div>
-        <div className="flex items-center gap-4 text-xs font-mono">
+        <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs font-mono">
           <div className="flex items-center gap-1.5">
             <span className="w-3 h-3 rounded bg-emerald-500/20 border border-emerald-500/40"></span>
             <span className="text-slate-400 text-[10px]">Higher Value</span>
@@ -41,11 +41,11 @@ export function SensitivityMatrixTable({ data }: SensitivityMatrixProps) {
         </div>
       </div>
 
-      <div className="overflow-x-auto p-6">
+      <div className="overflow-x-auto p-3 sm:p-6">
         <table className="w-full text-xs text-center border-collapse">
           <thead>
             <tr>
-              <th className="p-2 border border-slate-800 bg-[#0c1220] text-slate-400 font-sans text-[11px] font-semibold text-left">
+              <th className="p-2.5 border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-[#0c1220] text-slate-700 dark:text-slate-400 font-sans text-[11px] font-bold text-left">
                 WACC \ Growth (g)
               </th>
               {terminal_growth_rates_pct.map((g) => {
@@ -53,8 +53,10 @@ export function SensitivityMatrixTable({ data }: SensitivityMatrixProps) {
                 return (
                   <th
                     key={g}
-                    className={`p-2 border border-slate-800 font-mono text-[11px] ${
-                      isBaseG ? "bg-sky-500/20 text-sky-300 font-bold" : "bg-[#0c1220] text-slate-400"
+                    className={`p-2.5 border border-slate-200 dark:border-slate-800 font-mono text-[11px] ${
+                      isBaseG
+                        ? "bg-sky-100 dark:bg-sky-500/20 text-sky-800 dark:text-sky-300 font-bold"
+                        : "bg-slate-100 dark:bg-[#0c1220] text-slate-700 dark:text-slate-400 font-semibold"
                     }`}
                   >
                     {g.toFixed(2)}%
@@ -69,8 +71,10 @@ export function SensitivityMatrixTable({ data }: SensitivityMatrixProps) {
               return (
                 <tr key={w}>
                   <td
-                    className={`p-2 border border-slate-800 text-left font-bold text-[11px] ${
-                      isBaseW ? "bg-sky-500/20 text-sky-300" : "bg-[#0c1220] text-slate-400"
+                    className={`p-2.5 border border-slate-200 dark:border-slate-800 text-left font-bold text-[11px] ${
+                      isBaseW
+                        ? "bg-sky-100 dark:bg-sky-500/20 text-sky-800 dark:text-sky-300"
+                        : "bg-slate-100 dark:bg-[#0c1220] text-slate-700 dark:text-slate-400"
                     }`}
                   >
                     {w.toFixed(2)}%
@@ -81,25 +85,25 @@ export function SensitivityMatrixTable({ data }: SensitivityMatrixProps) {
 
                     if (val === null || val === undefined) {
                       return (
-                        <td key={g} className="p-2 border border-slate-800/80 bg-slate-900/40 text-slate-600 text-[10px]">
+                        <td key={g} className="p-2.5 border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/40 text-slate-400 dark:text-slate-600 text-[10px]">
                           N/A (WACC≤g)
                         </td>
                       );
                     }
 
                     const diffPct = ((val - base_intrinsic_value) / base_intrinsic_value) * 100;
-                    let cellColor = "bg-[#0e1424] text-slate-200";
+                    let cellColor = "bg-white dark:bg-[#0e1424] text-slate-800 dark:text-slate-200";
 
                     if (isBaseCell) {
-                      cellColor = "bg-sky-500/20 text-sky-300 font-extrabold ring-2 ring-sky-400 ring-inset";
+                      cellColor = "bg-sky-100 dark:bg-sky-500/20 text-sky-800 dark:text-sky-300 font-extrabold ring-2 ring-sky-500 dark:ring-sky-400 ring-inset";
                     } else if (diffPct > 5) {
-                      cellColor = "bg-emerald-500/10 text-emerald-300";
+                      cellColor = "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 font-semibold";
                     } else if (diffPct < -5) {
-                      cellColor = "bg-rose-500/10 text-rose-300";
+                      cellColor = "bg-rose-50 dark:bg-rose-500/10 text-rose-800 dark:text-rose-300";
                     }
 
                     return (
-                      <td key={g} className={`p-2 border border-slate-800 text-[11px] transition-colors ${cellColor}`}>
+                      <td key={g} className={`p-2.5 border border-slate-200 dark:border-slate-800 text-[11px] transition-colors ${cellColor}`}>
                         {formatINR(val, 0)}
                       </td>
                     );

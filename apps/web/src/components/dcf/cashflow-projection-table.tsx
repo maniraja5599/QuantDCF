@@ -11,13 +11,13 @@ export function CashflowProjectionTable({ output }: CashflowProjectionTableProps
   const years = output.forecast_years;
 
   return (
-    <div className="bg-[#111726] border border-slate-800 rounded-xl overflow-hidden shadow-lg">
-      <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+    <div className="bg-white dark:bg-[#111726] border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-lg transition-colors">
+      <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
         <div>
-          <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider">
+          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
             Discounted Free Cash Flow Schedule (FCFF)
           </h3>
-          <p className="text-[11px] text-slate-500 mt-0.5">
+          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
             Explicit forecast discounting at {output.discount_rate_wacc_pct.toFixed(2)}% WACC. Figures in ₹ Crore.
           </p>
         </div>
@@ -26,27 +26,33 @@ export function CashflowProjectionTable({ output }: CashflowProjectionTableProps
       <div className="overflow-x-auto">
         <table className="w-full text-xs text-left border-collapse">
           <thead>
-            <tr className="bg-[#0c1220] border-b border-slate-800 text-slate-400 uppercase font-mono text-[10px]">
-              <th className="py-3 px-4 font-semibold text-slate-300">FCFF Component</th>
+            <tr className="bg-slate-100 dark:bg-[#0c1220] border-b border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-400 uppercase font-mono text-[10px]">
+              <th className="py-2.5 px-4 font-semibold text-slate-700 dark:text-slate-300">FCFF Component</th>
               {years.map((y) => (
-                <th key={y.year_index} className="py-3 px-4 text-right font-semibold">
+                <th key={y.year_index} className="py-2.5 px-4 text-right font-semibold">
                   {y.year_label} (T+{y.year_index})
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/60 font-mono">
+          <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60 font-mono">
             {/* Revenue */}
-            <tr className="hover:bg-slate-800/20 font-bold text-slate-100">
-              <td className="py-2.5 px-4 font-sans text-xs">Projected Revenue</td>
+            <tr className="hover:bg-slate-100/50 dark:hover:bg-slate-800/20 font-bold text-slate-900 dark:text-slate-100">
+              <td className="py-2.5 px-4 font-sans text-xs">
+                <div>Projected Revenue</div>
+                <div className="text-[10px] text-slate-500 dark:text-slate-400 font-normal">Base year scaled by growth rate</div>
+              </td>
               {years.map((y) => (
-                <td key={y.year_index} className="py-2.5 px-4 text-right text-sky-400">
+                <td key={y.year_index} className="py-2.5 px-4 text-right text-sky-700 dark:text-sky-400 font-bold">
                   {formatCrore(y.revenue)}
                 </td>
               ))}
             </tr>
             <tr className="hover:bg-slate-800/20 text-slate-400">
-              <td className="py-2 px-4 font-sans text-xs">Revenue Growth %</td>
+              <td className="py-2 px-4 font-sans text-xs">
+                <div>Revenue Growth %</div>
+                <div className="text-[10px] text-slate-500">Year-over-year top line expansion</div>
+              </td>
               {years.map((y) => (
                 <td key={y.year_index} className="py-2 px-4 text-right text-slate-300">
                   {formatPercentRaw(y.revenue_growth_pct)}
@@ -56,15 +62,21 @@ export function CashflowProjectionTable({ output }: CashflowProjectionTableProps
 
             {/* Operating Profit (EBIT) */}
             <tr className="hover:bg-slate-800/20 font-semibold text-slate-200 bg-slate-800/10">
-              <td className="py-2.5 px-4 font-sans text-xs">Operating Profit (EBIT)</td>
+              <td className="py-2.5 px-4 font-sans text-xs">
+                <div>Operating Profit (EBIT)</div>
+                <div className="text-[10px] text-slate-500 font-normal">Earnings before interest and taxes</div>
+              </td>
               {years.map((y) => (
-                <td key={y.year_index} className="py-2.5 px-4 text-right text-emerald-400">
+                <td key={y.year_index} className="py-2.5 px-4 text-right text-emerald-400 font-bold">
                   {formatCrore(y.ebit)}
                 </td>
               ))}
             </tr>
             <tr className="hover:bg-slate-800/20 text-slate-400">
-              <td className="py-2 px-4 font-sans text-xs">EBIT Margin %</td>
+              <td className="py-2 px-4 font-sans text-xs">
+                <div>EBIT Margin %</div>
+                <div className="text-[10px] text-slate-500">Operating profitability as % of revenue</div>
+              </td>
               {years.map((y) => (
                 <td key={y.year_index} className="py-2 px-4 text-right text-slate-300">
                   {formatPercentRaw(y.ebit_margin_pct)}
@@ -74,7 +86,10 @@ export function CashflowProjectionTable({ output }: CashflowProjectionTableProps
 
             {/* Taxes & NOPAT */}
             <tr className="hover:bg-slate-800/20 text-slate-400">
-              <td className="py-2 px-4 font-sans text-xs">(-) Operating Taxes</td>
+              <td className="py-2 px-4 font-sans text-xs">
+                <div>(-) Operating Taxes</div>
+                <div className="text-[10px] text-slate-500">Statutory tax applied on operating profit</div>
+              </td>
               {years.map((y) => (
                 <td key={y.year_index} className="py-2 px-4 text-right text-slate-400">
                   ({formatCrore(y.operating_taxes)})
@@ -82,7 +97,10 @@ export function CashflowProjectionTable({ output }: CashflowProjectionTableProps
               ))}
             </tr>
             <tr className="hover:bg-slate-800/20 font-bold text-slate-200">
-              <td className="py-2.5 px-4 font-sans text-xs">NOPAT (EBIT - Taxes)</td>
+              <td className="py-2.5 px-4 font-sans text-xs">
+                <div>NOPAT (EBIT - Taxes)</div>
+                <div className="text-[10px] text-slate-500 font-normal">Net operating profit after taxes</div>
+              </td>
               {years.map((y) => (
                 <td key={y.year_index} className="py-2.5 px-4 text-right text-slate-100">
                   {formatCrore(y.nopat)}
@@ -92,7 +110,10 @@ export function CashflowProjectionTable({ output }: CashflowProjectionTableProps
 
             {/* Non-cash & Reinvestment adjustments */}
             <tr className="hover:bg-slate-800/20 text-slate-400">
-              <td className="py-2 px-4 font-sans text-xs">(+) Depreciation & Amortization</td>
+              <td className="py-2 px-4 font-sans text-xs">
+                <div>(+) Depreciation & Amortization</div>
+                <div className="text-[10px] text-slate-500">Non-cash charge added back to cash flow</div>
+              </td>
               {years.map((y) => (
                 <td key={y.year_index} className="py-2 px-4 text-right text-slate-300">
                   +{formatCrore(y.depreciation_amortization)}
@@ -100,7 +121,10 @@ export function CashflowProjectionTable({ output }: CashflowProjectionTableProps
               ))}
             </tr>
             <tr className="hover:bg-slate-800/20 text-slate-400">
-              <td className="py-2 px-4 font-sans text-xs">(-) Capital Expenditure (CapEx)</td>
+              <td className="py-2 px-4 font-sans text-xs">
+                <div>(-) Capital Expenditure (CapEx)</div>
+                <div className="text-[10px] text-slate-500">Fixed assets & maintenance reinvestment</div>
+              </td>
               {years.map((y) => (
                 <td key={y.year_index} className="py-2 px-4 text-right text-rose-400">
                   -{formatCrore(y.capex)}
@@ -108,7 +132,10 @@ export function CashflowProjectionTable({ output }: CashflowProjectionTableProps
               ))}
             </tr>
             <tr className="hover:bg-slate-800/20 text-slate-400">
-              <td className="py-2 px-4 font-sans text-xs">(-) Change in Net Working Capital</td>
+              <td className="py-2 px-4 font-sans text-xs">
+                <div>(-) Change in Net Working Capital</div>
+                <div className="text-[10px] text-slate-500">Operating liquidity requirement</div>
+              </td>
               {years.map((y) => (
                 <td key={y.year_index} className="py-2 px-4 text-right text-slate-400">
                   -{formatCrore(y.change_in_nwc)}
@@ -118,7 +145,10 @@ export function CashflowProjectionTable({ output }: CashflowProjectionTableProps
 
             {/* Unlevered Free Cash Flow (FCFF) */}
             <tr className="hover:bg-slate-800/20 bg-sky-500/10 font-bold text-sky-400">
-              <td className="py-2.5 px-4 font-sans text-xs">Free Cash Flow to Firm (FCFF)</td>
+              <td className="py-2.5 px-4 font-sans text-xs">
+                <div className="text-sky-300">Free Cash Flow to Firm (FCFF)</div>
+                <div className="text-[10px] text-sky-400/70 font-normal">NOPAT + D&A - CapEx - ΔNWC</div>
+              </td>
               {years.map((y) => (
                 <td key={y.year_index} className="py-2.5 px-4 text-right text-sky-300 font-bold">
                   {formatCrore(y.free_cash_flow)}
@@ -128,7 +158,10 @@ export function CashflowProjectionTable({ output }: CashflowProjectionTableProps
 
             {/* Discounting rows */}
             <tr className="hover:bg-slate-800/20 text-slate-400 text-[11px]">
-              <td className="py-2 px-4 font-sans">Discount Period (t)</td>
+              <td className="py-2 px-4 font-sans">
+                <div>Discount Period (t)</div>
+                <div className="text-[10px] text-slate-500">Compounding period (mid-year adjusted)</div>
+              </td>
               {years.map((y) => (
                 <td key={y.year_index} className="py-2 px-4 text-right">
                   {y.discount_period.toFixed(2)}
@@ -136,7 +169,10 @@ export function CashflowProjectionTable({ output }: CashflowProjectionTableProps
               ))}
             </tr>
             <tr className="hover:bg-slate-800/20 text-slate-400 text-[11px]">
-              <td className="py-2 px-4 font-sans">Discount Factor [1 / (1+WACC)^t]</td>
+              <td className="py-2 px-4 font-sans">
+                <div>Discount Factor [1 / (1+WACC)^t]</div>
+                <div className="text-[10px] text-slate-500">Present value multiplier at effective WACC</div>
+              </td>
               {years.map((y) => (
                 <td key={y.year_index} className="py-2 px-4 text-right text-slate-300">
                   {y.discount_factor.toFixed(4)}
@@ -146,7 +182,10 @@ export function CashflowProjectionTable({ output }: CashflowProjectionTableProps
 
             {/* Present Value of Cash Flow */}
             <tr className="hover:bg-slate-800/20 bg-emerald-500/10 font-extrabold text-emerald-400">
-              <td className="py-3 px-4 font-sans text-xs">Present Value PV(FCFF)</td>
+              <td className="py-3 px-4 font-sans text-xs">
+                <div className="text-emerald-300">Present Value PV(FCFF)</div>
+                <div className="text-[10px] text-emerald-400/70 font-normal">FCFF × Discount Factor</div>
+              </td>
               {years.map((y) => (
                 <td key={y.year_index} className="py-3 px-4 text-right text-emerald-400">
                   {formatCrore(y.pv_fcf)}
@@ -158,39 +197,39 @@ export function CashflowProjectionTable({ output }: CashflowProjectionTableProps
       </div>
 
       {/* Terminal Value Reconciliation Footer */}
-      <div className="bg-[#0b101c] p-6 border-t border-slate-800 grid grid-cols-1 md:grid-cols-3 gap-6 font-mono text-xs">
+      <div className="bg-slate-50 dark:bg-[#0b101c] p-6 border-t border-slate-200 dark:border-slate-800 grid grid-cols-1 md:grid-cols-3 gap-6 font-mono text-xs">
         <div className="space-y-1">
-          <div className="text-[10px] uppercase font-semibold text-slate-400 font-sans">
+          <div className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 font-sans">
             Explicit 5-Yr PV Cash Flows
           </div>
-          <div className="text-xl font-bold text-slate-100">
+          <div className="text-xl font-bold text-slate-900 dark:text-slate-100">
             {formatCrore(output.cumulative_pv_fcf)}
           </div>
-          <div className="text-[10px] text-slate-400 font-sans">
+          <div className="text-[10px] text-slate-500 dark:text-slate-400 font-sans">
             {(100 - output.tv_as_pct_of_ev).toFixed(1)}% of Enterprise Value
           </div>
         </div>
 
         <div className="space-y-1">
-          <div className="text-[10px] uppercase font-semibold text-slate-400 font-sans">
+          <div className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 font-sans">
             Discounted Terminal Value
           </div>
-          <div className="text-xl font-bold text-sky-400">
+          <div className="text-xl font-bold text-sky-700 dark:text-sky-400">
             {formatCrore(output.pv_terminal_value)}
           </div>
-          <div className="text-[10px] text-slate-400 font-sans">
+          <div className="text-[10px] text-slate-500 dark:text-slate-400 font-sans">
             Gordon Growth: {output.terminal_growth_rate_pct.toFixed(2)}% perpetual g ({output.tv_as_pct_of_ev.toFixed(1)}% of EV)
           </div>
         </div>
 
         <div className="space-y-1">
-          <div className="text-[10px] uppercase font-semibold text-slate-400 font-sans">
+          <div className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 font-sans">
             Total Implied Enterprise Value
           </div>
-          <div className="text-2xl font-extrabold text-emerald-400">
+          <div className="text-2xl font-extrabold text-emerald-700 dark:text-emerald-400">
             {formatCrore(output.enterprise_value)}
           </div>
-          <div className="text-[10px] text-slate-400 font-sans">
+          <div className="text-[10px] text-slate-500 dark:text-slate-400 font-sans">
             Sum of Discounted Forecast + PV(Terminal Value)
           </div>
         </div>

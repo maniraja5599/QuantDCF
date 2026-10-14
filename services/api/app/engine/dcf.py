@@ -210,6 +210,11 @@ def calculate_dcf(params: DCFCalculationInput) -> DCFCalculationOutput:
             f"Debt [{params.total_debt:,.2f}] - Minority [{params.minority_interest:,.2f}] - "
             f"Senior [{params.other_senior_claims:,.2f}] = {equity_value:,.2f}"
         ),
+        "ev_reconciliation": (
+            f"Equity Value [{equity_value:,.2f}] - Cash [{params.cash_and_equivalents:,.2f}] + "
+            f"Debt [{params.total_debt:,.2f}] + Minority [{params.minority_interest:,.2f}] + "
+            f"Senior [{params.other_senior_claims:,.2f}] = {enterprise_value:,.2f} [Balanced]"
+        ),
         "intrinsic_value_per_share": (
             f"Equity Value [{equity_value:,.2f}] / Diluted Shares [{params.diluted_shares:,.2f}] = "
             f"₹{intrinsic_value_per_share:,.2f}"

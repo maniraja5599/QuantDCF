@@ -21,6 +21,12 @@ async def get_nifty_quote():
     return await provider_registry.get_nifty_quote()
 
 
+@router.get("/indices/leaders", response_model=List[dict])
+async def get_market_leaders():
+    """Returns real-time streaming quotes for NIFTY 50, SENSEX, and market leaders."""
+    return await provider_registry.get_market_leaders_quotes()
+
+
 @router.get("/{symbol}", response_model=dict)
 async def get_company_profile(symbol: str):
     """Returns official profile, sector, ISIN, and market data status for a company."""

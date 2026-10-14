@@ -9,9 +9,19 @@ import {
   ScenarioResult,
   ProviderStatus,
   SavedValuation,
+  PeerCompsResponse,
+  BFSIValuationInput,
+  BFSIValuationOutput,
+  SOTPValuationInput,
+  SOTPValuationOutput,
 } from "./types";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
+// In browser context (mobile or desktop), use relative path so Next.js proxies all /api requests to FastAPI backend.
+// In SSR context, use process.env.NEXT_PUBLIC_API_BASE_URL or fallback to http://127.0.0.1:8000.
+const API_BASE =
+  typeof window !== "undefined"
+    ? ""
+    : process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
 
 async function request<T>(endpoint: string, options?: RequestInit): Promise<T> {
   const url = `${API_BASE}${endpoint}`;
@@ -48,6 +58,9 @@ export const api = {
   getCompanyProfile: (symbol: string): Promise<Company> =>
     request<Company>(`/api/companies/${encodeURIComponent(symbol)}`),
 
+  getCompany: (symbol: string): Promise<Company> =>
+    request<Company>(`/api/companies/${encodeURIComponent(symbol)}`),
+
   getQuote: (symbol: string): Promise<MarketQuote> =>
     request<MarketQuote>(`/api/companies/${encodeURIComponent(symbol)}/quote`),
 
@@ -56,10 +69,21 @@ export const api = {
     current_price: number;
     change: number;
     percent_change: number;
+    day_high?: number;
+    day_low?: number;
     timestamp: string;
     source: string;
     is_live: boolean;
   }> => request("/api/companies/indices/nifty"),
+
+  getMarketLeaders: (): Promise<Array<{
+    s: string;
+    price: number;
+    change: number;
+    p_change: number;
+    type: "index" | "stock";
+    is_live: boolean;
+  }>> => request("/api/companies/indices/leaders"),
 
   // Financial Statements
   getHistoricalFinancials: (symbol: string): Promise<HistoricalStatement[]> =>
@@ -100,6 +124,30 @@ export const api = {
 
   calculateScenarios: (payload: DCFCalculationInput): Promise<ScenarioResult[]> =>
     request<ScenarioResult[]>("/api/valuation/scenarios", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
+
+  // Peer Comps & Multiples
+  getPeerComps: (symbol: string, params?: { eps?: number; ebit?: number; revenue?: number }): Promise<PeerCompsResponse> => {
+    const q = new URLSearchParams();
+    if (params?.eps) q.append("eps", params.eps.toString());
+    if (params?.ebit) q.append("ebit", params.ebit.toString());
+    if (params?.revenue) q.append("revenue", params.revenue.toString());
+    const qs = q.toString() ? `?${q.toString()}` : "";
+    return request<PeerCompsResponse>(`/api/valuation/peers/${encodeURIComponent(symbol)}${qs}`);
+  },
+
+  // BFSI Banking Valuation
+  calculateBFSI: (payload: BFSIValuationInput): Promise<BFSIValuationOutput> =>
+    request<BFSIValuationOutput>("/api/valuation/bfsi", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
+
+  // Sum-of-the-Parts (SOTP) Valuation
+  calculateSOTP: (payload: SOTPValuationInput): Promise<SOTPValuationOutput> =>
+    request<SOTPValuationOutput>("/api/valuation/sotp", {
       method: "POST",
       body: JSON.stringify(payload),
     }),

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -12,7 +13,11 @@ import {
   Settings,
   TrendingUp,
   ShieldAlert,
+  X,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from "lucide-react";
+import { Logo, LogoIcon } from "@/components/ui/logo";
 
 const NAV_ITEMS = [
   { name: "Dashboard", href: "/", icon: LayoutDashboard },
@@ -24,31 +29,114 @@ const NAV_ITEMS = [
   { name: "Settings", href: "/settings", icon: Settings },
 ];
 
-export function Sidebar() {
+interface SidebarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
+}
+
+export function Sidebar({
+  isOpen = false,
+  onClose,
+  isCollapsed = false,
+  onToggleCollapse,
+}: SidebarProps) {
   const pathname = usePathname();
 
-  return (
-    <aside className="w-64 bg-[#0d1322] border-r border-slate-800 flex flex-col h-screen fixed left-0 top-0 z-40 select-none">
+  // 1. Prevent background scroll when mobile drawer is open
+  useEffect(() => {
+    if (isOpen) {
+      const originalStyle = window.getComputedStyle(document.body).overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = originalStyle;
+      };
+    }
+  }, [isOpen]);
+
+  // 2. Close on Escape key press
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen && onClose) {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
+  const handleLinkClick = () => {
+    if (onClose) {
+      onClose();
+    }
+  };
+
+  const renderNavContent = (collapsed: boolean) => (
+    <div className="flex flex-col h-full bg-[#0d1322] border-r border-slate-800 select-none">
       {/* Brand Header */}
-      <div className="h-16 flex items-center px-6 border-b border-slate-800 gap-3">
-        <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-sky-500 to-emerald-400 flex items-center justify-center text-white shadow-lg shadow-sky-500/20">
-          <TrendingUp className="w-5 h-5" />
+      {collapsed ? (
+        <div className="h-16 flex flex-col items-center justify-center border-b border-slate-800 px-2 relative">
+          <Link
+            href="/"
+            onClick={handleLinkClick}
+            suppressHydrationWarning
+            title="QuantDCF India — Institutional Valuation"
+            className="flex items-center justify-center p-1 rounded-xl hover:bg-slate-800/60 transition-colors"
+          >
+            <LogoIcon size="md" />
+          </Link>
         </div>
-        <div>
-          <span className="font-bold text-sm tracking-wider text-slate-100 uppercase">
-            QuantDCF <span className="text-sky-400">India</span>
-          </span>
-          <div className="text-[10px] text-slate-400 font-mono tracking-tighter">
-            EQUITY RESEARCH v1.0
-          </div>
+      ) : (
+        <div className="h-16 flex items-center justify-between px-4 border-b border-slate-800">
+          <Logo size="md" onClick={handleLinkClick} />
+
+          {/* Desktop Collapse Toggle Button */}
+          {onToggleCollapse && (
+            <button
+              onClick={onToggleCollapse}
+              aria-label="Collapse navigation sidebar"
+              title="Collapse Sidebar (Ctrl+B)"
+              className="hidden lg:flex w-8 h-8 items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/80 active:scale-95 transition-all"
+            >
+              <PanelLeftClose className="w-4 h-4" />
+            </button>
+          )}
+
+          {/* Mobile Close Button - 44px Touch Target with Smooth Feedback */}
+          {onClose && (
+            <button
+              onClick={onClose}
+              aria-label="Close navigation menu"
+              className="lg:hidden w-11 h-11 flex items-center justify-center rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 active:scale-95 transition-transform duration-100"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          )}
         </div>
-      </div>
+      )}
+
+      {/* When collapsed on desktop, show expand button under header */}
+      {collapsed && onToggleCollapse && (
+        <div className="pt-2 px-2 flex justify-center">
+          <button
+            onClick={onToggleCollapse}
+            aria-label="Expand navigation sidebar"
+            title="Expand Sidebar (Ctrl+B)"
+            className="w-10 h-8 flex items-center justify-center rounded-lg text-sky-400 hover:text-sky-300 hover:bg-sky-500/10 border border-sky-500/20 transition-all"
+          >
+            <PanelLeftOpen className="w-4 h-4" />
+          </button>
+        </div>
+      )}
 
       {/* Navigation Links */}
-      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-        <div className="px-3 pb-2 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
-          Terminal Navigation
-        </div>
+      <nav className={`flex-1 ${collapsed ? "px-2 py-3" : "px-3 py-4"} space-y-1.5 overflow-y-auto overscroll-contain`}>
+        {!collapsed && (
+          <div className="px-3 pb-2 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+            Terminal Navigation
+          </div>
+        )}
         {NAV_ITEMS.map((item) => {
           const isActive =
             item.href === "/"
@@ -59,31 +147,82 @@ export function Sidebar() {
             <Link
               key={item.name}
               href={item.href}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition-all ${
+              onClick={handleLinkClick}
+              suppressHydrationWarning
+              title={collapsed ? item.name : undefined}
+              className={`flex items-center ${
+                collapsed ? "justify-center p-3" : "gap-3 px-3.5 py-3"
+              } rounded-xl text-xs font-medium transition-all duration-150 active:scale-[0.98] ${
                 isActive
-                  ? "bg-sky-500/10 text-sky-400 border border-sky-500/20 font-semibold"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
+                  ? "bg-sky-500/15 text-sky-400 border border-sky-500/30 font-semibold shadow-sm"
+                  : "text-slate-400 hover:text-slate-100 hover:bg-slate-800/60"
               }`}
             >
-              <item.icon className={`w-4 h-4 ${isActive ? "text-sky-400" : "text-slate-400"}`} />
-              <span>{item.name}</span>
+              <item.icon className={`${collapsed ? "w-5 h-5" : "w-4 h-4"} shrink-0 ${isActive ? "text-sky-400" : "text-slate-400"}`} />
+              {!collapsed && <span className="truncate">{item.name}</span>}
             </Link>
           );
         })}
       </nav>
 
       {/* Licensing Compliance Status Footer */}
-      <div className="p-4 border-t border-slate-800 bg-[#090e18]">
-        <div className="rounded-lg bg-amber-500/10 border border-amber-500/20 p-3 text-xs">
-          <div className="flex items-center gap-2 text-amber-400 font-semibold text-[11px]">
-            <ShieldAlert className="w-3.5 h-3.5" />
-            <span>NSE MCP Gate: Active</span>
+      <div className={`${collapsed ? "p-2" : "p-4"} border-t border-slate-800 bg-[#090e18]`}>
+        {collapsed ? (
+          <div
+            title="NSE MCP Gate: Active - Audited filings verified"
+            className="w-10 h-10 mx-auto flex items-center justify-center rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400"
+          >
+            <ShieldAlert className="w-4 h-4" />
           </div>
-          <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
-            Data policy compliance enforced. Audited filings verified.
-          </p>
-        </div>
+        ) : (
+          <div className="rounded-lg bg-amber-500/10 border border-amber-500/20 p-3 text-xs">
+            <div className="flex items-center gap-2 text-amber-400 font-semibold text-[11px]">
+              <ShieldAlert className="w-3.5 h-3.5 shrink-0" />
+              <span>NSE MCP Gate: Active</span>
+            </div>
+            <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
+              Data policy compliance enforced. Audited filings verified.
+            </p>
+          </div>
+        )}
       </div>
-    </aside>
+    </div>
+  );
+
+  return (
+    <>
+      {/* 1. Desktop Sidebar (Smooth width collapse from w-64 to w-16) */}
+      <aside
+        className={`hidden lg:flex fixed left-0 top-0 h-screen z-40 transition-all duration-300 ease-in-out ${
+          isCollapsed ? "w-16" : "w-64"
+        }`}
+      >
+        {renderNavContent(isCollapsed)}
+      </aside>
+
+      {/* 2. Mobile Butter-Smooth Off-Canvas Drawer (Persistent DOM with Hardware-Accelerated Transforms) */}
+      <div
+        className={`fixed inset-0 z-50 lg:hidden transition-all duration-300 ease-in-out ${
+          isOpen ? "pointer-events-auto visible" : "pointer-events-none invisible"
+        }`}
+      >
+        {/* Backdrop Blur Overlay with Smooth Fade */}
+        <div
+          className={`fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-300 ease-out ${
+            isOpen ? "opacity-100" : "opacity-0"
+          }`}
+          onClick={onClose}
+        />
+
+        {/* Drawer Menu Panel with iOS/Material Spring-Decel Curve */}
+        <aside
+          className={`fixed top-0 left-0 bottom-0 w-72 max-w-[85vw] h-full z-10 shadow-2xl transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform ${
+            isOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
+        >
+          {renderNavContent(false)}
+        </aside>
+      </div>
+    </>
   );
 }

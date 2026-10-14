@@ -47,3 +47,5 @@ yarn-error.log*
 pnpm-debug.log*
 *.tmp
 temp/
+screenshots/
+capture_all_pages.js

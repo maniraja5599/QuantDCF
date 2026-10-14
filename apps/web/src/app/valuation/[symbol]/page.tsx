@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { api } from "@/lib/api-client";
 import {
@@ -13,6 +13,7 @@ import {
   ForecastYearInput,
   SensitivityMatrix,
   ScenarioResult,
+  PeerCompsResponse,
 } from "@/lib/types";
 import { ValuationSummaryCard } from "@/components/dcf/valuation-summary-card";
 import { HistoricalFinancialsTable } from "@/components/dcf/historical-financials-table";
@@ -25,6 +26,9 @@ import { ValuationBridgeChart } from "@/components/dcf/bridge-chart";
 import { CashflowTrajectoryChart } from "@/components/dcf/cashflow-chart";
 import { StatementUploader } from "@/components/dcf/statement-uploader";
 import { AuditFormulaPanel } from "@/components/dcf/audit-formula-panel";
+import { PeerCompsTable } from "@/components/dcf/peer-comps-table";
+import { BFSIValuationCard } from "@/components/dcf/bfsi-valuation-card";
+import { SOTPValuationCard } from "@/components/dcf/sotp-valuation-card";
 import {
   Bookmark,
   FileDown,
@@ -35,6 +39,12 @@ import {
   Loader2,
   AlertCircle,
   CheckCircle,
+  FileSpreadsheet,
+  Users,
+  Landmark,
+  PieChart,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { formatCrore, formatINR } from "@/lib/formatters";
 
@@ -56,8 +66,46 @@ export default function CompanyValuationPage() {
   // WACC Modal state
   const [isWaccModalOpen, setIsWaccModalOpen] = useState(false);
 
-  // Active Tab
-  const [activeTab, setActiveTab] = useState<"model" | "historical" | "sensitivity" | "scenarios" | "upload" | "audit">("model");
+  // Active Tab & Peer Comps
+  const [peerComps, setPeerComps] = useState<PeerCompsResponse | null>(null);
+  const [activeTab, setActiveTab] = useState<
+    "model" | "historical" | "peers" | "bfsi" | "sotp" | "sensitivity" | "scenarios" | "upload" | "audit"
+  >("model");
+
+  // Tab scroll navigation state
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const checkTabScroll = useCallback(() => {
+    if (tabsRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = tabsRef.current;
+      setCanScrollLeft(scrollLeft > 4);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 4);
+    }
+  }, []);
+
+  useEffect(() => {
+    checkTabScroll();
+    const handleResize = () => checkTabScroll();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [checkTabScroll]);
+
+  // Re-check scroll availability once loading finishes and DOM elements are rendered
+  useEffect(() => {
+    if (!loading) {
+      const timer = setTimeout(checkTabScroll, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [loading, output, checkTabScroll]);
+
+  const scrollTabs = (direction: "left" | "right") => {
+    if (tabsRef.current) {
+      tabsRef.current.scrollBy({ left: direction === "left" ? -240 : 240, behavior: "smooth" });
+      setTimeout(checkTabScroll, 300);
+    }
+  };
 
   // Save Modal state
   const [isSaving, setIsSaving] = useState(false);
@@ -74,6 +122,9 @@ export default function CompanyValuationPage() {
     weight_equity_pct: 90.0,
     weight_debt_pct: 10.0,
   });
+
+  const isBFSI = company?.sector?.toLowerCase().includes("financial") || ["HDFCBANK", "ICICIBANK", "SBIN", "KOTAKBANK", "BAJFINANCE"].includes(symbol);
+  const isConglomerate = symbol === "RELIANCE" || symbol === "LT" || company?.sector?.toLowerCase().includes("diversified");
 
   const [forecasts, setForecasts] = useState<ForecastYearInput[]>([
     {
@@ -193,15 +244,17 @@ export default function CompanyValuationPage() {
       setLoading(true);
       setError(null);
       try {
-        const [prof, q, hist] = await Promise.all([
+        const [prof, q, hist, peers] = await Promise.all([
           api.getCompanyProfile(symbol).catch(() => null),
           api.getQuote(symbol).catch(() => null),
           api.getHistoricalFinancials(symbol).catch(() => []),
+          api.getPeerComps(symbol).catch(() => null),
         ]);
 
         setCompany(prof);
         setQuote(q);
         setHistorical(hist);
+        setPeerComps(peers);
 
         const latest = hist.length > 0 ? hist[hist.length - 1] : undefined;
 
@@ -296,6 +349,124 @@ export default function CompanyValuationPage() {
     }
   };
 
+  const handleExportCSV = () => {
+    if (!output) return;
+
+    const rows: string[][] = [
+      ["QUANTDCF INSTITUTIONAL VALUATION SCHEDULE"],
+      ["Company Name", company?.name || symbol],
+      ["NSE Ticker", symbol],
+      ["Exchange", company?.exchange || "NSE"],
+      ["Valuation Timestamp", output.calculated_at],
+      ["Model Version", output.model_version],
+      [""],
+      ["DCF VALUATION BRIDGE & INTRINSIC VALUE"],
+      ["Intrinsic Value Per Share (INR)", output.intrinsic_value_per_share.toFixed(2)],
+      ["Current Market Price (INR)", output.current_market_price ? output.current_market_price.toFixed(2) : "N/A"],
+      ["Implied Upside / Downside %", output.implied_upside_downside_pct ? `${output.implied_upside_downside_pct.toFixed(2)}%` : "N/A"],
+      ["Discount Rate (WACC %)", `${output.discount_rate_wacc_pct.toFixed(2)}%`],
+      ["Terminal Growth Rate %", `${output.terminal_growth_rate_pct.toFixed(2)}%`],
+      ["Enterprise Value (INR Cr)", output.enterprise_value.toFixed(2)],
+      ["PV of 5-Yr Forecast FCF (INR Cr)", output.cumulative_pv_fcf.toFixed(2)],
+      ["PV of Terminal Value (INR Cr)", output.pv_terminal_value.toFixed(2)],
+      ["Terminal Value % of EV", `${output.tv_as_pct_of_ev.toFixed(2)}%`],
+      ["Cash & Liquid Assets (INR Cr)", output.cash_and_equivalents.toFixed(2)],
+      ["Total Debt & Borrowings (INR Cr)", output.total_debt.toFixed(2)],
+      ["Minority Interest / Claims (INR Cr)", output.minority_interest.toFixed(2)],
+      ["Implied Equity Value (INR Cr)", output.equity_value.toFixed(2)],
+      ["Diluted Shares Outstanding (Cr)", output.diluted_shares.toFixed(2)],
+      [""],
+      ["5-YEAR FORECAST FREE CASH FLOW SCHEDULE (INR CRORE)"],
+      [
+        "Financial Metric",
+        ...output.forecast_years.map((f) => f.year_label)
+      ],
+      [
+        "Revenue from Operations",
+        ...output.forecast_years.map((f) => f.revenue.toFixed(2))
+      ],
+      [
+        "Revenue Growth %",
+        ...output.forecast_years.map((f) => `${f.revenue_growth_pct.toFixed(2)}%`)
+      ],
+      [
+        "Operating Profit (EBIT)",
+        ...output.forecast_years.map((f) => f.ebit.toFixed(2))
+      ],
+      [
+        "EBIT Margin %",
+        ...output.forecast_years.map((f) => `${f.ebit_margin_pct.toFixed(2)}%`)
+      ],
+      [
+        "Operating Taxes",
+        ...output.forecast_years.map((f) => f.operating_taxes.toFixed(2))
+      ],
+      [
+        "Net Operating Profit After Tax (NOPAT)",
+        ...output.forecast_years.map((f) => f.nopat.toFixed(2))
+      ],
+      [
+        "Depreciation & Amortization (+)",
+        ...output.forecast_years.map((f) => f.depreciation_amortization.toFixed(2))
+      ],
+      [
+        "Capital Expenditure (-)",
+        ...output.forecast_years.map((f) => f.capex.toFixed(2))
+      ],
+      [
+        "Change in Net Working Capital (-)",
+        ...output.forecast_years.map((f) => f.change_in_nwc.toFixed(2))
+      ],
+      [
+        "Free Cash Flow to Firm (FCFF)",
+        ...output.forecast_years.map((f) => f.free_cash_flow.toFixed(2))
+      ],
+      [
+        "Discount Period (t)",
+        ...output.forecast_years.map((f) => f.discount_period.toString())
+      ],
+      [
+        "Discount Factor",
+        ...output.forecast_years.map((f) => f.discount_factor.toFixed(4))
+      ],
+      [
+        "Present Value of FCF (PV)",
+        ...output.forecast_years.map((f) => f.pv_fcf.toFixed(2))
+      ],
+      [""],
+      ["SCENARIO VALUATION MATRIX"],
+      ["Scenario Name", "Revenue CAGR %", "Terminal EBIT Margin %", "Intrinsic Value (INR)", "Upside/Downside %"],
+      ...scenarios.map((s) => [
+        s.scenario_name.toUpperCase(),
+        `${s.revenue_cagr_pct.toFixed(1)}%`,
+        `${s.terminal_ebit_margin_pct.toFixed(1)}%`,
+        s.intrinsic_value_per_share.toFixed(2),
+        s.implied_upside_downside_pct ? `${s.implied_upside_downside_pct.toFixed(2)}%` : "N/A"
+      ]),
+    ];
+
+    const csvContent = rows
+      .map((row) =>
+        row
+          .map((cell) => {
+            const escaped = String(cell).replace(/"/g, '""');
+            return `"${escaped}"`;
+          })
+          .join(",")
+      )
+      .join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `${symbol}_QuantDCF_Valuation_Model.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4 text-sky-400">
@@ -308,68 +479,84 @@ export default function CompanyValuationPage() {
   }
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto pb-12">
+    <div className="space-y-4 max-w-7xl mx-auto pb-8">
       {/* Company Identity & Action Header */}
-      <div className="bg-[#111726] border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div className="space-y-2">
-          <div className="flex items-center gap-3">
-            <span className="text-2xl font-black text-sky-400 font-mono tracking-tight">
+      <div className="bg-white dark:bg-[#111726] border border-slate-200 dark:border-slate-800 rounded-xl p-4 sm:p-5 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 transition-colors">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <span className="text-xl font-black text-sky-600 dark:text-sky-400 font-mono tracking-tight">
               {symbol}
             </span>
-            <span className="bg-slate-800 text-slate-300 text-xs px-2 py-0.5 rounded font-mono font-bold">
+            <span className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] px-1.5 py-0.5 rounded font-mono font-bold border border-slate-200 dark:border-transparent">
               {company?.exchange || "NSE"}
             </span>
             {historical.length > 0 && historical[0].provenance === "AUDITED" ? (
-              <span className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs px-2.5 py-0.5 rounded flex items-center gap-1 font-semibold">
-                <ShieldCheck className="w-3.5 h-3.5" /> Audited Annual Disclosures
+              <span className="bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 text-[10px] px-2 py-0.5 rounded flex items-center gap-1 font-semibold">
+                <ShieldCheck className="w-3 h-3" /> Audited Disclosures
               </span>
             ) : (
-              <span className="bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs px-2.5 py-0.5 rounded font-semibold">
+              <span className="bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20 text-[10px] px-2 py-0.5 rounded font-semibold">
                 Manual / Upload Mode
               </span>
             )}
           </div>
-          <h1 className="text-xl font-bold text-slate-100">{company?.name || symbol}</h1>
-          <div className="text-xs text-slate-400 flex items-center gap-4">
-            <span>Sector: <strong className="text-slate-300">{company?.sector || "General"}</strong></span>
-            <span>Industry: <strong className="text-slate-300">{company?.industry || "Equities"}</strong></span>
-            {company?.isin && <span>ISIN: <strong className="text-slate-300 font-mono">{company.isin}</strong></span>}
+          <h1 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">{company?.name || symbol}</h1>
+          <div className="text-[11px] text-slate-500 dark:text-slate-400 flex flex-wrap items-center gap-3">
+            <span>Sector: <strong className="text-slate-800 dark:text-slate-200">{company?.sector || "General"}</strong></span>
+            <span>Industry: <strong className="text-slate-800 dark:text-slate-200">{company?.industry || "Equities"}</strong></span>
+            {company?.isin && <span>ISIN: <strong className="text-slate-800 dark:text-slate-200 font-mono">{company.isin}</strong></span>}
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={handleSaveModel}
             disabled={isSaving}
-            className="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold px-4 py-2 rounded-lg text-xs flex items-center gap-2 transition-all"
+            className="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-sm"
           >
             {saveSuccess ? (
               <>
-                <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="text-emerald-400">Model Saved</span>
+                <CheckCircle className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                <span className="text-emerald-600 dark:text-emerald-400 font-bold">Saved</span>
               </>
             ) : (
               <>
-                <Bookmark className="w-3.5 h-3.5" />
+                <Bookmark className="w-3.5 h-3.5 text-slate-600 dark:text-slate-400" />
                 <span>Save Valuation</span>
               </>
             )}
           </button>
           <button
+            onClick={handleExportCSV}
+            className="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-sm"
+            title="Download full 5-year FCF schedule and DCF parameters as CSV"
+          >
+            <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+            <span>Export CSV</span>
+          </button>
+          <button
             onClick={handleExportReport}
-            className="bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-4 py-2 rounded-lg text-xs flex items-center gap-2 transition-all shadow-md shadow-sky-500/20"
+            className="bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-md shadow-sky-500/20"
           >
             <FileDown className="w-3.5 h-3.5" />
-            <span>Export Institutional Memo</span>
+            <span>Export Memo</span>
           </button>
         </div>
       </div>
 
       {error && (
-        <div className="p-4 bg-rose-500/10 border border-rose-500/30 rounded-xl flex items-center gap-3 text-xs text-rose-300">
-          <AlertCircle className="w-5 h-5 shrink-0" />
-          <span>{error}</span>
+        <div className="p-4 bg-rose-500/10 border border-rose-500/30 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-rose-300 shadow-md">
+          <div className="flex items-center gap-2.5">
+            <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
+            <span>{error}</span>
+          </div>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-3 py-1.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-500/40 rounded-lg text-xs font-semibold shrink-0 transition-all active:scale-95"
+          >
+            Retry Loading
+          </button>
         </div>
       )}
 
@@ -382,73 +569,133 @@ export default function CompanyValuationPage() {
         />
       )}
 
-      {/* Navigation Tabs */}
-      <div className="flex border-b border-slate-800 space-x-6 text-xs font-semibold text-slate-400">
-        <button
-          onClick={() => setActiveTab("model")}
-          className={`pb-3 transition-colors border-b-2 flex items-center gap-1.5 ${
-            activeTab === "model"
-              ? "border-sky-400 text-sky-400"
-              : "border-transparent hover:text-slate-200"
-          }`}
+      {/* Navigation Tabs Bar with Responsive Left/Right Chevrons */}
+      <div className="relative border-b border-slate-200 dark:border-slate-800 flex items-center group">
+        {canScrollLeft && (
+          <button
+            onClick={() => scrollTabs("left")}
+            className="absolute left-0 z-20 h-full px-1.5 bg-gradient-to-r from-slate-100 via-slate-100/90 to-transparent dark:from-[#080c16] dark:via-[#080c16]/95 dark:to-transparent flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white transition-all shadow-lg"
+            aria-label="Scroll tabs left"
+            title="Scroll left"
+          >
+            <ChevronLeft className="w-4 h-4 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded p-0.5 border border-slate-300 dark:border-slate-700 shadow" />
+          </button>
+        )}
+
+        <div
+          ref={tabsRef}
+          onScroll={checkTabScroll}
+          className="flex space-x-1 sm:space-x-2 text-xs font-semibold text-slate-500 dark:text-slate-400 overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-800 scrollbar-track-transparent pb-0 px-1 w-full scroll-smooth"
         >
-          <Layers className="w-4 h-4" /> DCF Forecast & Visualizations
-        </button>
-        <button
-          onClick={() => setActiveTab("historical")}
-          className={`pb-3 transition-colors border-b-2 flex items-center gap-1.5 ${
-            activeTab === "historical"
-              ? "border-sky-400 text-sky-400"
-              : "border-transparent hover:text-slate-200"
-          }`}
-        >
-          <Calendar className="w-4 h-4" /> Audited Historical Statements
-        </button>
-        <button
-          onClick={() => setActiveTab("sensitivity")}
-          className={`pb-3 transition-colors border-b-2 flex items-center gap-1.5 ${
-            activeTab === "sensitivity"
-              ? "border-sky-400 text-sky-400"
-              : "border-transparent hover:text-slate-200"
-          }`}
-        >
-          Sensitivity Matrix (WACC vs g)
-        </button>
-        <button
-          onClick={() => setActiveTab("scenarios")}
-          className={`pb-3 transition-colors border-b-2 flex items-center gap-1.5 ${
-            activeTab === "scenarios"
-              ? "border-sky-400 text-sky-400"
-              : "border-transparent hover:text-slate-200"
-          }`}
-        >
-          Bull / Base / Bear Scenarios
-        </button>
-        <button
-          onClick={() => setActiveTab("audit")}
-          className={`pb-3 transition-colors border-b-2 flex items-center gap-1.5 ${
-            activeTab === "audit"
-              ? "border-sky-400 text-sky-400"
-              : "border-transparent hover:text-slate-200"
-          }`}
-        >
-          Mathematical Audit Trail
-        </button>
-        <button
-          onClick={() => setActiveTab("upload")}
-          className={`pb-3 transition-colors border-b-2 flex items-center gap-1.5 ${
-            activeTab === "upload"
-              ? "border-sky-400 text-sky-400"
-              : "border-transparent hover:text-slate-200"
-          }`}
-        >
-          Upload Statements (CSV/XLSX)
-        </button>
+          <button
+            onClick={() => setActiveTab("model")}
+            className={`px-2.5 py-2 pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 shrink-0 ${
+              activeTab === "model"
+                ? "border-sky-500 text-sky-700 dark:text-sky-400 font-bold"
+                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-slate-200"
+            }`}
+          >
+            <Layers className="w-3.5 h-3.5" /> Forecast & Models
+          </button>
+          <button
+            onClick={() => setActiveTab("historical")}
+            className={`px-2.5 py-2 pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 shrink-0 ${
+              activeTab === "historical"
+                ? "border-sky-500 text-sky-700 dark:text-sky-400 font-bold"
+                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-slate-200"
+            }`}
+          >
+            <Calendar className="w-3.5 h-3.5" /> Audited Financials
+          </button>
+          <button
+            onClick={() => setActiveTab("peers")}
+            className={`px-2.5 py-2 pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 shrink-0 ${
+              activeTab === "peers"
+                ? "border-sky-500 text-sky-700 dark:text-sky-400 font-bold"
+                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-slate-200"
+            }`}
+          >
+            <Users className="w-3.5 h-3.5" /> Peer Comps
+          </button>
+          <button
+            onClick={() => setActiveTab("bfsi")}
+            className={`px-2.5 py-2 pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 shrink-0 ${
+              activeTab === "bfsi"
+                ? "border-emerald-500 text-emerald-700 dark:text-emerald-400 font-bold"
+                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-slate-200"
+            }`}
+          >
+            <Landmark className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> Banking (DDM/P-B)
+            {isBFSI && <span className="text-[9px] bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 px-1 rounded font-mono font-bold">BFSI</span>}
+          </button>
+          <button
+            onClick={() => setActiveTab("sotp")}
+            className={`px-2.5 py-2 pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 shrink-0 ${
+              activeTab === "sotp"
+                ? "border-amber-500 text-amber-700 dark:text-amber-400 font-bold"
+                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-slate-200"
+            }`}
+          >
+            <PieChart className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" /> SOTP
+            {isConglomerate && <span className="text-[9px] bg-amber-500/20 text-amber-700 dark:text-amber-400 px-1 rounded font-mono font-bold">Conglomerate</span>}
+          </button>
+          <button
+            onClick={() => setActiveTab("sensitivity")}
+            className={`px-2.5 py-2 pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 shrink-0 ${
+              activeTab === "sensitivity"
+                ? "border-sky-500 text-sky-700 dark:text-sky-400 font-bold"
+                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-slate-200"
+            }`}
+          >
+            Sensitivity Matrix
+          </button>
+          <button
+            onClick={() => setActiveTab("scenarios")}
+            className={`px-2.5 py-2 pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 shrink-0 ${
+              activeTab === "scenarios"
+                ? "border-sky-500 text-sky-700 dark:text-sky-400 font-bold"
+                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-slate-200"
+            }`}
+          >
+            Scenarios
+          </button>
+          <button
+            onClick={() => setActiveTab("audit")}
+            className={`px-2.5 py-2 pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 shrink-0 ${
+              activeTab === "audit"
+                ? "border-sky-500 text-sky-700 dark:text-sky-400 font-bold"
+                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-slate-200"
+            }`}
+          >
+            Audit Trail
+          </button>
+          <button
+            onClick={() => setActiveTab("upload")}
+            className={`px-2.5 py-2 pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 shrink-0 ${
+              activeTab === "upload"
+                ? "border-sky-500 text-sky-700 dark:text-sky-400 font-bold"
+                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-slate-200"
+            }`}
+          >
+            Upload (CSV/XLSX)
+          </button>
+        </div>
+
+        {canScrollRight && (
+          <button
+            onClick={() => scrollTabs("right")}
+            className="absolute right-0 z-20 h-full px-1.5 bg-gradient-to-l from-slate-100 via-slate-100/90 to-transparent dark:from-[#080c16] dark:via-[#080c16]/95 dark:to-transparent flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white transition-all shadow-lg"
+            aria-label="Scroll tabs right"
+            title="Scroll right"
+          >
+            <ChevronRight className="w-4 h-4 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded p-0.5 border border-slate-300 dark:border-slate-700 shadow" />
+          </button>
+        )}
       </div>
 
       {/* Tab Panels */}
       {activeTab === "model" && output && (
-        <div className="space-y-8 animate-in fade-in">
+        <div className="space-y-4 animate-in fade-in">
           {/* Forecast Assumptions Form */}
           <ForecastAssumptionsForm
             forecasts={forecasts}
@@ -470,7 +717,7 @@ export default function CompanyValuationPage() {
           <CashflowProjectionTable output={output} />
 
           {/* Charts Row */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <ValuationBridgeChart output={output} />
             <CashflowTrajectoryChart output={output} />
           </div>
@@ -478,31 +725,60 @@ export default function CompanyValuationPage() {
       )}
 
       {activeTab === "historical" && (
-        <div className="space-y-8 animate-in fade-in">
+        <div className="space-y-4 animate-in fade-in">
           <HistoricalFinancialsTable statements={historical} />
         </div>
       )}
 
+      {activeTab === "peers" && peerComps && (
+        <div className="space-y-4 animate-in fade-in">
+          <PeerCompsTable
+            data={peerComps}
+            currentSymbol={symbol}
+            dcfIntrinsicValue={output?.intrinsic_value_per_share}
+            currentMarketPrice={quote?.current_price || output?.current_market_price}
+          />
+        </div>
+      )}
+
+      {activeTab === "bfsi" && (
+        <div className="space-y-4 animate-in fade-in">
+          <BFSIValuationCard
+            symbol={symbol}
+            currentMarketPrice={quote?.current_price || output?.current_market_price}
+          />
+        </div>
+      )}
+
+      {activeTab === "sotp" && (
+        <div className="space-y-4 animate-in fade-in">
+          <SOTPValuationCard
+            symbol={symbol}
+            currentMarketPrice={quote?.current_price || output?.current_market_price}
+          />
+        </div>
+      )}
+
       {activeTab === "sensitivity" && (
-        <div className="space-y-8 animate-in fade-in">
+        <div className="space-y-4 animate-in fade-in">
           <SensitivityMatrixTable data={sensitivity} />
         </div>
       )}
 
       {activeTab === "scenarios" && (
-        <div className="space-y-8 animate-in fade-in">
+        <div className="space-y-4 animate-in fade-in">
           <ScenarioSelector scenarios={scenarios} />
         </div>
       )}
 
       {activeTab === "audit" && output && (
-        <div className="space-y-8 animate-in fade-in">
+        <div className="space-y-4 animate-in fade-in">
           <AuditFormulaPanel output={output} />
         </div>
       )}
 
       {activeTab === "upload" && (
-        <div className="space-y-8 animate-in fade-in">
+        <div className="space-y-4 animate-in fade-in">
           <StatementUploader onStatementsUploaded={handleStatementsUploaded} />
         </div>
       )}
