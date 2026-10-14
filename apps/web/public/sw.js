@@ -2,10 +2,10 @@
 const CACHE_NAME = "quantdcf-cache-v1";
 const STATIC_ASSETS = [
   "/",
+  "/logo.png",
   "/manifest.webmanifest",
   "/icons/icon-192.png",
   "/icons/icon-512.png",
-  "/icons/icon.svg",
   "/icons/apple-touch-icon.png",
   "/favicon.ico",
 ];
