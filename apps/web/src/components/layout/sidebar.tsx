@@ -16,6 +16,7 @@ import {
   X,
   PanelLeftClose,
   PanelLeftOpen,
+  Instagram,
 } from "lucide-react";
 import { Logo, LogoIcon } from "@/components/ui/logo";
 
@@ -166,23 +167,59 @@ export function Sidebar({
       </nav>
 
       {/* Licensing Compliance Status Footer */}
-      <div className={`${collapsed ? "p-2" : "p-4"} border-t border-slate-800 bg-[#090e18]`}>
+      <div className={`${collapsed ? "p-2" : "p-3"} border-t border-slate-800 bg-[#090e18]`}>
         {collapsed ? (
-          <div
-            title="NSE MCP Gate: Active - Audited filings verified"
-            className="w-10 h-10 mx-auto flex items-center justify-center rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400"
-          >
-            <ShieldAlert className="w-4 h-4" />
+          <div className="space-y-2 flex flex-col items-center">
+            <div
+              title="NSE MCP Gate: Active - Audited filings verified"
+              className="w-10 h-10 flex items-center justify-center rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400"
+            >
+              <ShieldAlert className="w-4 h-4" />
+            </div>
+
+            {/* Developer Icon (Collapsed) */}
+            <a
+              href="https://www.instagram.com/maniraja__/"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Developed by Maniraja (@maniraja__)"
+              className="w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-br from-purple-500/15 via-pink-500/10 to-amber-500/15 border border-pink-500/30 text-pink-400 hover:text-pink-300 hover:border-pink-500/60 hover:scale-105 active:scale-95 transition-all shadow-sm group"
+            >
+              <Instagram className="w-4 h-4 text-pink-400 group-hover:rotate-12 transition-transform duration-200" />
+            </a>
           </div>
         ) : (
-          <div className="rounded-lg bg-amber-500/10 border border-amber-500/20 p-3 text-xs">
-            <div className="flex items-center gap-2 text-amber-400 font-semibold text-[11px]">
-              <ShieldAlert className="w-3.5 h-3.5 shrink-0" />
-              <span>NSE MCP Gate: Active</span>
+          <div>
+            <div className="rounded-lg bg-amber-500/10 border border-amber-500/20 p-2.5 text-xs">
+              <div className="flex items-center gap-1.5 text-amber-400 font-semibold text-[11px]">
+                <ShieldAlert className="w-3.5 h-3.5 shrink-0" />
+                <span>NSE MCP Gate: Active</span>
+              </div>
+              <p className="text-[10px] text-slate-400 mt-0.5 leading-relaxed">
+                Data policy compliance enforced. Audited filings verified.
+              </p>
             </div>
-            <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
-              Data policy compliance enforced. Audited filings verified.
-            </p>
+
+            {/* Developer Badge (Expanded) - Alaga kutty a */}
+            <div className="mt-2.5 pt-2.5 border-t border-slate-800/70 flex items-center justify-between gap-1.5 px-0.5">
+              <div className="flex items-center gap-1.5 min-w-0">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                <span className="text-[10.5px] text-slate-400 font-medium truncate">
+                  Dev by <strong className="text-slate-200 font-semibold">Maniraja</strong>
+                </span>
+              </div>
+
+              <a
+                href="https://www.instagram.com/maniraja__/"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Instagram: @maniraja__"
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-gradient-to-r from-purple-500/15 via-pink-500/15 to-amber-500/15 text-pink-400 border border-pink-500/30 hover:border-pink-500/60 hover:text-pink-300 hover:scale-105 active:scale-95 transition-all shrink-0 group"
+              >
+                <Instagram className="w-2.5 h-2.5 text-pink-400 group-hover:rotate-12 transition-transform duration-200" />
+                <span className="font-mono text-[9.5px]">@maniraja__</span>
+              </a>
+            </div>
           </div>
         )}
       </div>
