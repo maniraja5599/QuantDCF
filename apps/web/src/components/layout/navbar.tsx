@@ -146,6 +146,15 @@ export function Navbar({ onToggleMobileMenu, isCollapsed = false, onToggleCollap
     }
   };
 
+  const [tickerIndex, setTickerIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTickerIndex((prev) => (prev + 1) % 2);
+    }, 2800);
+    return () => clearInterval(timer);
+  }, []);
+
   const niftyPrice = nifty
     ? nifty.current_price.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
     : "22,622.70";
@@ -309,17 +318,37 @@ export function Navbar({ onToggleMobileMenu, isCollapsed = false, onToggleCollap
           </div>
         )}
 
-        {/* Mobile: Compact NIFTY Pill */}
+        {/* Mobile: Compact NIFTY Pill with Vertical Scroll-Up Ticker */}
         {!serverError && (
           <div
-            className="flex sm:hidden items-center gap-1.5 bg-slate-100 dark:bg-[#0f172a] border border-slate-300 dark:border-slate-800 px-2 py-1 rounded-md text-[10px] font-mono shrink-0 hover-lift active-press"
-            title={`NIFTY 50: ₹${niftyPrice} (${niftyChangeText})`}
+            className="flex sm:hidden items-center gap-1.5 bg-slate-100 dark:bg-[#0f172a] border border-slate-300 dark:border-slate-800 px-2 py-1 rounded-md text-[10px] font-mono shrink-0 shadow-sm"
+            title={`NIFTY 50 Live: ₹${niftyPrice}\nPoints: ${niftyChangeSign}${niftyChangeVal.toFixed(2)}\nPercent: ${niftyPctSign}${niftyPctVal.toFixed(2)}%`}
           >
             <span className={`w-1.5 h-1.5 rounded-full ${nifty?.is_live ? "bg-emerald-500 dark:bg-emerald-400 animate-ping" : "bg-emerald-500 dark:bg-emerald-400"}`} />
             <span suppressHydrationWarning className="font-extrabold text-slate-900 dark:text-white">₹{niftyPrice}</span>
-            <span suppressHydrationWarning className={`font-bold ${isPositive ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}`}>
-              {niftyChangeText}
-            </span>
+            <div className="h-4 overflow-hidden relative w-[48px] text-right">
+              <div
+                className="transition-transform duration-500 ease-out flex flex-col"
+                style={{ transform: `translateY(-${tickerIndex * 16}px)` }}
+              >
+                <span
+                  suppressHydrationWarning
+                  className={`h-4 leading-4 block font-bold truncate ${
+                    isPositive ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"
+                  }`}
+                >
+                  {niftyPctSign}{niftyPctVal.toFixed(2)}%
+                </span>
+                <span
+                  suppressHydrationWarning
+                  className={`h-4 leading-4 block font-bold truncate ${
+                    isPositive ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"
+                  }`}
+                >
+                  {niftyChangeSign}{niftyChangeVal.toFixed(2)}
+                </span>
+              </div>
+            </div>
           </div>
         )}
 

@@ -108,11 +108,25 @@ export default function ReportsPage() {
       ]);
 
       const latest = hist.length > 0 ? hist[hist.length - 1] : undefined;
-      const baseRev = latest ? latest.revenue : 240893.0;
-      const shares = latest ? latest.diluted_shares : 361.8;
-      const cash = latest ? latest.cash_and_equivalents : 14782.0;
+      const baseRev = latest
+        ? latest.revenue
+        : quote?.market_cap
+        ? quote.market_cap * 0.35
+        : 15000.0;
+      const shares = latest
+        ? latest.diluted_shares
+        : quote?.diluted_shares
+        ? quote.diluted_shares
+        : (quote?.market_cap && quote?.current_price)
+        ? Math.round(quote.market_cap / quote.current_price)
+        : 100.0;
+      const cash = latest ? latest.cash_and_equivalents : 0.0;
       const debt = latest ? latest.total_debt : 0.0;
-      const minority = latest ? latest.minority_interest : 820.0;
+      const minority = latest ? latest.minority_interest : 0.0;
+      const cmp = quote?.current_price || 100.0;
+
+      const ebitM = latest?.ebit_margin_pct ? Number(latest.ebit_margin_pct.toFixed(2)) : 22.5;
+      const taxR = latest?.effective_tax_rate_pct ? Number(latest.effective_tax_rate_pct.toFixed(2)) : 25.17;
 
       const calcRes = await api.calculateDCF({
         symbol,
@@ -134,59 +148,17 @@ export default function ReportsPage() {
           weight_equity_pct: 90.0,
           weight_debt_pct: 10.0,
         },
-        forecasts: [
-          {
-            year_index: 1,
-            year_label: "FY25E",
-            revenue_growth_pct: 9.0,
-            ebit_margin_pct: latest ? Math.round(latest.ebit_margin_pct * 100) / 100 : 24.14,
-            tax_rate_pct: latest ? Math.round((latest.effective_tax_rate_pct || 25.17) * 100) / 100 : 25.43,
-            capex_pct_of_rev: 1.5,
-            dna_pct_of_rev: 2.1,
-            nwc_change_pct_of_rev: 1.0,
-          },
-          {
-            year_index: 2,
-            year_label: "FY26E",
-            revenue_growth_pct: 9.0,
-            ebit_margin_pct: latest ? Math.round(latest.ebit_margin_pct * 100) / 100 : 24.14,
-            tax_rate_pct: latest ? Math.round((latest.effective_tax_rate_pct || 25.17) * 100) / 100 : 25.43,
-            capex_pct_of_rev: 1.5,
-            dna_pct_of_rev: 2.1,
-            nwc_change_pct_of_rev: 1.0,
-          },
-          {
-            year_index: 3,
-            year_label: "FY27E",
-            revenue_growth_pct: 8.5,
-            ebit_margin_pct: latest ? Math.round(latest.ebit_margin_pct * 100) / 100 : 24.14,
-            tax_rate_pct: latest ? Math.round((latest.effective_tax_rate_pct || 25.17) * 100) / 100 : 25.43,
-            capex_pct_of_rev: 1.5,
-            dna_pct_of_rev: 2.1,
-            nwc_change_pct_of_rev: 1.0,
-          },
-          {
-            year_index: 4,
-            year_label: "FY28E",
-            revenue_growth_pct: 8.0,
-            ebit_margin_pct: latest ? Math.round(latest.ebit_margin_pct * 100) / 100 : 24.14,
-            tax_rate_pct: latest ? Math.round((latest.effective_tax_rate_pct || 25.17) * 100) / 100 : 25.43,
-            capex_pct_of_rev: 1.5,
-            dna_pct_of_rev: 2.1,
-            nwc_change_pct_of_rev: 1.0,
-          },
-          {
-            year_index: 5,
-            year_label: "FY29E",
-            revenue_growth_pct: 7.5,
-            ebit_margin_pct: latest ? Math.round(latest.ebit_margin_pct * 100) / 100 : 24.14,
-            tax_rate_pct: latest ? Math.round((latest.effective_tax_rate_pct || 25.17) * 100) / 100 : 25.43,
-            capex_pct_of_rev: 1.5,
-            dna_pct_of_rev: 2.1,
-            nwc_change_pct_of_rev: 1.0,
-          },
-        ],
-        current_market_price: quote?.current_price || 2314.40,
+        forecasts: [9.0, 9.0, 8.5, 8.0, 7.5].map((g, i) => ({
+          year_index: i + 1,
+          year_label: `FY${25 + i}E`,
+          revenue_growth_pct: g,
+          ebit_margin_pct: ebitM,
+          tax_rate_pct: taxR,
+          capex_pct_of_rev: 1.5,
+          dna_pct_of_rev: 2.1,
+          nwc_change_pct_of_rev: 1.0,
+        })),
+        current_market_price: cmp,
       });
 
       const report = await api.generateReport({
@@ -196,9 +168,13 @@ export default function ReportsPage() {
         valuation_result: calcRes,
       });
 
-      setReportPreview(report.html_document);
+      if (report?.html_document) {
+        setReportPreview(report.html_document);
+      } else {
+        alert("Report generation returned an empty document.");
+      }
     } catch (err: any) {
-      alert("Failed to generate report: " + err.message);
+      alert("Failed to generate report: " + (err.message || "Unknown error"));
     } finally {
       setGenerating(false);
     }
