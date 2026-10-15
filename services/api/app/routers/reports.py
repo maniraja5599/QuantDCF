@@ -33,25 +33,47 @@ async def generate_valuation_report(req: ReportRequest):
 <html>
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DCF Valuation Memorandum - {req.symbol}</title>
 <style>
-  body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #0f172a; margin: 40px; line-height: 1.5; }}
+  body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #0f172a; margin: 0; padding: 24px 20px 48px; line-height: 1.5; max-width: 920px; margin: 0 auto; }}
+  .toolbar {{ position: sticky; top: 0; z-index: 99; background: #0f172a; color: #fff; padding: 10px 16px; margin: -24px -20px 24px -20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; }}
+  .toolbar-logo {{ font-size: 14px; font-weight: 800; color: #38bdf8; }}
+  .btn {{ cursor: pointer; padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; border: none; font-family: inherit; }}
+  .btn-print {{ background: #0284c7; color: #fff; margin-right: 6px; }}
+  .btn-close {{ background: #334155; color: #fff; }}
+  .btn-close:hover {{ background: #e11d48; }}
   .header {{ border-bottom: 2px solid #0284c7; padding-bottom: 16px; margin-bottom: 24px; }}
-  .title {{ font-size: 26px; font-weight: bold; margin: 0 0 6px 0; color: #0f172a; }}
-  .subtitle {{ font-size: 14px; color: #64748b; }}
-  .badge {{ display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; background: #e0f2fe; color: #0369a1; }}
+  .title {{ font-size: 24px; font-weight: bold; margin: 0 0 6px 0; color: #0f172a; }}
+  .subtitle {{ font-size: 13px; color: #64748b; }}
+  .badge {{ display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; background: #e0f2fe; color: #0369a1; margin-bottom: 8px; }}
   .grid {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 24px 0; }}
+  @media (max-width: 640px) {{ .grid {{ grid-template-columns: 1fr; }} }}
   .card {{ border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; background: #f8fafc; }}
   .metric-label {{ font-size: 11px; font-weight: 600; color: #64748b; text-transform: uppercase; }}
   .metric-value {{ font-size: 22px; font-weight: 700; color: #0f172a; margin-top: 4px; }}
-  table {{ width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 12px; }}
-  th, td {{ padding: 10px 12px; border: 1px solid #e2e8f0; text-align: right; }}
+  .table-box {{ width: 100%; overflow-x: auto; margin: 20px 0; border: 1px solid #e2e8f0; border-radius: 8px; }}
+  table {{ width: 100%; border-collapse: collapse; font-size: 12px; min-width: 580px; }}
+  th, td {{ padding: 9px 12px; border-bottom: 1px solid #e2e8f0; text-align: right; }}
   th {{ background: #f1f5f9; font-weight: 600; color: #334155; }}
   th:first-child, td:first-child {{ text-align: left; }}
   .disclaimer {{ margin-top: 40px; padding: 16px; border-left: 4px solid #f59e0b; background: #fef3c7; font-size: 11px; color: #92400e; }}
+  @media print {{
+    .no-print {{ display: none !important; }}
+    body {{ padding: 0 !important; max-width: 100% !important; }}
+    .table-box {{ overflow: visible !important; border: none !important; }}
+    table {{ min-width: 100% !important; }}
+  }}
 </style>
 </head>
 <body>
+  <div class="toolbar no-print">
+    <span class="toolbar-logo">QuantDCF Research Memorandum</span>
+    <div>
+      <button type="button" onclick="window.print()" class="btn btn-print">🖨️ Print / PDF</button>
+      <button type="button" onclick="window.close()" class="btn btn-close">✕ Close Window</button>
+    </div>
+  </div>
   <div class="header">
     <div class="badge">Institutional DCF Equity Research</div>
     <h1 class="title">{req.company_name} ({req.symbol})</h1>
@@ -74,19 +96,20 @@ async def generate_valuation_report(req: ReportRequest):
   </div>
 
   <h3>Projected Free Cash Flow Schedule (₹ Crore)</h3>
-  <table>
-    <thead>
-      <tr>
-        <th>Period</th>
-        <th>Revenue</th>
-        <th>EBIT</th>
-        <th>NOPAT</th>
-        <th>CapEx</th>
-        <th>FCFF</th>
-        <th>PV(FCFF)</th>
-      </tr>
-    </thead>
-    <tbody>
+  <div class="table-box">
+    <table>
+      <thead>
+        <tr>
+          <th>Period</th>
+          <th>Revenue</th>
+          <th>EBIT</th>
+          <th>NOPAT</th>
+          <th>CapEx</th>
+          <th>FCFF</th>
+          <th>PV(FCFF)</th>
+        </tr>
+      </thead>
+      <tbody>
 """
     for y in res.get("forecast_years", []):
         html_report += f"""      <tr>
@@ -100,23 +123,26 @@ async def generate_valuation_report(req: ReportRequest):
       </tr>
 """
 
-    html_report += f"""    </tbody>
-  </table>
+    html_report += f"""      </tbody>
+    </table>
+  </div>
 
   <h3>Enterprise Value to Equity Value Reconciliation</h3>
-  <table>
-    <tbody>
-      <tr><td>Cumulative PV of 5-Yr Cash Flows</td><td>₹{res.get('cumulative_pv_fcf', 0):,.2f} Cr</td></tr>
-      <tr><td>Present Value of Terminal Value ({res.get('tv_as_pct_of_ev', 0):.1f}% of EV)</td><td>₹{res.get('pv_terminal_value', 0):,.2f} Cr</td></tr>
-      <tr><td><strong>Enterprise Value</strong></td><td><strong>₹{res.get('enterprise_value', 0):,.2f} Cr</strong></td></tr>
-      <tr><td>(+) Cash & Liquid Investments</td><td>₹{res.get('cash_and_equivalents', 0):,.2f} Cr</td></tr>
-      <tr><td>(-) Total Outstanding Debt</td><td>₹{res.get('total_debt', 0):,.2f} Cr</td></tr>
-      <tr><td>(-) Minority Interest & Senior Claims</td><td>₹{res.get('minority_interest', 0) + res.get('other_senior_claims', 0):,.2f} Cr</td></tr>
-      <tr><td><strong>Implied Equity Value</strong></td><td><strong>₹{res.get('equity_value', 0):,.2f} Cr</strong></td></tr>
-      <tr><td>Diluted Shares Outstanding</td><td>{res.get('diluted_shares', 0):,.2f} Cr shares</td></tr>
-      <tr><td><strong>Intrinsic Value Per Diluted Share</strong></td><td><strong>₹{res.get('intrinsic_value_per_share', 0):,.2f}</strong></td></tr>
-    </tbody>
-  </table>
+  <div class="table-box">
+    <table>
+      <tbody>
+        <tr><td>Cumulative PV of 5-Yr Cash Flows</td><td>₹{res.get('cumulative_pv_fcf', 0):,.2f} Cr</td></tr>
+        <tr><td>Present Value of Terminal Value ({res.get('tv_as_pct_of_ev', 0):.1f}% of EV)</td><td>₹{res.get('pv_terminal_value', 0):,.2f} Cr</td></tr>
+        <tr><td><strong>Enterprise Value</strong></td><td><strong>₹{res.get('enterprise_value', 0):,.2f} Cr</strong></td></tr>
+        <tr><td>(+) Cash & Liquid Investments</td><td>₹{res.get('cash_and_equivalents', 0):,.2f} Cr</td></tr>
+        <tr><td>(-) Total Outstanding Debt</td><td>₹{res.get('total_debt', 0):,.2f} Cr</td></tr>
+        <tr><td>(-) Minority Interest & Senior Claims</td><td>₹{res.get('minority_interest', 0) + res.get('other_senior_claims', 0):,.2f} Cr</td></tr>
+        <tr><td><strong>Implied Equity Value</strong></td><td><strong>₹{res.get('equity_value', 0):,.2f} Cr</strong></td></tr>
+        <tr><td>Diluted Shares Outstanding</td><td>{res.get('diluted_shares', 0):,.2f} Cr shares</td></tr>
+        <tr><td><strong>Intrinsic Value Per Diluted Share</strong></td><td><strong>₹{res.get('intrinsic_value_per_share', 0):,.2f}</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
 
   <div class="disclaimer">
     <strong>REGULATORY DISCLAIMER & LIMITATIONS:</strong>
