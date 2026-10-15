@@ -42,16 +42,16 @@ export function MobileBottomNav({ onOpenMenu }: MobileBottomNavProps) {
             suppressHydrationWarning
             className={`relative flex flex-col items-center justify-center py-1 px-3 rounded-xl text-[10px] font-semibold transition-transform duration-100 active:scale-95 ${
               isActive
-                ? "text-sky-600 dark:text-sky-400 font-bold"
+                ? "text-sky-600 dark:text-sky-300 font-bold"
                 : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 active:text-slate-950 dark:active:text-white"
             }`}
           >
             {/* Active Top Glow Pill */}
             {isActive && (
-              <span className="absolute -top-1.5 w-6 h-1 rounded-full bg-sky-500 dark:bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.8)]" />
+              <span className="absolute -top-1.5 w-6 h-1 rounded-full bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-500 shadow-[0_0_10px_rgba(56,189,248,0.95)]" />
             )}
-            <tab.icon className={`w-5 h-5 mb-0.5 transition-transform duration-100 ${isActive ? "text-sky-600 dark:text-sky-400 scale-105" : "text-slate-500 dark:text-slate-400"}`} />
-            <span>{tab.name}</span>
+            <tab.icon className={`w-5 h-5 mb-0.5 transition-transform duration-100 ${isActive ? "text-sky-600 dark:text-sky-300 dark:drop-shadow-[0_0_6px_rgba(56,189,248,0.8)] scale-105" : "text-slate-500 dark:text-slate-400"}`} />
+            <span className={isActive ? "text-sky-700 dark:text-white font-bold" : ""}>{tab.name}</span>
           </Link>
         );
       })}

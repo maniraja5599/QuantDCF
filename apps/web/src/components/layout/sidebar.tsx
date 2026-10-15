@@ -151,24 +151,40 @@ export function Sidebar({
                 onClick={handleLinkClick}
                 suppressHydrationWarning
                 className={`flex items-center ${
-                  collapsed ? "justify-center p-3" : "gap-3 px-3.5 py-3"
-                } rounded-xl text-xs font-medium transition-all duration-200 active:scale-[0.97] relative overflow-hidden ${
+                  collapsed ? "justify-center p-3" : "gap-3 px-3.5 py-2.5"
+                } rounded-xl text-xs font-medium transition-all duration-200 active:scale-[0.98] relative overflow-hidden ${
                   isActive
-                    ? "bg-sky-50 dark:bg-gradient-to-r dark:from-sky-500/20 dark:via-sky-500/10 dark:to-transparent text-sky-700 dark:text-sky-300 border border-sky-300 dark:border-sky-500/30 font-semibold shadow-sm"
-                    : "text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/70 hover:translate-x-0.5"
+                    ? "bg-sky-500/10 text-sky-900 border border-sky-300/80 shadow-xs dark:bg-gradient-to-r dark:from-sky-500/25 dark:via-sky-500/15 dark:to-cyan-500/20 dark:text-white dark:border-sky-500/40 dark:shadow-[0_0_18px_rgba(14,165,233,0.18),inset_0_1px_1px_rgba(255,255,255,0.1)] font-semibold"
+                    : "border border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-slate-100 hover:bg-slate-100/90 dark:hover:bg-slate-800/60 hover:border-slate-200 dark:hover:border-slate-700/50 hover:translate-x-0.5"
                 }`}
               >
                 {isActive && (
-                  <span className="absolute left-0 top-1.5 bottom-1.5 w-1 bg-sky-500 dark:bg-sky-400 rounded-r-full shadow-[0_0_8px_rgba(56,189,248,0.8)]" />
+                  <span className="absolute left-0 top-1.5 bottom-1.5 w-1.5 bg-gradient-to-b from-cyan-400 via-sky-400 to-blue-500 rounded-r-full shadow-[0_0_12px_rgba(56,189,248,0.95)]" />
                 )}
                 <item.icon
-                  className={`${collapsed ? "w-5 h-5" : "w-4 h-4"} shrink-0 transition-all duration-200 group-hover:scale-115 group-hover:-translate-y-0.5 ${
-                    isActive ? "text-sky-600 dark:text-sky-400" : "text-slate-500 dark:text-slate-400 group-hover:text-sky-600 dark:group-hover:text-sky-300"
+                  className={`${collapsed ? "w-5 h-5" : "w-4 h-4"} shrink-0 transition-all duration-200 group-hover:scale-110 ${
+                    isActive
+                      ? "text-sky-600 dark:text-sky-300 dark:drop-shadow-[0_0_8px_rgba(56,189,248,0.7)]"
+                      : "text-slate-500 dark:text-slate-400 group-hover:text-sky-600 dark:group-hover:text-sky-300"
                   }`}
                 />
                 {!collapsed && (
-                  <span className="truncate transition-colors duration-200 group-hover:text-slate-900 dark:group-hover:text-slate-100">
+                  <span
+                    className={`truncate transition-colors duration-200 ${
+                      isActive
+                        ? "text-sky-950 dark:text-white font-semibold tracking-wide"
+                        : "group-hover:text-slate-900 dark:group-hover:text-slate-100"
+                    }`}
+                  >
                     {item.name}
+                  </span>
+                )}
+                {isActive && !collapsed && (
+                  <span className="ml-auto flex items-center justify-center pl-1">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75" />
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-gradient-to-r from-cyan-400 to-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.9)]" />
+                    </span>
                   </span>
                 )}
               </Link>
@@ -176,6 +192,7 @@ export function Sidebar({
               {/* Floating Tooltip Pill for Collapsed Mode (ItsHover Style) */}
               {collapsed && (
                 <div className="absolute left-full top-1/2 -translate-y-1/2 ml-3 px-2.5 py-1 bg-slate-900 dark:bg-slate-900/95 backdrop-blur-md text-white text-[11px] font-medium rounded-lg shadow-2xl border border-slate-700/80 pointer-events-none opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 z-50 whitespace-nowrap flex items-center gap-1.5">
+                  {isActive && <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(34,211,238,0.9)] animate-pulse" />}
                   <span>{item.name}</span>
                 </div>
               )}
