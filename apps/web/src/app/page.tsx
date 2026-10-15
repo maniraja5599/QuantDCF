@@ -359,37 +359,45 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6 sm:space-y-8 max-w-7xl mx-auto">
-      {/* 1. Live Market Ticker Marquee Strip (Clean static feed indicator, zero ping dots) */}
-      <div className="bg-white dark:bg-[#0b101c] border border-slate-200 dark:border-slate-800/90 rounded-xl px-3 py-2 overflow-x-auto scrollbar-none shadow-sm dark:shadow-inner">
-        <div className="flex items-center gap-4 sm:gap-6 text-xs whitespace-nowrap min-w-max">
-          <div className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300 font-semibold font-mono text-[11px] pr-2 border-r border-slate-200 dark:border-slate-800">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 inline-block" />
-            <span className="font-bold text-emerald-600 dark:text-emerald-400">MARKET FEED</span>
-            <span className="text-slate-400 dark:text-slate-500 text-[10px]">NSE / BSE</span>
-          </div>
-          {tickerItems.map((item, idx) => {
-            const isPos = item.c.startsWith("+");
-            const isIndex = item.type === "index";
-            const targetHref = isIndex ? "/screener" : `/valuation/${item.s}`;
-            return (
-              <Link
-                key={idx}
-                href={targetHref}
-                className="flex items-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-800/50 px-2 py-0.5 rounded transition-colors group"
-                title={`${item.s} ${isIndex ? "Index" : "Equity"} ${item.isLive ? "(Live Market Feed)" : "(Bhavcopy)"}`}
-              >
-                <div className="flex items-center gap-1">
-                  <span className={`font-bold font-mono text-xs ${isIndex ? "text-amber-600 dark:text-amber-300 group-hover:text-amber-700 dark:group-hover:text-amber-200" : "text-slate-800 dark:text-slate-200 group-hover:text-sky-600 dark:group-hover:text-sky-400"}`}>
-                    {item.s}
+      {/* 1. Live Market Ticker Marquee Strip (Continuous auto-scrolling with pause on hover) */}
+      <div className="relative bg-white dark:bg-[#0b101c] border border-slate-200 dark:border-slate-800/90 rounded-xl overflow-hidden shadow-sm dark:shadow-inner flex items-center h-10">
+        {/* Stationary Left Feed Badge */}
+        <div className="relative z-20 flex items-center gap-1.5 px-3 py-2 bg-white dark:bg-[#0b101c] border-r border-slate-200 dark:border-slate-800 shadow-[4px_0_12px_rgba(0,0,0,0.06)] dark:shadow-[4px_0_12px_rgba(0,0,0,0.35)] shrink-0">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 inline-block" />
+          <span className="font-bold font-mono text-[11px] text-emerald-600 dark:text-emerald-400 whitespace-nowrap">MARKET FEED</span>
+          <span className="text-slate-400 dark:text-slate-500 text-[10px] hidden sm:inline font-mono">NSE/BSE</span>
+        </div>
+
+        {/* Continuous Scrolling Marquee Track */}
+        <div className="relative flex-1 overflow-hidden">
+          {/* Subtle Right Fade Gradient */}
+          <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white dark:from-[#0b101c] to-transparent z-10 pointer-events-none" />
+
+          <div className="animate-marquee flex items-center gap-4 sm:gap-6 text-xs whitespace-nowrap pl-4 py-1.5">
+            {[...tickerItems, ...tickerItems].map((item, idx) => {
+              const isPos = item.c.startsWith("+");
+              const isIndex = item.type === "index";
+              const targetHref = isIndex ? "/screener" : `/valuation/${item.s}`;
+              return (
+                <Link
+                  key={`${item.s}-${idx}`}
+                  href={targetHref}
+                  className="flex items-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-800/60 px-2 py-0.5 rounded transition-colors group shrink-0"
+                  title={`${item.s} ${isIndex ? "Index" : "Equity"} ${item.isLive ? "(Live Market Feed)" : "(Bhavcopy)"}`}
+                >
+                  <div className="flex items-center gap-1">
+                    <span className={`font-bold font-mono text-xs ${isIndex ? "text-amber-600 dark:text-amber-300 group-hover:text-amber-700 dark:group-hover:text-amber-200" : "text-slate-800 dark:text-slate-200 group-hover:text-sky-600 dark:group-hover:text-sky-400"}`}>
+                      {item.s}
+                    </span>
+                  </div>
+                  <span className="font-mono text-slate-700 dark:text-slate-300 text-[11px] font-semibold">{item.p}</span>
+                  <span className={`font-mono text-[10px] font-bold ${isPos ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}`}>
+                    {item.c}
                   </span>
-                </div>
-                <span className="font-mono text-slate-700 dark:text-slate-300 text-[11px] font-semibold">{item.p}</span>
-                <span className={`font-mono text-[10px] font-bold ${isPos ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}`}>
-                  {item.c}
-                </span>
-              </Link>
-            );
-          })}
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </div>
 
