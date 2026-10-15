@@ -628,7 +628,7 @@ export default function DashboardPage() {
                 </Link>
               </div>
 
-              {/* Prev / Next Swipe Navigation Controls */}
+              {/* Prev / Next Swipe Navigation Controls with Responsive Touch Targets */}
               <button
                 type="button"
                 onClick={() =>
@@ -637,7 +637,7 @@ export default function DashboardPage() {
                   )
                 }
                 aria-label="Previous valuation stock"
-                className="absolute -left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center shadow-lg active:scale-95 transition-all z-20"
+                className="absolute -left-2 sm:-left-3.5 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-8 sm:h-8 rounded-full bg-white dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center shadow-lg active:scale-95 transition-all z-20"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -648,7 +648,7 @@ export default function DashboardPage() {
                   setActiveStockIndex((prev) => (prev + 1) % FEATURED_DCF_STOCKS.length)
                 }
                 aria-label="Next valuation stock"
-                className="absolute -right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center shadow-lg active:scale-95 transition-all z-20"
+                className="absolute -right-2 sm:-right-3.5 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-8 sm:h-8 rounded-full bg-white dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center shadow-lg active:scale-95 transition-all z-20"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>

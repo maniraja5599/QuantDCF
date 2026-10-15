@@ -74,22 +74,22 @@ export function Sidebar({
   };
 
   const renderNavContent = (collapsed: boolean) => (
-    <div className="flex flex-col h-full bg-[#0d1322] border-r border-slate-800 select-none">
+    <div className="flex flex-col h-full bg-white dark:bg-[#0d1322] border-r border-slate-200 dark:border-slate-800 select-none transition-colors">
       {/* Brand Header */}
       {collapsed ? (
-        <div className="h-16 flex flex-col items-center justify-center border-b border-slate-800 px-2 relative">
+        <div className="h-16 flex flex-col items-center justify-center border-b border-slate-200 dark:border-slate-800 px-2 relative">
           <Link
             href="/"
             onClick={handleLinkClick}
             suppressHydrationWarning
             title="QuantDCF India — Institutional Valuation"
-            className="flex items-center justify-center p-1 rounded-xl hover:bg-slate-800/60 transition-colors"
+            className="flex items-center justify-center p-1 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors"
           >
             <LogoIcon size="md" />
           </Link>
         </div>
       ) : (
-        <div className="h-16 flex items-center justify-between px-4 border-b border-slate-800">
+        <div className="h-16 flex items-center justify-between px-4 border-b border-slate-200 dark:border-slate-800">
           <Logo size="md" onClick={handleLinkClick} />
 
           {/* Desktop Collapse Toggle Button */}
@@ -98,7 +98,7 @@ export function Sidebar({
               onClick={onToggleCollapse}
               aria-label="Collapse navigation sidebar"
               title="Collapse Sidebar (Ctrl+B)"
-              className="hidden lg:flex w-8 h-8 items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/80 active:scale-95 transition-all"
+              className="hidden lg:flex w-8 h-8 items-center justify-center rounded-lg text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/80 active:scale-95 transition-all"
             >
               <PanelLeftClose className="w-4 h-4" />
             </button>
@@ -109,7 +109,7 @@ export function Sidebar({
             <button
               onClick={onClose}
               aria-label="Close navigation menu"
-              className="lg:hidden w-11 h-11 flex items-center justify-center rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 active:scale-95 transition-transform duration-100"
+              className="lg:hidden w-11 h-11 flex items-center justify-center rounded-xl text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/80 active:scale-95 transition-transform duration-100"
             >
               <X className="w-5 h-5" />
             </button>
@@ -124,7 +124,7 @@ export function Sidebar({
             onClick={onToggleCollapse}
             aria-label="Expand navigation sidebar"
             title="Expand Sidebar (Ctrl+B)"
-            className="w-10 h-8 flex items-center justify-center rounded-lg text-sky-400 hover:text-sky-300 hover:bg-sky-500/10 border border-sky-500/20 transition-all"
+            className="w-10 h-8 flex items-center justify-center rounded-lg text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 hover:bg-sky-50 dark:hover:bg-sky-500/10 border border-sky-300 dark:border-sky-500/20 transition-all"
           >
             <PanelLeftOpen className="w-4 h-4" />
           </button>
@@ -134,7 +134,7 @@ export function Sidebar({
       {/* Navigation Links */}
       <nav className={`flex-1 ${collapsed ? "px-2 py-3" : "px-3 py-4"} space-y-1.5 overflow-y-auto overscroll-contain`}>
         {!collapsed && (
-          <div className="px-3 pb-2 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+          <div className="px-3 pb-2 text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
             Terminal Navigation
           </div>
         )}
@@ -154,20 +154,20 @@ export function Sidebar({
                   collapsed ? "justify-center p-3" : "gap-3 px-3.5 py-3"
                 } rounded-xl text-xs font-medium transition-all duration-200 active:scale-[0.97] relative overflow-hidden ${
                   isActive
-                    ? "bg-gradient-to-r from-sky-500/20 via-sky-500/10 to-transparent text-sky-300 border border-sky-500/30 font-semibold shadow-sm shadow-sky-500/10"
-                    : "text-slate-400 hover:text-slate-100 hover:bg-slate-800/70 hover:translate-x-0.5"
+                    ? "bg-sky-50 dark:bg-gradient-to-r dark:from-sky-500/20 dark:via-sky-500/10 dark:to-transparent text-sky-700 dark:text-sky-300 border border-sky-300 dark:border-sky-500/30 font-semibold shadow-sm"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/70 hover:translate-x-0.5"
                 }`}
               >
                 {isActive && (
-                  <span className="absolute left-0 top-1.5 bottom-1.5 w-1 bg-sky-400 rounded-r-full shadow-[0_0_8px_rgba(56,189,248,0.8)]" />
+                  <span className="absolute left-0 top-1.5 bottom-1.5 w-1 bg-sky-500 dark:bg-sky-400 rounded-r-full shadow-[0_0_8px_rgba(56,189,248,0.8)]" />
                 )}
                 <item.icon
                   className={`${collapsed ? "w-5 h-5" : "w-4 h-4"} shrink-0 transition-all duration-200 group-hover:scale-115 group-hover:-translate-y-0.5 ${
-                    isActive ? "text-sky-400 drop-shadow-[0_0_6px_rgba(56,189,248,0.5)]" : "text-slate-400 group-hover:text-sky-300"
+                    isActive ? "text-sky-600 dark:text-sky-400" : "text-slate-500 dark:text-slate-400 group-hover:text-sky-600 dark:group-hover:text-sky-300"
                   }`}
                 />
                 {!collapsed && (
-                  <span className="truncate transition-colors duration-200 group-hover:text-slate-100">
+                  <span className="truncate transition-colors duration-200 group-hover:text-slate-900 dark:group-hover:text-slate-100">
                     {item.name}
                   </span>
                 )}
@@ -175,7 +175,7 @@ export function Sidebar({
 
               {/* Floating Tooltip Pill for Collapsed Mode (ItsHover Style) */}
               {collapsed && (
-                <div className="absolute left-full top-1/2 -translate-y-1/2 ml-3 px-2.5 py-1 bg-slate-900/95 backdrop-blur-md text-slate-100 text-[11px] font-medium rounded-lg shadow-2xl border border-slate-700/80 pointer-events-none opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 z-50 whitespace-nowrap flex items-center gap-1.5">
+                <div className="absolute left-full top-1/2 -translate-y-1/2 ml-3 px-2.5 py-1 bg-slate-900 dark:bg-slate-900/95 backdrop-blur-md text-white text-[11px] font-medium rounded-lg shadow-2xl border border-slate-700/80 pointer-events-none opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 z-50 whitespace-nowrap flex items-center gap-1.5">
                   <span>{item.name}</span>
                 </div>
               )}
@@ -185,12 +185,12 @@ export function Sidebar({
       </nav>
 
       {/* Licensing Compliance Status Footer */}
-      <div className={`${collapsed ? "p-2" : "p-3"} border-t border-slate-800 bg-[#090e18]`}>
+      <div className={`${collapsed ? "p-2" : "p-3"} border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#090e18] transition-colors`}>
         {collapsed ? (
           <div className="space-y-2 flex flex-col items-center">
             <div
               title="NSE MCP Gate: Active - Audited filings verified"
-              className="w-10 h-10 flex items-center justify-center rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400"
+              className="w-10 h-10 flex items-center justify-center rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400"
             >
               <ShieldAlert className="w-4 h-4" />
             </div>
@@ -201,29 +201,29 @@ export function Sidebar({
               target="_blank"
               rel="noopener noreferrer"
               title="Developed by Maniraja (@maniraja__)"
-              className="w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-br from-purple-500/15 via-pink-500/10 to-amber-500/15 border border-pink-500/30 text-pink-400 hover:text-pink-300 hover:border-pink-500/60 hover:scale-105 active:scale-95 transition-all shadow-sm group"
+              className="w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-br from-purple-500/15 via-pink-500/10 to-amber-500/15 border border-pink-500/30 text-pink-600 dark:text-pink-400 hover:text-pink-700 dark:hover:text-pink-300 hover:border-pink-500/60 hover:scale-105 active:scale-95 transition-all shadow-sm group"
             >
-              <Instagram className="w-4 h-4 text-pink-400 group-hover:rotate-12 transition-transform duration-200" />
+              <Instagram className="w-4 h-4 text-pink-600 dark:text-pink-400 group-hover:rotate-12 transition-transform duration-200" />
             </a>
           </div>
         ) : (
           <div>
             <div className="rounded-lg bg-amber-500/10 border border-amber-500/20 p-2.5 text-xs">
-              <div className="flex items-center gap-1.5 text-amber-400 font-semibold text-[11px]">
+              <div className="flex items-center gap-1.5 text-amber-700 dark:text-amber-400 font-semibold text-[11px]">
                 <ShieldAlert className="w-3.5 h-3.5 shrink-0" />
                 <span>NSE MCP Gate: Active</span>
               </div>
-              <p className="text-[10px] text-slate-400 mt-0.5 leading-relaxed">
+              <p className="text-[10px] text-slate-600 dark:text-slate-400 mt-0.5 leading-relaxed">
                 Data policy compliance enforced. Audited filings verified.
               </p>
             </div>
 
             {/* Developer Badge (Expanded) - Alaga kutty a */}
-            <div className="mt-2.5 pt-2.5 border-t border-slate-800/70 flex items-center justify-between gap-1.5 px-0.5">
+            <div className="mt-2.5 pt-2.5 border-t border-slate-200 dark:border-slate-800/70 flex items-center justify-between gap-1.5 px-0.5">
               <div className="flex items-center gap-1.5 min-w-0">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-                <span className="text-[10.5px] text-slate-400 font-medium truncate">
-                  Dev by <strong className="text-slate-200 font-semibold">Maniraja</strong>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse shrink-0" />
+                <span className="text-[10.5px] text-slate-600 dark:text-slate-400 font-medium truncate">
+                  Dev by <strong className="text-slate-900 dark:text-slate-200 font-semibold">Maniraja</strong>
                 </span>
               </div>
 
@@ -232,9 +232,9 @@ export function Sidebar({
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Instagram: @maniraja__"
-                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-gradient-to-r from-purple-500/15 via-pink-500/15 to-amber-500/15 text-pink-400 border border-pink-500/30 hover:border-pink-500/60 hover:text-pink-300 hover:scale-105 active:scale-95 transition-all shrink-0 group"
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-gradient-to-r from-purple-500/15 via-pink-500/15 to-amber-500/15 text-pink-600 dark:text-pink-400 border border-pink-500/30 hover:border-pink-500/60 hover:text-pink-700 dark:hover:text-pink-300 hover:scale-105 active:scale-95 transition-all shrink-0 group"
               >
-                <Instagram className="w-2.5 h-2.5 text-pink-400 group-hover:rotate-12 transition-transform duration-200" />
+                <Instagram className="w-2.5 h-2.5 text-pink-600 dark:text-pink-400 group-hover:rotate-12 transition-transform duration-200" />
                 <span className="font-mono text-[9.5px]">@maniraja__</span>
               </a>
             </div>

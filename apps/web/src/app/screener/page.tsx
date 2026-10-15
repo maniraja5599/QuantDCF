@@ -360,7 +360,7 @@ export default function ScreenerPage() {
 
             <Link
               href={`/valuation/${c.symbol}`}
-              className="w-full bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold py-2 rounded-xl text-xs flex items-center justify-center gap-2 shadow-sm transition-all"
+              className="w-full bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 shadow-sm transition-all active-press hover-lift"
             >
               <Calculator className="w-3.5 h-3.5" />
               <span>Model {c.symbol} DCF</span>
@@ -384,14 +384,14 @@ export default function ScreenerPage() {
               <button
                 onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
                 disabled={currentPage === 1}
-                className="px-3 py-1.5 bg-white dark:bg-slate-800 disabled:opacity-40 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700"
+                className="px-3.5 py-2 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-40 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 active-press transition-all"
               >
                 Prev
               </button>
               <button
                 onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
                 disabled={currentPage === totalPages}
-                className="px-3 py-1.5 bg-white dark:bg-slate-800 disabled:opacity-40 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700"
+                className="px-3.5 py-2 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-40 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 active-press transition-all"
               >
                 Next
               </button>

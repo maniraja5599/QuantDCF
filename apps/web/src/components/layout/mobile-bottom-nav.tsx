@@ -27,7 +27,7 @@ export function MobileBottomNav({ onOpenMenu }: MobileBottomNavProps) {
   return (
     <nav
       aria-label="Mobile Navigation Bar"
-      className="fixed bottom-0 left-0 right-0 z-30 lg:hidden bg-[#0a0f1d]/95 backdrop-blur-md border-t border-slate-800/90 px-3 py-1.5 flex items-center justify-around shadow-2xl safe-area-bottom select-none"
+      className="fixed bottom-0 left-0 right-0 z-30 lg:hidden bg-white/95 dark:bg-[#0a0f1d]/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800/90 px-3 py-1.5 flex items-center justify-around shadow-xl safe-area-bottom select-none transition-colors"
     >
       {tabs.map((tab) => {
         const isActive =
@@ -42,15 +42,15 @@ export function MobileBottomNav({ onOpenMenu }: MobileBottomNavProps) {
             suppressHydrationWarning
             className={`relative flex flex-col items-center justify-center py-1 px-3 rounded-xl text-[10px] font-semibold transition-transform duration-100 active:scale-95 ${
               isActive
-                ? "text-sky-400 font-bold"
-                : "text-slate-400 hover:text-slate-200 active:text-white"
+                ? "text-sky-600 dark:text-sky-400 font-bold"
+                : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 active:text-slate-950 dark:active:text-white"
             }`}
           >
             {/* Active Top Glow Pill */}
             {isActive && (
-              <span className="absolute -top-1.5 w-6 h-1 rounded-full bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.8)]" />
+              <span className="absolute -top-1.5 w-6 h-1 rounded-full bg-sky-500 dark:bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.8)]" />
             )}
-            <tab.icon className={`w-5 h-5 mb-0.5 transition-transform duration-100 ${isActive ? "text-sky-400 scale-105" : "text-slate-400"}`} />
+            <tab.icon className={`w-5 h-5 mb-0.5 transition-transform duration-100 ${isActive ? "text-sky-600 dark:text-sky-400 scale-105" : "text-slate-500 dark:text-slate-400"}`} />
             <span>{tab.name}</span>
           </Link>
         );
@@ -60,9 +60,9 @@ export function MobileBottomNav({ onOpenMenu }: MobileBottomNavProps) {
       <button
         onClick={onOpenMenu}
         aria-label="Open full menu"
-        className="flex flex-col items-center justify-center py-1 px-3 rounded-xl text-[10px] font-semibold text-slate-400 hover:text-slate-200 active:text-white active:scale-95 transition-transform duration-100"
+        className="flex flex-col items-center justify-center py-1 px-3 rounded-xl text-[10px] font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 active:text-slate-950 dark:active:text-white active:scale-95 transition-transform duration-100"
       >
-        <Menu className="w-5 h-5 mb-0.5 text-slate-400" />
+        <Menu className="w-5 h-5 mb-0.5 text-slate-500 dark:text-slate-400" />
         <span>Menu</span>
       </button>
     </nav>

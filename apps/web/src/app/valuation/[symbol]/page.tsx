@@ -671,13 +671,13 @@ export default function CompanyValuationPage() {
           </div>
 
           {/* Quick Model Jump Strip */}
-          <div className="flex flex-wrap items-center gap-1.5 pt-1">
-            <span className="text-[10px] font-mono uppercase font-bold text-slate-400 mr-0.5">Jump Model:</span>
+          <div className="flex items-center gap-1.5 pt-1 overflow-x-auto scrollbar-none max-w-full">
+            <span className="text-[10px] font-mono uppercase font-bold text-slate-500 dark:text-slate-400 shrink-0 mr-0.5">Jump Model:</span>
             {["SUZLON", "TCS", "RELIANCE", "INFY", "HDFCBANK", "ITC", "LT"].map((s) => (
               <Link
                 key={s}
                 href={`/valuation/${s}`}
-                className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-bold transition-all ${
+                className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-bold shrink-0 transition-all ${
                   s === symbol
                     ? "bg-sky-500 text-slate-950 shadow-sm font-black"
                     : "bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-700"
@@ -689,12 +689,12 @@ export default function CompanyValuationPage() {
           </div>
         </div>
 
-        {/* Action Buttons with ItsHover Interactive Style */}
-        <div className="flex flex-wrap items-center gap-2">
+        {/* Action Buttons with Responsive Mobile Grid */}
+        <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2">
           <button
             onClick={handleRefreshAudit}
             disabled={isRefreshingAudit}
-            className="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-sm hover-lift active-press group shimmer-sweep"
+            className="justify-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-semibold px-3 py-2 sm:py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-sm hover-lift active-press group shimmer-sweep"
             title="Automatically fetch latest audited statements from official exchange gateway"
           >
             <RefreshCw className={`w-3.5 h-3.5 text-sky-500 group-hover:rotate-180 transition-transform duration-500 ${isRefreshingAudit ? "animate-spin" : ""}`} />
@@ -703,7 +703,7 @@ export default function CompanyValuationPage() {
           <button
             onClick={handleSaveModel}
             disabled={isSaving}
-            className="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-sm hover-lift active-press group shimmer-sweep"
+            className="justify-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-semibold px-3 py-2 sm:py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-sm hover-lift active-press group shimmer-sweep"
           >
             {saveSuccess ? (
               <>
@@ -713,13 +713,13 @@ export default function CompanyValuationPage() {
             ) : (
               <>
                 <Bookmark className="w-3.5 h-3.5 text-slate-600 dark:text-slate-400 group-hover:text-amber-400 group-hover:scale-110 transition-all duration-200" />
-                <span>Save Valuation</span>
+                <span>Save Model</span>
               </>
             )}
           </button>
           <button
             onClick={handleExportCSV}
-            className="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-sm hover-lift active-press group shimmer-sweep"
+            className="justify-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 font-semibold px-3 py-2 sm:py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-sm hover-lift active-press group shimmer-sweep"
             title="Download full 5-year FCF schedule and DCF parameters as CSV"
           >
             <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 group-hover:-translate-y-0.5 transition-transform" />
@@ -727,7 +727,7 @@ export default function CompanyValuationPage() {
           </button>
           <button
             onClick={handleExportReport}
-            className="bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-md shadow-sky-500/20 hover-lift active-press group shimmer-sweep"
+            className="justify-center bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-3 py-2 sm:py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-md shadow-sky-500/20 hover-lift active-press group shimmer-sweep"
           >
             <FileDown className="w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform" />
             <span>Export Memo</span>

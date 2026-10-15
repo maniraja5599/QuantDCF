@@ -255,11 +255,11 @@ export default function DataSourcesPage() {
 
       {/* 3. Regulatory Policy & Compliance Notice */}
       <div className="p-4 sm:p-5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs space-y-2">
-        <div className="flex items-center gap-2 text-amber-300 font-bold text-sm">
+        <div className="flex items-center gap-2 text-amber-700 dark:text-amber-300 font-bold text-sm">
           <ShieldAlert className="w-4 h-4 shrink-0" />
           <span>NSE India Market Data Policy & Regulatory Licensing Notice</span>
         </div>
-        <p className="text-slate-300 leading-relaxed text-xs">
+        <p className="text-slate-800 dark:text-slate-300 leading-relaxed text-xs">
           The National Stock Exchange of India (NSE) enforces strict guidelines governing the redistribution of live ticks and historical price data.
           In accordance with the official <strong>NSE Data Policy</strong>, this platform maintains an automated licensing gate (<code>NSE_DATA_LICENSE_APPROVED</code>).
           Commercial bulk redistribution via direct MCP protocols remains strictly locked until an authorized commercial license agreement is executed with NSE Data & Analytics Limited.
@@ -269,36 +269,36 @@ export default function DataSourcesPage() {
 
       {/* 4. Active Provider Architecture Grid (4 Cards) */}
       <div className="space-y-3">
-        <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2 font-mono">
-          <Layers className="w-4 h-4 text-sky-400" />
+        <h2 className="text-sm font-bold uppercase tracking-wider text-slate-800 dark:text-slate-300 flex items-center gap-2 font-mono">
+          <Layers className="w-4 h-4 text-sky-500 dark:text-sky-400" />
           Registered Data Adapters & Gateway Architecture
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* 1. Real-Time Exchange Quotes Provider */}
-          <div className="bg-[#111726] border border-slate-800 rounded-xl p-5 space-y-3 shadow-lg flex flex-col justify-between hover:border-slate-700 transition-colors">
+          <div className="bg-white dark:bg-[#111726] border border-slate-200 dark:border-slate-800 rounded-xl p-5 space-y-3 shadow-lg flex flex-col justify-between hover:border-slate-400 dark:hover:border-slate-700 transition-colors">
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
-                <span className="font-bold text-xs sm:text-sm text-slate-100">Exchange Quotes Feed</span>
-                <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 flex items-center gap-1">
-                  <CheckCircle2 className="w-3 h-3" /> Online & Live
+                <span className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100">Exchange Quotes Feed</span>
+                <span className="text-[10px] font-mono font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 flex items-center gap-1">
+                  <CheckCircle2 className="w-3 h-3 text-emerald-500" /> Online & Live
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 leading-relaxed">
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
                 Live index ticks and official daily exchange closing quotes for 501 equities.
               </p>
-              <div className="text-[11px] text-slate-400 space-y-1 font-mono">
-                <div>Source: <span className="text-slate-200">^NSEI, ^BSESN, Bhavcopy</span></div>
-                <div>Frequency: <span className="text-slate-200">10s Streaming Ticker</span></div>
-                <div>Coverage: <span className="text-slate-200">501 NIFTY Equities</span></div>
+              <div className="text-[11px] text-slate-600 dark:text-slate-400 space-y-1 font-mono">
+                <div>Source: <span className="text-slate-800 dark:text-slate-200">^NSEI, ^BSESN, Bhavcopy</span></div>
+                <div>Frequency: <span className="text-slate-800 dark:text-slate-200">10s Streaming Ticker</span></div>
+                <div>Coverage: <span className="text-slate-800 dark:text-slate-200">501 NIFTY Equities</span></div>
               </div>
             </div>
-            <div className="pt-3 border-t border-slate-800 text-[11px]">
+            <div className="pt-3 border-t border-slate-200 dark:border-slate-800 text-[11px]">
               <a
                 href="https://www.nseindia.com/all-reports"
                 target="_blank"
                 rel="noreferrer"
-                className="text-sky-400 hover:text-sky-300 flex items-center gap-1 font-semibold"
+                className="text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 flex items-center gap-1 font-semibold"
               >
                 NSE Official Reports <ExternalLink className="w-3 h-3" />
               </a>
