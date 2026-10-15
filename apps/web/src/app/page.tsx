@@ -429,7 +429,7 @@ export default function DashboardPage() {
             {/* Dynamic Headline */}
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tight leading-[1.15]">
               Valuation Reimagined for{" "}
-              <span className="bg-gradient-to-r from-sky-600 via-teal-600 to-emerald-600 dark:from-sky-400 dark:via-cyan-300 dark:to-emerald-400 bg-clip-text text-transparent underline decoration-sky-500/30 decoration-wavy decoration-1 underline-offset-8">
+              <span className="text-sky-600 dark:text-sky-400 font-black inline-block">
                 Indian Equities
               </span>
             </h1>
