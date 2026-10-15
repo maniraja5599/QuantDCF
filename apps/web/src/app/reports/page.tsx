@@ -47,6 +47,7 @@ export default function ReportsPage() {
   const [selectedSector, setSelectedSector] = useState("All");
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const selectedCompany = useMemo(
     () => CATALOG_COMPANIES.find((c) => c.symbol === symbol) || CATALOG_COMPANIES[0],
@@ -184,15 +185,28 @@ export default function ReportsPage() {
 
   const handlePrint = () => {
     if (!reportPreview) return;
+    // 1. Direct seamless in-app print: prints directly from the embedded iframe so user NEVER leaves the app!
+    if (iframeRef.current && iframeRef.current.contentWindow) {
+      try {
+        iframeRef.current.contentWindow.focus();
+        iframeRef.current.contentWindow.print();
+        return;
+      } catch (err) {
+        console.warn("Direct iframe print exception, falling back:", err);
+      }
+    }
+
+    // 2. Fallback: dedicated window if iframe print is blocked by browser policy
     const printWindow = window.open("", "_blank");
     if (printWindow) {
       printWindow.document.write(reportPreview);
       printWindow.document.close();
+      printWindow.focus();
       setTimeout(() => {
         try {
           printWindow.print();
         } catch {}
-      }, 200);
+      }, 250);
     }
   };
 
@@ -490,6 +504,7 @@ export default function ReportsPage() {
           {/* Responsive Iframe Frame */}
           <div className="w-full bg-slate-50 dark:bg-[#080c16] p-1 sm:p-2">
             <iframe
+              ref={iframeRef}
               srcDoc={reportPreview}
               className="w-full h-[650px] sm:h-[850px] rounded-xl border border-slate-200 dark:border-slate-800 bg-white"
               title="Valuation Report Preview"

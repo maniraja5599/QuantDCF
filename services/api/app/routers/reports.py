@@ -56,11 +56,41 @@ async def generate_valuation_report(req: ReportRequest):
     .no-print {{ display: none !important; }}
     body {{ padding: 0 !important; max-width: 100% !important; }}
     .table-box {{ overflow: visible !important; border: none !important; }}
-    table {{ min-width: 100% !important; }}
+    .standalone-topbar {{ display: none; }}
+    .is-standalone .standalone-topbar {{ display: flex; position: sticky; top: 0; z-index: 9999; background: #0f172a; color: #ffffff; padding: 10px 16px; margin: -24px -20px 24px -20px; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; }}
+    .in-iframe .standalone-topbar {{ display: none !important; }}
+    .btn-return {{ cursor: pointer; background: #0284c7; color: #ffffff; font-weight: 700; font-size: 11px; padding: 6px 14px; border-radius: 8px; border: none; font-family: inherit; }}
+    .btn-return:hover {{ background: #0369a1; }}
+    .btn-print-action {{ cursor: pointer; background: #059669; color: #ffffff; font-weight: 700; font-size: 11px; padding: 6px 12px; border-radius: 8px; border: none; font-family: inherit; }}
+    .btn-close-action {{ cursor: pointer; background: #334155; color: #f1f5f9; font-weight: 700; font-size: 11px; padding: 6px 12px; border-radius: 8px; border: 1px solid #475569; font-family: inherit; }}
+    .btn-close-action:hover {{ background: #e11d48; color: #ffffff; }}
   }}
 </style>
+<script>
+  try {{
+    if (window.self !== window.top) {{
+      document.documentElement.classList.add('in-iframe');
+    }} else {{
+      document.documentElement.classList.add('is-standalone');
+    }}
+  }} catch (e) {{
+    document.documentElement.classList.add('in-iframe');
+  }}
+</script>
 </head>
 <body>
+  <div class="standalone-topbar no-print">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <button type="button" onclick="if (window.opener && !window.opener.closed) {{ window.close(); }} else {{ window.location.href = '/reports'; }}" class="btn-return">
+        ← Return to QuantDCF App
+      </button>
+      <span style="font-weight: 800; font-size: 12px; color: #38bdf8;">QuantDCF Research Memo</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <button type="button" onclick="window.print()" class="btn-print-action">🖨️ Print / PDF</button>
+      <button type="button" onclick="window.close()" class="btn-close-action">✕ Close Tab</button>
+    </div>
+  </div>
   <div class="header">
     <div class="badge">Institutional DCF Equity Research</div>
     <h1 class="title">{req.company_name} ({req.symbol})</h1>

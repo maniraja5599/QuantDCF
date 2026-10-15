@@ -400,13 +400,42 @@ export default function CompanyValuationPage() {
         valuation_result: output,
         scenarios,
       });
-      // Open print window
-      const printWindow = window.open("", "_blank");
-      if (printWindow) {
-        printWindow.document.write(res.html_document);
-        printWindow.document.close();
-        printWindow.print();
+
+      // Seamless in-app print: creates a temporary print frame so user never leaves the terminal app!
+      let hiddenIframe = document.getElementById("quantdcf-print-frame") as HTMLIFrameElement;
+      if (!hiddenIframe) {
+        hiddenIframe = document.createElement("iframe");
+        hiddenIframe.id = "quantdcf-print-frame";
+        hiddenIframe.style.position = "fixed";
+        hiddenIframe.style.top = "-9999px";
+        hiddenIframe.style.left = "-9999px";
+        hiddenIframe.style.width = "0px";
+        hiddenIframe.style.height = "0px";
+        hiddenIframe.style.border = "none";
+        document.body.appendChild(hiddenIframe);
       }
+
+      hiddenIframe.srcdoc = res.html_document;
+      hiddenIframe.onload = () => {
+        setTimeout(() => {
+          try {
+            hiddenIframe.contentWindow?.focus();
+            hiddenIframe.contentWindow?.print();
+          } catch (_) {
+            const printWindow = window.open("", "_blank");
+            if (printWindow) {
+              printWindow.document.write(res.html_document);
+              printWindow.document.close();
+              printWindow.focus();
+              setTimeout(() => {
+                try {
+                  printWindow.print();
+                } catch {}
+              }, 250);
+            }
+          }
+        }, 200);
+      };
     } catch (err) {
       alert("Report export failed");
     }

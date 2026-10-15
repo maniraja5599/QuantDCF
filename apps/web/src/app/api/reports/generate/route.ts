@@ -324,8 +324,113 @@ export async function POST(req: NextRequest) {
         size: A4 portrait;
       }
     }
+    .standalone-topbar {
+      display: none;
+    }
+    .is-standalone .standalone-topbar {
+      display: flex;
+      position: sticky;
+      top: 0;
+      z-index: 9999;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 10px 16px;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #334155;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+    }
+    .in-iframe .standalone-topbar {
+      display: none !important;
+    }
+    .btn-return {
+      cursor: pointer;
+      background: #0284c7;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 11px;
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    .btn-return:hover {
+      background: #0369a1;
+    }
+    .btn-print-action {
+      cursor: pointer;
+      background: #059669;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 11px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: inherit;
+    }
+    .btn-print-action:hover {
+      background: #047857;
+    }
+    .btn-close-action {
+      cursor: pointer;
+      background: #334155;
+      color: #f1f5f9;
+      font-weight: 700;
+      font-size: 11px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid #475569;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: inherit;
+    }
+    .btn-close-action:hover {
+      background: #e11d48;
+      color: #ffffff;
+      border-color: #be123c;
+    }
   </style>
+  <script>
+    try {
+      if (window.self !== window.top) {
+        document.documentElement.classList.add('in-iframe');
+      } else {
+        document.documentElement.classList.add('is-standalone');
+      }
+    } catch (e) {
+      document.documentElement.classList.add('in-iframe');
+    }
+  </script>
+</head>
 <body>
+  <!-- Standalone Top Bar (Only visible when opened directly in new tab or popup, hidden in iframe preview) -->
+  <div class="standalone-topbar no-print">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <button type="button" onclick="if (window.opener && !window.opener.closed) { window.close(); } else { window.location.href = '/reports'; }" class="btn-return">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        Return to QuantDCF App
+      </button>
+      <span style="font-weight: 800; font-size: 12px; color: #38bdf8; font-family: ui-monospace, monospace;">QuantDCF Research Memo</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <button type="button" onclick="window.print()" class="btn-print-action">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        Print / Save PDF
+      </button>
+      <button type="button" onclick="window.close()" class="btn-close-action">
+        ✕ Close Tab
+      </button>
+    </div>
+  </div>
+
   <div class="report-container">
     <div class="header">
       <div>
