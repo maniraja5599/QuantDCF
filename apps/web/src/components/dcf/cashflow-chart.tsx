@@ -26,12 +26,12 @@ export function CashflowTrajectoryChart({ output }: CashflowChartProps) {
   }));
 
   return (
-    <div className="bg-[#111726] border border-slate-800 rounded-xl overflow-hidden shadow-lg p-6">
+    <div className="bg-white dark:bg-[#111726] border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-lg p-6 transition-colors">
       <div className="mb-4">
-        <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider">
+        <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
           Forecast Revenue & Cash Flow Trajectory
         </h3>
-        <p className="text-[11px] text-slate-500 mt-0.5">
+        <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
           Projected operational cash generation and discounted values in ₹ Crore.
         </p>
       </div>

@@ -14,29 +14,29 @@ export function SensitivityMatrixTable({ data }: SensitivityMatrixProps) {
   const { wacc_rates_pct, terminal_growth_rates_pct, matrix, base_wacc_pct, base_growth_pct, base_intrinsic_value } = data;
 
   return (
-    <div className="bg-[#111726] border border-slate-800 rounded-xl overflow-hidden shadow-lg">
-      <div className="px-4 sm:px-6 py-4 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+    <div className="bg-white dark:bg-[#111726] border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-lg transition-colors">
+      <div className="px-4 sm:px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider flex items-center gap-2">
-            <Grid3X3 className="w-4 h-4 text-sky-400" />
+          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider flex items-center gap-2">
+            <Grid3X3 className="w-4 h-4 text-sky-600 dark:text-sky-400" />
             Intrinsic Value Sensitivity Matrix
           </h3>
-          <p className="text-[11px] text-slate-500 mt-0.5">
+          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
             Intrinsic value per diluted share (₹) across varying WACC discount rates and perpetual terminal growth rates (g).
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs font-mono">
           <div className="flex items-center gap-1.5">
             <span className="w-3 h-3 rounded bg-emerald-500/20 border border-emerald-500/40"></span>
-            <span className="text-slate-400 text-[10px]">Higher Value</span>
+            <span className="text-slate-600 dark:text-slate-400 text-[10px]">Higher Value</span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="w-3 h-3 rounded bg-sky-500/30 border border-sky-400"></span>
-            <span className="text-slate-400 text-[10px]">Base Model</span>
+            <span className="text-slate-600 dark:text-slate-400 text-[10px]">Base Model</span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="w-3 h-3 rounded bg-rose-500/20 border border-rose-500/40"></span>
-            <span className="text-slate-400 text-[10px]">Lower Value</span>
+            <span className="text-slate-600 dark:text-slate-400 text-[10px]">Lower Value</span>
           </div>
         </div>
       </div>

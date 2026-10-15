@@ -324,17 +324,17 @@ export default function AdminPage() {
   if (!isAuthenticated) {
     return (
       <div className="min-h-[80vh] flex items-center justify-center p-4">
-        <div className="w-full max-w-xs rounded-2xl bg-[#0b0f19] border border-slate-800 shadow-2xl p-6 text-center relative overflow-hidden">
+        <div className="w-full max-w-xs rounded-2xl bg-white dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-800 shadow-2xl p-6 text-center relative overflow-hidden transition-colors">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-36 h-36 bg-sky-500/10 rounded-full blur-2xl pointer-events-none" />
 
-          <div className="w-12 h-12 mx-auto rounded-xl bg-sky-500/15 border border-sky-500/30 flex items-center justify-center text-sky-400 mb-3">
+          <div className="w-12 h-12 mx-auto rounded-xl bg-sky-500/15 border border-sky-500/30 flex items-center justify-center text-sky-600 dark:text-sky-400 mb-3">
             <Lock className="w-6 h-6" />
           </div>
 
-          <h1 className="text-base font-bold text-white tracking-tight">
+          <h1 className="text-base font-bold text-slate-900 dark:text-white tracking-tight">
             QuantDCF Telemetry PIN
           </h1>
-          <p className="text-[11px] text-slate-400 mt-0.5">
+          <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
             Enter 4-digit code to access visitor logs
           </p>
 
@@ -345,15 +345,15 @@ export default function AdminPage() {
                 key={i}
                 className={`w-3.5 h-3.5 rounded-full transition-all duration-150 ${
                   pin.length > i
-                    ? "bg-sky-400 shadow-[0_0_10px_rgba(56,189,248,0.8)] scale-110"
-                    : "border-2 border-slate-700 bg-slate-900"
+                    ? "bg-sky-500 dark:bg-sky-400 shadow-[0_0_10px_rgba(56,189,248,0.8)] scale-110"
+                    : "border-2 border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-900"
                 }`}
               />
             ))}
           </div>
 
           {pinError && (
-            <div className="text-[11px] text-rose-400 bg-rose-500/10 border border-rose-500/20 rounded-md py-1.5 px-2 mb-3">
+            <div className="text-[11px] text-rose-600 dark:text-rose-400 bg-rose-500/10 border border-rose-500/20 rounded-md py-1.5 px-2 mb-3">
               {pinError}
             </div>
           )}
@@ -366,7 +366,7 @@ export default function AdminPage() {
                 type="button"
                 onClick={() => handleKeypadPress(digit)}
                 disabled={isVerifying}
-                className="h-10 rounded-lg bg-slate-800/60 hover:bg-slate-700/80 active:bg-sky-500/20 border border-slate-700/60 text-white font-semibold text-base transition-all active:scale-95"
+                className="h-10 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/60 dark:hover:bg-slate-700/80 active:bg-sky-500/20 border border-slate-200 dark:border-slate-700/60 text-slate-800 dark:text-white font-semibold text-base transition-all active:scale-95"
               >
                 {digit}
               </button>
@@ -377,7 +377,7 @@ export default function AdminPage() {
                 setPin("");
                 setPinError("");
               }}
-              className="h-10 rounded-lg bg-slate-800/30 hover:bg-slate-800 text-slate-400 text-[10px] font-semibold uppercase tracking-wider transition-all"
+              className="h-10 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/30 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-semibold uppercase tracking-wider transition-all"
             >
               Clear
             </button>
@@ -385,14 +385,14 @@ export default function AdminPage() {
               type="button"
               onClick={() => handleKeypadPress("0")}
               disabled={isVerifying}
-              className="h-10 rounded-lg bg-slate-800/60 hover:bg-slate-700/80 active:bg-sky-500/20 border border-slate-700/60 text-white font-semibold text-base transition-all active:scale-95"
+              className="h-10 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/60 dark:hover:bg-slate-700/80 active:bg-sky-500/20 border border-slate-200 dark:border-slate-700/60 text-slate-800 dark:text-white font-semibold text-base transition-all active:scale-95"
             >
               0
             </button>
             <button
               type="button"
               onClick={handleBackspace}
-              className="h-10 rounded-lg bg-slate-800/30 hover:bg-slate-800 text-slate-400 text-xs font-semibold transition-all flex items-center justify-center"
+              className="h-10 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/30 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-semibold transition-all flex items-center justify-center"
             >
               ⌫
             </button>
@@ -411,22 +411,22 @@ export default function AdminPage() {
   return (
     <div className="space-y-3 pb-8 max-w-7xl mx-auto">
       {/* Compact Top Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-[#0b0f19] border border-slate-800/90 px-3.5 py-2.5 rounded-xl shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-white dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-800/90 px-3.5 py-2.5 rounded-xl shadow-sm transition-colors">
         <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 shrink-0">
+          <div className="w-7 h-7 rounded-lg bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-600 dark:text-sky-400 shrink-0">
             <Activity className="w-4 h-4 animate-pulse" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-sm font-bold text-white tracking-tight">
+              <h1 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">
                 Visitor Telemetry & Time Spent Terminal
               </h1>
-              <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded text-[10px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+              <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded text-[10px] font-semibold bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-ping" />
                 Live
               </span>
             </div>
-            <p className="text-[10px] text-slate-400 leading-tight">
+            <p className="text-[10px] text-slate-600 dark:text-slate-400 leading-tight">
               Real-time capture of Visitor IP, Geolocation, Pages browsed, and exact Time Spent.
             </p>
           </div>
@@ -438,8 +438,8 @@ export default function AdminPage() {
             onClick={() => setAutoRefresh(!autoRefresh)}
             className={`px-2.5 py-1 rounded-md text-[11px] font-medium border transition-all flex items-center gap-1 ${
               autoRefresh
-                ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30"
-                : "bg-slate-800/60 text-slate-400 border-slate-700"
+                ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30"
+                : "bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/60 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-400 border-slate-200 dark:border-slate-700"
             }`}
           >
             <RefreshCw className={`w-3 h-3 ${autoRefresh ? "animate-spin" : ""}`} />
@@ -449,7 +449,7 @@ export default function AdminPage() {
           <button
             onClick={fetchVisitors}
             disabled={loading}
-            className="px-2.5 py-1 rounded-md text-[11px] font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all flex items-center gap-1"
+            className="px-2.5 py-1 rounded-md text-[11px] font-medium bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition-all flex items-center gap-1"
           >
             <RefreshCw className={`w-3 h-3 ${loading ? "animate-spin" : ""}`} />
             <span>Sync</span>
@@ -458,7 +458,7 @@ export default function AdminPage() {
           <button
             onClick={handleExportCsv}
             disabled={!visitors.length}
-            className="px-2.5 py-1 rounded-md text-[11px] font-medium bg-sky-500/15 hover:bg-sky-500/25 text-sky-400 border border-sky-500/30 transition-all flex items-center gap-1"
+            className="px-2.5 py-1 rounded-md text-[11px] font-medium bg-sky-500/15 hover:bg-sky-500/25 text-sky-700 dark:text-sky-400 border border-sky-500/30 transition-all flex items-center gap-1"
           >
             <Download className="w-3 h-3" />
             <span>CSV</span>
@@ -466,7 +466,7 @@ export default function AdminPage() {
 
           <button
             onClick={handleLogout}
-            className="px-2.5 py-1 rounded-md text-[11px] font-medium bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition-all flex items-center gap-1"
+            className="px-2.5 py-1 rounded-md text-[11px] font-medium bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 dark:text-rose-400 border border-rose-500/30 transition-all flex items-center gap-1"
           >
             <LogOut className="w-3 h-3" />
             <span>Exit</span>
@@ -477,58 +477,58 @@ export default function AdminPage() {
       {/* 4 Ultra-Compact Metric Cards with ItsHover Style */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
         {/* Active Now */}
-        <div className="rounded-xl bg-[#0b0f19] border border-slate-800/90 hover-glow-emerald hover-lift p-3 flex items-center justify-between group transition-all">
+        <div className="rounded-xl bg-white dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-800/90 hover-glow-emerald hover-lift p-3 flex items-center justify-between group transition-all shadow-xs">
           <div>
-            <div className="text-[10px] uppercase font-semibold text-slate-400">Active Now</div>
-            <div className="text-xl font-black text-emerald-400 font-mono mt-0.5 group-hover:scale-105 transition-transform origin-left">
+            <div className="text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400">Active Now</div>
+            <div className="text-xl font-black text-emerald-600 dark:text-emerald-400 font-mono mt-0.5 group-hover:scale-105 transition-transform origin-left">
               {stats?.activeNow ?? visitors.filter((v) => v.isOnline).length}
             </div>
             <p className="text-[10px] text-slate-500">Live in last 90 seconds</p>
           </div>
-          <span className="w-3 h-3 rounded-full bg-emerald-400 animate-ping" />
+          <span className="w-3 h-3 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-ping" />
         </div>
 
         {/* Unique IP Addresses */}
-        <div className="rounded-xl bg-[#0b0f19] border border-slate-800/90 hover-glow-sky hover-lift p-3 flex items-center justify-between group transition-all">
+        <div className="rounded-xl bg-white dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-800/90 hover-glow-sky hover-lift p-3 flex items-center justify-between group transition-all shadow-xs">
           <div>
-            <div className="text-[10px] uppercase font-semibold text-slate-400">Unique Visitors</div>
-            <div className="text-xl font-black text-white font-mono mt-0.5 group-hover:text-sky-300 group-hover:scale-105 transition-all origin-left">
+            <div className="text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400">Unique Visitors</div>
+            <div className="text-xl font-black text-slate-900 dark:text-white font-mono mt-0.5 group-hover:text-sky-600 dark:group-hover:text-sky-300 group-hover:scale-105 transition-all origin-left">
               {stats?.uniqueIpsCount ?? new Set(visitors.map((v) => v.ip)).size}
             </div>
             <p className="text-[10px] text-slate-500">Distinct IP addresses</p>
           </div>
-          <Users className="w-4 h-4 text-sky-400 hover-icon-pop" />
+          <Users className="w-4 h-4 text-sky-500 hover-icon-pop" />
         </div>
 
         {/* Avg Time & Total Time Spent */}
-        <div className="rounded-xl bg-[#0b0f19] border border-slate-800/90 hover-glow-sky hover-lift p-3 flex items-center justify-between group transition-all">
+        <div className="rounded-xl bg-white dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-800/90 hover-glow-sky hover-lift p-3 flex items-center justify-between group transition-all shadow-xs">
           <div>
-            <div className="text-[10px] uppercase font-semibold text-slate-400">Time Spent</div>
-            <div className="text-xl font-black text-amber-400 font-mono mt-0.5 group-hover:scale-105 transition-transform origin-left">
+            <div className="text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400">Time Spent</div>
+            <div className="text-xl font-black text-amber-600 dark:text-amber-400 font-mono mt-0.5 group-hover:scale-105 transition-transform origin-left">
               {stats?.avgDurationFormatted ?? formatDuration(stats?.avgDurationSeconds || 0)}
             </div>
             <p className="text-[10px] text-slate-500 font-mono">
               Total: {formatDuration(visitors.reduce((acc, v) => acc + (v.totalDurationSeconds || v.durationSeconds || 0), 0))}
             </p>
           </div>
-          <Timer className="w-4 h-4 text-amber-400 hover-icon-pop" />
+          <Timer className="w-4 h-4 text-amber-500 hover-icon-pop" />
         </div>
 
         {/* Total Pageviews */}
-        <div className="rounded-xl bg-[#0b0f19] border border-slate-800/90 hover-glow-purple hover-lift p-3 flex items-center justify-between group transition-all">
+        <div className="rounded-xl bg-white dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-800/90 hover-glow-purple hover-lift p-3 flex items-center justify-between group transition-all shadow-xs">
           <div>
-            <div className="text-[10px] uppercase font-semibold text-slate-400">Total Pageviews</div>
-            <div className="text-xl font-black text-purple-400 font-mono mt-0.5 group-hover:scale-105 transition-transform origin-left">
+            <div className="text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400">Total Pageviews</div>
+            <div className="text-xl font-black text-purple-600 dark:text-purple-400 font-mono mt-0.5 group-hover:scale-105 transition-transform origin-left">
               {stats?.totalVisits ?? visitors.reduce((acc, v) => acc + (v.pageViewsCount || 1), 0)}
             </div>
             <p className="text-[10px] text-slate-500">Across {visitors.length} sessions</p>
           </div>
-          <Eye className="w-4 h-4 text-purple-400 hover-icon-pop" />
+          <Eye className="w-4 h-4 text-purple-500 hover-icon-pop" />
         </div>
       </div>
 
       {/* Compact Filter & Search Bar */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-2 bg-[#0b0f19] px-3 py-2 rounded-xl border border-slate-800/90">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-2 bg-white dark:bg-[#0b0f19] px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800/90 shadow-xs transition-colors">
         <div className="relative w-full sm:w-72">
           <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
           <input
@@ -536,12 +536,12 @@ export default function AdminPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search IP, city, or page..."
-            className="w-full pl-8 pr-2.5 py-1 rounded-md bg-slate-900 border border-slate-700/80 text-[11px] text-white placeholder-slate-500 focus:outline-none focus:border-sky-500"
+            className="w-full pl-8 pr-2.5 py-1 rounded-md bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 text-[11px] text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-sky-500"
           />
         </div>
 
         <div className="flex items-center gap-1.5 w-full sm:w-auto justify-between sm:justify-end">
-          <div className="flex items-center bg-slate-900 p-0.5 rounded-md border border-slate-800 text-[10px]">
+          <div className="flex items-center bg-slate-100 dark:bg-slate-900 p-0.5 rounded-md border border-slate-200 dark:border-slate-800 text-[10px]">
             {(
               [
                 { id: "ALL", label: "All" },
@@ -556,7 +556,7 @@ export default function AdminPage() {
                 className={`px-2 py-0.5 rounded font-medium transition-all ${
                   statusFilter === tab.id
                     ? "bg-sky-500 text-slate-950 font-bold shadow-xs"
-                    : "text-slate-400 hover:text-slate-200"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
                 }`}
               >
                 {tab.label}
@@ -567,7 +567,7 @@ export default function AdminPage() {
           <button
             onClick={handleClearLogs}
             title="Clear all logs"
-            className="p-1.5 rounded-md text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 border border-slate-800 hover:border-rose-500/30 transition-all"
+            className="p-1.5 rounded-md text-slate-500 dark:text-slate-400 hover:text-rose-500 hover:bg-rose-500/10 border border-slate-200 dark:border-slate-800 hover:border-rose-500/30 transition-all"
           >
             <Trash2 className="w-3.5 h-3.5" />
           </button>
@@ -575,11 +575,11 @@ export default function AdminPage() {
       </div>
 
       {/* Dense Institutional Visitor Table */}
-      <div className="rounded-xl bg-[#0b0f19] border border-slate-800/90 overflow-hidden shadow-md">
-        <div className="px-3.5 py-2 border-b border-slate-800/80 flex items-center justify-between text-[11px]">
+      <div className="rounded-xl bg-white dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-800/90 overflow-hidden shadow-xs transition-colors">
+        <div className="px-3.5 py-2 border-b border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-[11px]">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-white">Live Visitor Sessions</span>
-            <span className="text-slate-400 font-mono text-[10px]">
+            <span className="font-bold text-slate-900 dark:text-white">Live Visitor Sessions</span>
+            <span className="text-slate-500 dark:text-slate-400 font-mono text-[10px]">
               ({filteredVisitors.length} of {visitors.length} recorded)
             </span>
           </div>
@@ -591,7 +591,7 @@ export default function AdminPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-[11px] border-collapse">
             <thead>
-              <tr className="border-b border-slate-800 bg-slate-900/80 text-slate-400 font-semibold uppercase text-[9px] tracking-wider">
+              <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/80 text-slate-600 dark:text-slate-400 font-semibold uppercase text-[9px] tracking-wider">
                 <th className="py-2 px-3">Status</th>
                 <th className="py-2 px-3">Time Spent (Duration)</th>
                 <th className="py-2 px-3">Visitor IP</th>
@@ -601,7 +601,7 @@ export default function AdminPage() {
                 <th className="py-2 px-3">Last Active</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/50 font-mono">
+            <tbody className="divide-y divide-slate-200 dark:divide-slate-800/50 font-mono">
               {filteredVisitors.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="text-center py-10 text-slate-500 font-sans text-xs">
@@ -618,27 +618,27 @@ export default function AdminPage() {
                   return (
                     <tr
                       key={v.id || v.sessionId}
-                      className="hover:bg-slate-800/40 transition-colors group text-slate-300 text-[11px]"
+                      className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors group text-slate-700 dark:text-slate-300 text-[11px]"
                     >
                       {/* 1. Status & Visits */}
                       <td className="py-1.5 px-2.5 whitespace-nowrap">
                         <div className="flex items-center gap-1.5">
                           {v.isOnline ? (
-                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-ping" />
                               Live
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-800 text-slate-400 border border-slate-700/60">
-                              <span className="w-1.5 h-1.5 rounded-full bg-slate-500" />
+                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700/60">
+                              <span className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-500" />
                               Offline
                             </span>
                           )}
                           <span
                             className={`px-1.5 py-0.2 rounded text-[9px] font-semibold ${
                               v.visitCount && v.visitCount > 1
-                                ? "bg-amber-500/15 text-amber-300 border border-amber-500/30 font-sans"
-                                : "bg-slate-800/80 text-slate-400 border border-slate-700/50 font-sans"
+                                ? "bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-sans"
+                                : "bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700/50 font-sans"
                             }`}
                           >
                             {v.visitCount && v.visitCount > 1 ? `🔥 ${v.visitCount} visits` : "1st visit"}
@@ -649,18 +649,18 @@ export default function AdminPage() {
                       {/* 2. Time Spent (Duration) */}
                       <td className="py-1.5 px-2.5 whitespace-nowrap">
                         <div className="flex items-center gap-1.5 font-bold">
-                          <Timer className={`w-3.5 h-3.5 ${isLongSession ? "text-amber-400" : "text-sky-400"}`} />
+                          <Timer className={`w-3.5 h-3.5 ${isLongSession ? "text-amber-500 dark:text-amber-400" : "text-sky-500 dark:text-sky-400"}`} />
                           <span
                             className={`px-1.5 py-0.5 rounded text-[10px] ${
                               isLongSession
-                                ? "bg-amber-500/15 text-amber-300 border border-amber-500/30"
-                                : "bg-sky-500/10 text-sky-300 border border-sky-500/20"
+                                ? "bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30"
+                                : "bg-sky-500/10 text-sky-700 dark:text-sky-300 border border-sky-500/20"
                             }`}
                           >
                             {durationText}
                           </span>
                           {v.totalDurationSeconds && v.totalDurationSeconds > (v.durationSeconds || 0) && (
-                            <span className="text-[9px] px-1 py-0.2 rounded bg-purple-500/10 text-purple-300 border border-purple-500/20 font-mono">
+                            <span className="text-[9px] px-1 py-0.2 rounded bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-500/20 font-mono">
                               Total: {formatDuration(v.totalDurationSeconds)}
                             </span>
                           )}
@@ -676,16 +676,16 @@ export default function AdminPage() {
                       {/* 3. IP Address */}
                       <td className="py-1.5 px-2.5 whitespace-nowrap">
                         <div className="flex items-center gap-1.5">
-                          <span className="font-bold text-sky-400 bg-sky-950/60 px-1.5 py-0.5 rounded border border-sky-800/50 font-mono text-[11px]">
+                          <span className="font-bold text-sky-700 dark:text-sky-400 bg-sky-50 dark:bg-sky-950/60 px-1.5 py-0.5 rounded border border-sky-200 dark:border-sky-800/50 font-mono text-[11px]">
                             {v.ip}
                           </span>
                           <button
                             onClick={() => handleCopyIp(v.ip)}
                             title="Copy IP"
-                            className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 hover:bg-slate-700 rounded text-slate-400 hover:text-white"
+                            className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded text-slate-400 hover:text-slate-900 dark:hover:text-white"
                           >
                             {copiedIp === v.ip ? (
-                              <Check className="w-3 h-3 text-emerald-400" />
+                              <Check className="w-3 h-3 text-emerald-500" />
                             ) : (
                               <Copy className="w-3 h-3" />
                             )}
@@ -696,8 +696,8 @@ export default function AdminPage() {
                       {/* 4. Location */}
                       <td className="py-1.5 px-2.5 whitespace-nowrap font-sans">
                         <div className="flex items-center gap-1">
-                          <MapPin className="w-3 h-3 text-emerald-400 shrink-0" />
-                          <span className="text-slate-200 font-medium text-[11px]">
+                          <MapPin className="w-3 h-3 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                          <span className="text-slate-800 dark:text-slate-200 font-medium text-[11px]">
                             {v.city ? `${v.city}, ` : ""}
                             {v.country === "IN" ? "India 🇮🇳" : v.country || "India 🇮🇳"}
                           </span>
@@ -712,11 +712,11 @@ export default function AdminPage() {
                       {/* 5. Pages Browsed */}
                       <td className="py-1.5 px-2.5 font-sans">
                         <div className="flex items-center gap-1 flex-wrap max-w-xs">
-                          <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-200 border border-slate-700 font-mono truncate max-w-[150px]">
+                          <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 font-mono truncate max-w-[150px]">
                             {v.page}
                           </span>
                           {v.pagesVisited && v.pagesVisited.length > 1 && (
-                            <span className="text-[9px] text-slate-400 font-mono">
+                            <span className="text-[9px] text-slate-500 dark:text-slate-400 font-mono">
                               +{v.pagesVisited.length - 1} ({v.pageViewsCount} hits)
                             </span>
                           )}
@@ -725,13 +725,13 @@ export default function AdminPage() {
 
                       {/* 6. Device & Browser */}
                       <td className="py-1.5 px-2.5 whitespace-nowrap font-sans">
-                        <div className="flex items-center gap-1 text-slate-300 text-[11px]">
+                        <div className="flex items-center gap-1 text-slate-700 dark:text-slate-300 text-[11px]">
                           {v.deviceType === "Mobile" ? (
-                            <Smartphone className="w-3 h-3 text-pink-400 shrink-0" />
+                            <Smartphone className="w-3 h-3 text-pink-500 dark:text-pink-400 shrink-0" />
                           ) : (
-                            <Laptop className="w-3 h-3 text-sky-400 shrink-0" />
+                            <Laptop className="w-3 h-3 text-sky-500 dark:text-sky-400 shrink-0" />
                           )}
-                          <span className="font-medium text-slate-200">{v.os}</span>
+                          <span className="font-medium text-slate-800 dark:text-slate-200">{v.os}</span>
                           <span className="text-slate-500 text-[10px]">
                             • {v.browser}
                           </span>
@@ -741,8 +741,8 @@ export default function AdminPage() {
                       {/* 7. Last Active */}
                       <td className="py-1.5 px-2.5 whitespace-nowrap">
                         <div className="flex items-center gap-1 font-sans">
-                          <Clock className="w-3 h-3 text-slate-500 shrink-0" />
-                          <span className="text-slate-300 font-medium text-[11px]">
+                          <Clock className="w-3 h-3 text-slate-400 shrink-0" />
+                          <span className="text-slate-700 dark:text-slate-300 font-medium text-[11px]">
                             {getRelativeTime(v.lastSeen || v.timestamp)}
                           </span>
                         </div>

@@ -59,42 +59,42 @@ export function WACCCalculatorModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-in fade-in">
-      <div className="bg-[#111726] border border-slate-800 rounded-xl max-w-2xl w-full shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in">
+      <div className="bg-white dark:bg-[#111726] border border-slate-200 dark:border-slate-800 rounded-xl max-w-2xl w-full shadow-2xl overflow-hidden transition-colors">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-[#0d1322]">
+        <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-[#0d1322]">
           <div className="flex items-center gap-2">
-            <Sliders className="w-4 h-4 text-sky-400" />
-            <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider">
+            <Sliders className="w-4 h-4 text-sky-600 dark:text-sky-400" />
+            <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
               Cost of Capital & WACC Modeling
             </h3>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-200">
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         <div className="p-6 space-y-6 max-h-[80vh] overflow-y-auto">
           {/* Summary Box */}
-          <div className="bg-[#090d18] border border-slate-800 rounded-lg p-4 flex items-center justify-between">
+          <div className="bg-slate-50 dark:bg-[#090d18] border border-slate-200 dark:border-slate-800 rounded-lg p-4 flex items-center justify-between">
             <div>
-              <div className="text-[10px] uppercase font-semibold text-slate-400">
+              <div className="text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400">
                 Effective Model Discount Rate
               </div>
-              <div className="text-3xl font-extrabold text-sky-400 font-mono mt-0.5">
+              <div className="text-3xl font-extrabold text-sky-600 dark:text-sky-400 font-mono mt-0.5">
                 {formatPercentRaw(effectiveWacc)}
               </div>
-              <div className="text-[11px] text-slate-400 mt-1">
-                Cost of Equity: <span className="text-slate-200 font-semibold">{formatPercentRaw(costOfEquity)}</span> | After-tax Debt: <span className="text-slate-200 font-semibold">{formatPercentRaw(costOfDebtAfterTax)}</span>
+              <div className="text-[11px] text-slate-600 dark:text-slate-400 mt-1">
+                Cost of Equity: <span className="text-slate-900 dark:text-slate-200 font-semibold">{formatPercentRaw(costOfEquity)}</span> | After-tax Debt: <span className="text-slate-900 dark:text-slate-200 font-semibold">{formatPercentRaw(costOfDebtAfterTax)}</span>
               </div>
             </div>
             {overrideEnabled ? (
-              <span className="text-[11px] font-semibold text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 rounded-md">
+              <span className="text-[11px] font-semibold text-amber-700 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 rounded-md">
                 Manual Override Active
               </span>
             ) : (
-              <span className="text-[11px] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-md flex items-center gap-1">
-                <CheckCircle className="w-3.5 h-3.5" /> CAPM Verified
+              <span className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-md flex items-center gap-1">
+                <CheckCircle className="w-3.5 h-3.5 text-emerald-500" /> CAPM Verified
               </span>
             )}
           </div>

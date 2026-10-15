@@ -54,124 +54,124 @@ export function HistoricalFinancialsTable({ statements }: HistoricalFinancialsTa
           </thead>
           <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60 font-mono">
             <tr className="hover:bg-slate-100/50 dark:hover:bg-slate-800/20 font-bold text-slate-900 dark:text-slate-100">
-              <td className="py-2 px-3 font-sans text-xs">Revenue from Operations</td>
+              <td className="py-2.5 px-4 font-sans text-xs">Revenue from Operations</td>
               {sorted.map((s) => (
-                <td key={s.fiscal_year} className="py-1.5 px-3 text-right text-sky-400">
+                <td key={s.fiscal_year} className="py-2 px-4 text-right text-sky-700 dark:text-sky-400 font-bold">
                   {formatCrore(s.revenue)}
                 </td>
               ))}
             </tr>
-            <tr className="hover:bg-slate-800/20 text-slate-400">
+            <tr className="hover:bg-slate-100/50 dark:hover:bg-slate-800/20 text-slate-700 dark:text-slate-400">
               <td className="py-2.5 px-4 font-sans text-xs">Operating Expenses</td>
               {sorted.map((s) => (
-                <td key={s.fiscal_year} className="py-2.5 px-4 text-right text-slate-400">
+                <td key={s.fiscal_year} className="py-2.5 px-4 text-right text-slate-800 dark:text-slate-300 font-medium">
                   {formatCrore(s.operating_expenses)}
                 </td>
               ))}
             </tr>
-            <tr className="hover:bg-slate-800/20 font-semibold text-slate-200 bg-slate-800/10">
+            <tr className="hover:bg-slate-100/70 dark:hover:bg-slate-800/30 font-semibold text-slate-900 dark:text-slate-200 bg-slate-50 dark:bg-slate-800/20">
               <td className="py-2.5 px-4 font-sans text-xs">Operating Profit (EBIT)</td>
               {sorted.map((s) => (
-                <td key={s.fiscal_year} className="py-2.5 px-4 text-right text-emerald-400">
+                <td key={s.fiscal_year} className="py-2.5 px-4 text-right text-emerald-700 dark:text-emerald-400 font-bold">
                   {formatCrore(s.ebit)}
                 </td>
               ))}
             </tr>
-            <tr className="hover:bg-slate-800/20 text-slate-400">
+            <tr className="hover:bg-slate-100/50 dark:hover:bg-slate-800/20 text-slate-700 dark:text-slate-400">
               <td className="py-2.5 px-4 font-sans text-xs">EBIT Margin %</td>
               {sorted.map((s) => (
-                <td key={s.fiscal_year} className="py-2.5 px-4 text-right text-slate-300">
+                <td key={s.fiscal_year} className="py-2.5 px-4 text-right text-slate-800 dark:text-slate-300 font-medium">
                   {formatPercentRaw(s.ebit_margin_pct)}
                 </td>
               ))}
             </tr>
-            <tr className="hover:bg-slate-800/20 text-slate-400">
+            <tr className="hover:bg-slate-100/50 dark:hover:bg-slate-800/20 text-slate-700 dark:text-slate-400">
               <td className="py-2.5 px-4 font-sans text-xs">Effective Tax Rate %</td>
               {sorted.map((s) => (
-                <td key={s.fiscal_year} className="py-2.5 px-4 text-right text-slate-400">
+                <td key={s.fiscal_year} className="py-2.5 px-4 text-right text-slate-800 dark:text-slate-300 font-medium">
                   {formatPercentRaw(s.effective_tax_rate_pct)}
                 </td>
               ))}
             </tr>
-            <tr className="hover:bg-slate-800/20 text-slate-400">
+            <tr className="hover:bg-slate-100/50 dark:hover:bg-slate-800/20 text-slate-700 dark:text-slate-400">
               <td className="py-2.5 px-4 font-sans text-xs">Depreciation & Amortization</td>
               {sorted.map((s) => (
-                <td key={s.fiscal_year} className="py-2.5 px-4 text-right text-slate-400">
+                <td key={s.fiscal_year} className="py-2.5 px-4 text-right text-slate-800 dark:text-slate-300 font-medium">
                   {formatCrore(s.depreciation_amortization)}
                 </td>
               ))}
             </tr>
-            <tr className="hover:bg-slate-800/20 text-slate-400">
+            <tr className="hover:bg-slate-100/50 dark:hover:bg-slate-800/20 text-slate-700 dark:text-slate-400">
               <td className="py-2.5 px-4 font-sans text-xs">Capital Expenditure (CapEx)</td>
               {sorted.map((s) => (
-                <td key={s.fiscal_year} className="py-2.5 px-4 text-right text-slate-400">
-                  {formatCrore(s.capex)}
+                <td key={s.fiscal_year} className="py-2.5 px-4 text-right text-rose-700 dark:text-rose-400 font-medium">
+                  -{formatCrore(s.capex)}
                 </td>
               ))}
             </tr>
-            <tr className="hover:bg-slate-800/20 text-slate-400">
+            <tr className="hover:bg-slate-100/50 dark:hover:bg-slate-800/20 text-slate-700 dark:text-slate-400">
               <td className="py-2.5 px-4 font-sans text-xs">Change in Net Working Capital</td>
               {sorted.map((s) => (
-                <td key={s.fiscal_year} className="py-2.5 px-4 text-right text-slate-400">
-                  {formatCrore(s.change_in_nwc)}
+                <td key={s.fiscal_year} className="py-2.5 px-4 text-right text-slate-800 dark:text-slate-400">
+                  -{formatCrore(s.change_in_nwc)}
                 </td>
               ))}
             </tr>
-            <tr className="hover:bg-slate-800/20 font-semibold text-emerald-400 bg-emerald-950/20 border-t border-b border-emerald-800/30">
-              <td className="py-2.5 px-4 font-sans text-xs">Audited Free Cash Flow (FCFF)</td>
+            <tr className="hover:bg-emerald-50 dark:hover:bg-emerald-950/30 font-semibold text-emerald-800 dark:text-emerald-300 bg-emerald-500/10 border-t border-b border-emerald-500/20">
+              <td className="py-2.5 px-4 font-sans text-xs font-bold">Audited Free Cash Flow (FCFF)</td>
               {sorted.map((s) => {
                 const nopat = s.ebit * (1 - s.effective_tax_rate_pct / 100);
                 const fcf = nopat + s.depreciation_amortization - s.capex - s.change_in_nwc;
                 return (
-                  <td key={s.fiscal_year} className="py-2.5 px-4 text-right font-bold text-emerald-300">
+                  <td key={s.fiscal_year} className="py-2.5 px-4 text-right font-extrabold text-emerald-800 dark:text-emerald-300 text-sm">
                     {formatCrore(fcf)}
                   </td>
                 );
               })}
             </tr>
-            <tr className="hover:bg-slate-800/20 text-slate-300 bg-emerald-950/10">
-              <td className="py-2.5 px-4 font-sans text-xs">FCF Conversion % (FCF / EBIT)</td>
+            <tr className="hover:bg-slate-100/50 dark:hover:bg-slate-800/20 text-slate-700 dark:text-slate-300 bg-emerald-500/5">
+              <td className="py-2.5 px-4 font-sans text-xs font-medium">FCF Conversion % (FCF / EBIT)</td>
               {sorted.map((s) => {
                 const nopat = s.ebit * (1 - s.effective_tax_rate_pct / 100);
                 const fcf = nopat + s.depreciation_amortization - s.capex - s.change_in_nwc;
                 const conversion = s.ebit > 0 ? (fcf / s.ebit) * 100 : 0;
                 return (
-                  <td key={s.fiscal_year} className="py-2.5 px-4 text-right font-semibold text-sky-400">
+                  <td key={s.fiscal_year} className="py-2.5 px-4 text-right font-bold text-sky-700 dark:text-sky-400">
                     {conversion.toFixed(1)}%
                   </td>
                 );
               })}
             </tr>
-            <tr className="hover:bg-slate-800/20 text-slate-400 bg-slate-800/10">
+            <tr className="hover:bg-slate-100/50 dark:hover:bg-slate-800/20 text-slate-700 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/10">
               <td className="py-2.5 px-4 font-sans text-xs">Cash & Liquid Investments</td>
               {sorted.map((s) => (
-                <td key={s.fiscal_year} className="py-2.5 px-4 text-right text-emerald-400 font-semibold">
+                <td key={s.fiscal_year} className="py-2.5 px-4 text-right text-emerald-700 dark:text-emerald-400 font-semibold">
                   {formatCrore(s.cash_and_equivalents)}
                 </td>
               ))}
             </tr>
-            <tr className="hover:bg-slate-800/20 text-slate-400">
+            <tr className="hover:bg-slate-100/50 dark:hover:bg-slate-800/20 text-slate-700 dark:text-slate-400">
               <td className="py-2.5 px-4 font-sans text-xs">Total Debt</td>
               {sorted.map((s) => (
-                <td key={s.fiscal_year} className="py-2.5 px-4 text-right text-rose-400">
+                <td key={s.fiscal_year} className="py-2.5 px-4 text-right text-rose-700 dark:text-rose-400 font-semibold">
                   {formatCrore(s.total_debt)}
                 </td>
               ))}
             </tr>
-            <tr className="hover:bg-slate-800/20 text-slate-400">
+            <tr className="hover:bg-slate-100/50 dark:hover:bg-slate-800/20 text-slate-700 dark:text-slate-400">
               <td className="py-2.5 px-4 font-sans text-xs">Diluted Shares Outstanding</td>
               {sorted.map((s) => (
-                <td key={s.fiscal_year} className="py-2.5 px-4 text-right text-slate-300">
+                <td key={s.fiscal_year} className="py-2.5 px-4 text-right text-slate-900 dark:text-slate-200 font-bold">
                   {formatNumberIN(s.diluted_shares)} Cr
                 </td>
               ))}
             </tr>
             {/* Provenance Disclosure Row */}
-            <tr className="bg-[#0b101c] text-slate-500 text-[10px]">
-              <td className="py-2.5 px-4 font-sans uppercase font-bold text-slate-400">Provenance / Filing</td>
+            <tr className="bg-slate-50 dark:bg-[#0b101c] text-slate-600 dark:text-slate-400 text-[10px] border-t border-slate-200 dark:border-slate-800">
+              <td className="py-2.5 px-4 font-sans uppercase font-bold text-slate-700 dark:text-slate-300">Provenance / Filing</td>
               {sorted.map((s) => (
                 <td key={s.fiscal_year} className="py-2.5 px-4 text-right">
-                  <span className="inline-block px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-sans font-semibold">
+                  <span className="inline-block px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 font-sans font-semibold">
                     {s.provenance}
                   </span>
                   {s.source_url && (
@@ -179,7 +179,7 @@ export function HistoricalFinancialsTable({ statements }: HistoricalFinancialsTa
                       href={s.source_url}
                       target="_blank"
                       rel="noreferrer"
-                      className="block text-slate-400 hover:text-sky-400 text-[9px] mt-1 truncate max-w-[120px] ml-auto"
+                      className="block text-slate-500 dark:text-slate-400 hover:text-sky-600 dark:hover:text-sky-400 text-[9px] mt-1 truncate max-w-[120px] ml-auto font-medium"
                       title={s.source_document || s.source_url}
                     >
                       Source Filing <ExternalLink className="w-2.5 h-2.5 inline" />

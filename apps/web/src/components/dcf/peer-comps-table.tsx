@@ -23,41 +23,41 @@ export function PeerCompsTable({
   return (
     <div className="space-y-6">
       {/* Header and Context */}
-      <div className="bg-[#111726] border border-slate-800 rounded-xl p-5 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white dark:bg-[#111726] border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4 transition-colors">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-sky-400 bg-sky-500/10 px-2 py-0.5 rounded border border-sky-500/20">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-sky-700 dark:text-sky-400 bg-sky-500/10 px-2 py-0.5 rounded border border-sky-500/20">
               Sector Benchmarks
             </span>
-            <span className="text-xs text-slate-400 font-medium">{sector}</span>
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">{sector}</span>
           </div>
-          <h3 className="text-sm font-bold text-slate-100 mt-1">
+          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 mt-1">
             Comparable Company Analysis (Peer Comps)
           </h3>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
             Institutional peer valuation matrix comparing trading multiples, profitability margins, and capital efficiency.
           </p>
         </div>
 
         {/* Median Multiples Pill Strip */}
-        <div className="flex flex-wrap items-center gap-3 bg-[#0a0f1d] px-4 py-2.5 rounded-lg border border-slate-800">
+        <div className="flex flex-wrap items-center gap-3 bg-slate-50 dark:bg-[#0a0f1d] px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-800">
           <div className="text-right">
             <div className="text-[10px] text-slate-500 uppercase font-semibold">Median P/E</div>
-            <div className="text-sm font-bold text-sky-400 font-mono">
+            <div className="text-sm font-bold text-sky-700 dark:text-sky-400 font-mono">
               {sector_medians.forward_pe > 0 ? `${sector_medians.forward_pe}x` : "—"}
             </div>
           </div>
-          <div className="w-px h-6 bg-slate-800" />
+          <div className="w-px h-6 bg-slate-200 dark:bg-slate-800" />
           <div className="text-right">
             <div className="text-[10px] text-slate-500 uppercase font-semibold">Median EV/EBIT</div>
-            <div className="text-sm font-bold text-emerald-400 font-mono">
+            <div className="text-sm font-bold text-emerald-700 dark:text-emerald-400 font-mono">
               {sector_medians.ev_ebit > 0 ? `${sector_medians.ev_ebit}x` : "—"}
             </div>
           </div>
-          <div className="w-px h-6 bg-slate-800" />
+          <div className="w-px h-6 bg-slate-200 dark:bg-slate-800" />
           <div className="text-right">
             <div className="text-[10px] text-slate-500 uppercase font-semibold">Median ROIC</div>
-            <div className="text-sm font-bold text-amber-400 font-mono">
+            <div className="text-sm font-bold text-amber-700 dark:text-amber-400 font-mono">
               {sector_medians.roic_pct > 0 ? `${sector_medians.roic_pct}%` : "—"}
             </div>
           </div>
@@ -65,12 +65,12 @@ export function PeerCompsTable({
       </div>
 
       {/* Peer Multiples Table */}
-      <div className="bg-[#111726] border border-slate-800 rounded-xl overflow-hidden shadow-xl">
+      <div className="bg-white dark:bg-[#111726] border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-xl transition-colors">
         <div className="overflow-x-auto">
           <table className="w-full text-xs text-left border-collapse">
             <thead>
-              <tr className="bg-[#0c1220] border-b border-slate-800 text-slate-400 uppercase font-mono text-[10px]">
-                <th className="py-3 px-4 font-semibold text-slate-300">Company / Ticker</th>
+              <tr className="bg-slate-100 dark:bg-[#0c1220] border-b border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-400 uppercase font-mono text-[10px]">
+                <th className="py-3 px-4 font-semibold text-slate-800 dark:text-slate-300">Company / Ticker</th>
                 <th className="py-3 px-3 text-right">CMP (₹)</th>
                 <th className="py-3 px-3 text-right">Market Cap (₹ Cr)</th>
                 <th className="py-3 px-3 text-right text-sky-400">Fwd P/E</th>

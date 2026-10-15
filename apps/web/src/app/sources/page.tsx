@@ -200,54 +200,54 @@ export default function DataSourcesPage() {
 
       {/* 2. Top Diagnostic Metrics (4 Cards with ItsHover Style) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <div className="bg-[#0e1526] border border-slate-800 hover-glow-sky hover-lift rounded-xl p-4 space-y-1 shadow-sm group transition-all">
-          <div className="flex items-center justify-between text-slate-400 text-xs">
-            <span className="font-semibold group-hover:text-slate-200 transition-colors">Tracked Equities</span>
-            <Building2 className="w-3.5 h-3.5 text-sky-400 hover-icon-pop" />
+        <div className="bg-white dark:bg-[#0e1526] border border-slate-200 dark:border-slate-800 hover-glow-sky hover-lift rounded-xl p-4 space-y-1 shadow-sm group transition-all">
+          <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs">
+            <span className="font-semibold group-hover:text-slate-900 dark:group-hover:text-slate-200 transition-colors">Tracked Equities</span>
+            <Building2 className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400 hover-icon-pop" />
           </div>
-          <div className="text-xl sm:text-2xl font-extrabold font-mono text-white group-hover:text-sky-300 transition-colors">
+          <div className="text-xl sm:text-2xl font-extrabold font-mono text-slate-900 dark:text-white group-hover:text-sky-600 dark:group-hover:text-sky-300 transition-colors">
             {totalCatalog}
           </div>
-          <p className="text-[11px] text-slate-400">
+          <p className="text-[11px] text-slate-500 dark:text-slate-400">
             NIFTY 500 catalog across 20 official sectors
           </p>
         </div>
 
-        <div className="bg-[#0e1526] border border-slate-800 hover-glow-emerald hover-lift rounded-xl p-4 space-y-1 shadow-sm group transition-all">
-          <div className="flex items-center justify-between text-slate-400 text-xs">
-            <span className="font-semibold group-hover:text-slate-200 transition-colors">Audited Disclosures</span>
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 hover-icon-pop" />
+        <div className="bg-white dark:bg-[#0e1526] border border-slate-200 dark:border-slate-800 hover-glow-emerald hover-lift rounded-xl p-4 space-y-1 shadow-sm group transition-all">
+          <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs">
+            <span className="font-semibold group-hover:text-slate-900 dark:group-hover:text-slate-200 transition-colors">Audited Disclosures</span>
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 hover-icon-pop" />
           </div>
-          <div className="text-xl sm:text-2xl font-extrabold font-mono text-emerald-400 group-hover:scale-105 transition-transform origin-left">
+          <div className="text-xl sm:text-2xl font-extrabold font-mono text-emerald-600 dark:text-emerald-400 group-hover:scale-105 transition-transform origin-left">
             {verifiedCount * 5} Filings
           </div>
-          <p className="text-[11px] text-slate-400">
+          <p className="text-[11px] text-slate-500 dark:text-slate-400">
             {verifiedCount} verified bluechips × 5 years (FY20–FY24)
           </p>
         </div>
 
-        <div className="bg-[#0e1526] border border-slate-800 hover-glow-sky hover-lift rounded-xl p-4 space-y-1 shadow-sm group transition-all">
-          <div className="flex items-center justify-between text-slate-400 text-xs">
-            <span className="font-semibold group-hover:text-slate-200 transition-colors">Live Market Feeds</span>
-            <TrendingUp className="w-3.5 h-3.5 text-cyan-400 hover-icon-pop" />
+        <div className="bg-white dark:bg-[#0e1526] border border-slate-200 dark:border-slate-800 hover-glow-sky hover-lift rounded-xl p-4 space-y-1 shadow-sm group transition-all">
+          <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs">
+            <span className="font-semibold group-hover:text-slate-900 dark:group-hover:text-slate-200 transition-colors">Live Market Feeds</span>
+            <TrendingUp className="w-3.5 h-3.5 text-sky-600 dark:text-cyan-400 hover-icon-pop" />
           </div>
-          <div className="text-xl sm:text-2xl font-extrabold font-mono text-cyan-300 group-hover:scale-105 transition-transform origin-left">
+          <div className="text-xl sm:text-2xl font-extrabold font-mono text-sky-600 dark:text-cyan-300 group-hover:scale-105 transition-transform origin-left">
             {isMarketFeedOnline ? "Active Feed" : "Connecting"}
           </div>
-          <p className="text-[11px] text-slate-400">
+          <p className="text-[11px] text-slate-500 dark:text-slate-400">
             NIFTY 50, SENSEX, BANK NIFTY + Bhavcopy
           </p>
         </div>
 
-        <div className="bg-[#0e1526] border border-slate-800 hover-glow-sky hover-lift rounded-xl p-4 space-y-1 shadow-sm group transition-all">
-          <div className="flex items-center justify-between text-slate-400 text-xs">
-            <span className="font-semibold group-hover:text-slate-200 transition-colors">NSE MCP Gate</span>
-            <Lock className="w-3.5 h-3.5 text-amber-400 hover-icon-pop" />
+        <div className="bg-white dark:bg-[#0e1526] border border-slate-200 dark:border-slate-800 hover-glow-sky hover-lift rounded-xl p-4 space-y-1 shadow-sm group transition-all">
+          <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs">
+            <span className="font-semibold group-hover:text-slate-900 dark:group-hover:text-slate-200 transition-colors">NSE MCP Gate</span>
+            <Lock className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 hover-icon-pop" />
           </div>
-          <div className="text-xl sm:text-2xl font-extrabold font-mono text-amber-300 group-hover:scale-105 transition-transform origin-left">
+          <div className="text-xl sm:text-2xl font-extrabold font-mono text-amber-600 dark:text-amber-300 group-hover:scale-105 transition-transform origin-left">
             {isMcpGated ? "Gated / Locked" : "Approved"}
           </div>
-          <p className="text-[11px] text-slate-400">
+          <p className="text-[11px] text-slate-500 dark:text-slate-400">
             Commercial redistribution compliance enforced
           </p>
         </div>
@@ -306,29 +306,29 @@ export default function DataSourcesPage() {
           </div>
 
           {/* 2. Audited Historical Filings Provider */}
-          <div className="bg-[#111726] border border-slate-800 rounded-xl p-5 space-y-3 shadow-lg flex flex-col justify-between hover:border-slate-700 transition-colors">
+          <div className="bg-white dark:bg-[#111726] border border-slate-200 dark:border-slate-800 rounded-xl p-5 space-y-3 shadow-lg flex flex-col justify-between hover:border-slate-400 dark:hover:border-slate-700 transition-colors">
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
-                <span className="font-bold text-xs sm:text-sm text-slate-100">Audited Filings Layer</span>
-                <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 flex items-center gap-1">
-                  <CheckCircle2 className="w-3 h-3" /> {isFundamentalOnline ? "Online & Audited" : "Online"}
+                <span className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100">Audited Filings Layer</span>
+                <span className="text-[10px] font-mono font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 flex items-center gap-1">
+                  <CheckCircle2 className="w-3 h-3 text-emerald-500" /> {isFundamentalOnline ? "Online & Audited" : "Online"}
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 leading-relaxed">
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
                 Historical statements extracted directly from company Annual Reports under Ind AS filed with BSE/NSE.
               </p>
-              <div className="text-[11px] text-slate-400 space-y-1 font-mono">
-                <div>Audited Companies: <span className="text-slate-200 font-bold">{verifiedCount} Bluechips</span></div>
-                <div>Full Periods: <span className="text-slate-200">FY20 – FY24 (5 Years)</span></div>
-                <div>Signed By: <span className="text-slate-200">Statutory Auditors</span></div>
+              <div className="text-[11px] text-slate-600 dark:text-slate-400 space-y-1 font-mono">
+                <div>Audited Companies: <span className="text-slate-900 dark:text-slate-200 font-bold">{verifiedCount} Bluechips</span></div>
+                <div>Full Periods: <span className="text-slate-800 dark:text-slate-200">FY20 – FY24 (5 Years)</span></div>
+                <div>Signed By: <span className="text-slate-800 dark:text-slate-200">Statutory Auditors</span></div>
               </div>
             </div>
-            <div className="pt-3 border-t border-slate-800 text-[11px]">
+            <div className="pt-3 border-t border-slate-200 dark:border-slate-800 text-[11px]">
               <a
                 href="https://www.bseindia.com/corporates/ann.html"
                 target="_blank"
                 rel="noreferrer"
-                className="text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-semibold"
+                className="text-emerald-700 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 flex items-center gap-1 font-semibold"
               >
                 BSE Corporate Filings <ExternalLink className="w-3 h-3" />
               </a>
@@ -336,29 +336,29 @@ export default function DataSourcesPage() {
           </div>
 
           {/* 3. Official NSE MCP Gateway */}
-          <div className="bg-[#111726] border border-slate-800 rounded-xl p-5 space-y-3 shadow-lg flex flex-col justify-between hover:border-slate-700 transition-colors">
+          <div className="bg-white dark:bg-[#111726] border border-slate-200 dark:border-slate-800 rounded-xl p-5 space-y-3 shadow-lg flex flex-col justify-between hover:border-slate-400 dark:hover:border-slate-700 transition-colors">
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
-                <span className="font-bold text-xs sm:text-sm text-slate-100">NSE MCP Gateway</span>
-                <span className="text-[10px] font-mono font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                <span className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100">NSE MCP Gateway</span>
+                <span className="text-[10px] font-mono font-bold text-amber-700 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
                   Compliance Gated
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 leading-relaxed">
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
                 Direct integration points for official Model Context Protocol (MCP) server endpoints.
               </p>
-              <div className="text-[10px] text-slate-400 space-y-1 font-mono truncate">
+              <div className="text-[10px] text-slate-600 dark:text-slate-400 space-y-1 font-mono truncate">
                 <div className="truncate">• mcp.nseindia.in/cmmkt/mcp</div>
                 <div className="truncate">• mcp.nseindia.in/bhavcopy/cm/mcp</div>
-                <div>Lock: <span className="text-amber-300">NSE_DATA_LICENSE_APPROVED</span></div>
+                <div>Lock: <span className="text-amber-600 dark:text-amber-300 font-semibold">NSE_DATA_LICENSE_APPROVED</span></div>
               </div>
             </div>
-            <div className="pt-3 border-t border-slate-800 space-y-1.5 text-[11px]">
+            <div className="pt-3 border-t border-slate-200 dark:border-slate-800 space-y-1.5 text-[11px]">
               <a
                 href="https://www.nseindia.com/nse-mcp"
                 target="_blank"
                 rel="noreferrer"
-                className="text-sky-400 hover:text-sky-300 flex items-center gap-1 font-semibold"
+                className="text-sky-700 dark:text-sky-400 hover:text-sky-800 dark:hover:text-sky-300 flex items-center gap-1 font-semibold"
               >
                 NSE MCP Docs <ExternalLink className="w-3 h-3" />
               </a>
@@ -366,7 +366,7 @@ export default function DataSourcesPage() {
                 href="https://www.nseindia.com/static/market-data/nse-data-policy"
                 target="_blank"
                 rel="noreferrer"
-                className="text-slate-400 hover:text-slate-300 flex items-center gap-1"
+                className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-300 flex items-center gap-1"
               >
                 Data Policy Guide <ExternalLink className="w-3 h-3" />
               </a>
@@ -374,27 +374,27 @@ export default function DataSourcesPage() {
           </div>
 
           {/* 4. Statement Document Parser */}
-          <div className="bg-[#111726] border border-slate-800 rounded-xl p-5 space-y-3 shadow-lg flex flex-col justify-between hover:border-slate-700 transition-colors">
+          <div className="bg-white dark:bg-[#111726] border border-slate-200 dark:border-slate-800 rounded-xl p-5 space-y-3 shadow-lg flex flex-col justify-between hover:border-slate-400 dark:hover:border-slate-700 transition-colors">
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
-                <span className="font-bold text-xs sm:text-sm text-slate-100">Statement Parser</span>
-                <span className="text-[10px] font-mono font-bold text-sky-400 bg-sky-500/10 px-2 py-0.5 rounded border border-sky-500/20">
+                <span className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100">Statement Parser</span>
+                <span className="text-[10px] font-mono font-bold text-sky-700 dark:text-sky-400 bg-sky-500/10 px-2 py-0.5 rounded border border-sky-500/20">
                   Active Engine
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 leading-relaxed">
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
                 Normalizes user-uploaded CSV and Excel balance sheets with zero substitution of fake data.
               </p>
-              <div className="text-[11px] text-slate-400 space-y-1 font-mono">
-                <div>Formats: <span className="text-slate-200">.csv, .xlsx, .xls</span></div>
-                <div>Mapping: <span className="text-slate-200">Revenue, EBIT, NOPAT</span></div>
-                <div>Provenance: <span className="text-slate-200">USER_UPLOADED</span></div>
+              <div className="text-[11px] text-slate-600 dark:text-slate-400 space-y-1 font-mono">
+                <div>Formats: <span className="text-slate-900 dark:text-slate-200 font-semibold">.csv, .xlsx, .xls</span></div>
+                <div>Mapping: <span className="text-slate-900 dark:text-slate-200 font-semibold">Revenue, EBIT, NOPAT</span></div>
+                <div>Provenance: <span className="text-slate-900 dark:text-slate-200 font-semibold">USER_UPLOADED</span></div>
               </div>
             </div>
-            <div className="pt-3 border-t border-slate-800 text-[11px]">
+            <div className="pt-3 border-t border-slate-200 dark:border-slate-800 text-[11px]">
               <Link
                 href="/valuation/TCS"
-                className="text-sky-400 hover:text-sky-300 flex items-center gap-1 font-semibold"
+                className="text-sky-700 dark:text-sky-400 hover:text-sky-800 dark:hover:text-sky-300 flex items-center gap-1 font-semibold"
               >
                 Open Modeling Workspace <ArrowRight className="w-3 h-3" />
               </Link>
@@ -407,27 +407,27 @@ export default function DataSourcesPage() {
       <div className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <h2 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               Verified Disclosures Directory ({VERIFIED_AUDIT_DIRECTORY.length} Audited Equities)
             </h2>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-500 dark:text-slate-400">
               Complete mathematical audit trail of 5-year historical filings, statutory auditor signatures, and model architecture.
             </p>
           </div>
 
           <Link
             href="/screener"
-            className="text-xs text-sky-400 hover:text-sky-300 flex items-center gap-1 font-semibold"
+            className="text-xs text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 flex items-center gap-1 font-semibold"
           >
             Explore All 501 Catalog Equities <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 
-        <div className="bg-[#0f172a] border border-slate-800 rounded-xl overflow-hidden shadow-xl">
+        <div className="bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-xl transition-colors">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-slate-300">
-              <thead className="bg-[#121b33] text-slate-400 font-mono uppercase text-[10px] border-b border-slate-800">
+            <table className="w-full text-left text-xs text-slate-700 dark:text-slate-300">
+              <thead className="bg-slate-100 dark:bg-[#121b33] text-slate-700 dark:text-slate-400 font-mono uppercase text-[10px] border-b border-slate-200 dark:border-slate-800">
                 <tr>
                   <th className="py-3 px-4">Equity & Symbol</th>
                   <th className="py-3 px-4">Sector</th>
@@ -438,29 +438,29 @@ export default function DataSourcesPage() {
                   <th className="py-3 px-4 text-right">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60 font-sans">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 font-sans">
                 {VERIFIED_AUDIT_DIRECTORY.map((c) => (
-                  <tr key={c.symbol} className="hover:bg-slate-800/40 transition-colors">
+                  <tr key={c.symbol} className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
                     <td className="py-3 px-4">
-                      <div className="font-bold text-white font-mono text-xs">{c.symbol}</div>
-                      <div className="text-[11px] text-slate-400 truncate max-w-[200px]">{c.name}</div>
+                      <div className="font-bold text-slate-900 dark:text-white font-mono text-xs">{c.symbol}</div>
+                      <div className="text-[11px] text-slate-600 dark:text-slate-400 truncate max-w-[200px]">{c.name}</div>
                     </td>
-                    <td className="py-3 px-4 text-slate-300 text-xs">
+                    <td className="py-3 px-4 text-slate-800 dark:text-slate-300 text-xs">
                       {c.sector}
                     </td>
                     <td className="py-3 px-4">
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-500/10 text-sky-300 border border-sky-500/20 font-semibold">
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-500/10 text-sky-700 dark:text-sky-300 border border-sky-500/20 font-semibold">
                         {c.modelType}
                       </span>
                     </td>
-                    <td className="py-3 px-4 font-mono text-[11px] text-slate-300">
+                    <td className="py-3 px-4 font-mono text-[11px] text-slate-800 dark:text-slate-300">
                       {c.periods}
                     </td>
-                    <td className="py-3 px-4 text-[11px] text-slate-300">
+                    <td className="py-3 px-4 text-[11px] text-slate-700 dark:text-slate-300">
                       {c.auditor}
                     </td>
                     <td className="py-3 px-4">
-                      <div className="flex items-center gap-1.5 text-emerald-400 text-[11px] font-medium">
+                      <div className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 text-[11px] font-medium">
                         <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
                         <span>Ind AS Verified</span>
                       </div>
@@ -471,7 +471,7 @@ export default function DataSourcesPage() {
                     <td className="py-3 px-4 text-right">
                       <Link
                         href={`/valuation/${c.symbol}`}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 text-xs font-semibold transition-colors border border-sky-500/20"
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 text-sky-700 dark:text-sky-400 text-xs font-semibold transition-colors border border-sky-500/20"
                       >
                         Model DCF <ArrowRight className="w-3 h-3" />
                       </Link>

@@ -429,13 +429,13 @@ export default function DashboardPage() {
             {/* Dynamic Headline */}
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tight leading-[1.15]">
               Valuation Reimagined for{" "}
-              <span className="bg-gradient-to-r from-sky-400 via-cyan-300 to-emerald-400 bg-clip-text text-transparent underline decoration-sky-500/30 decoration-wavy decoration-1 underline-offset-8">
+              <span className="bg-gradient-to-r from-sky-600 via-teal-600 to-emerald-600 dark:from-sky-400 dark:via-cyan-300 dark:to-emerald-400 bg-clip-text text-transparent underline decoration-sky-500/30 decoration-wavy decoration-1 underline-offset-8">
                 Indian Equities
               </span>
             </h1>
 
             {/* Value Description */}
-            <p className="text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed max-w-xl font-sans">
+            <p className="text-slate-700 dark:text-slate-300 text-xs sm:text-sm leading-relaxed max-w-xl font-sans">
               Autonomous equity research platform linking verified NSE filings with transparent 5-year explicit Free Cash Flow to Firm (FCFF) models, perpetual Gordon Growth anchors, and 2D WACC sensitivity grids. 100% mathematical provenance.
             </p>
 
@@ -444,15 +444,15 @@ export default function DashboardPage() {
               <button
                 type="button"
                 onClick={() => window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", ctrlKey: true }))}
-                className="flex-1 bg-slate-50 dark:bg-[#121829]/90 hover:bg-slate-100 dark:hover:bg-[#161f33] border border-slate-300 dark:border-slate-700/80 hover:border-sky-500/60 rounded-xl px-4 py-3 text-xs text-slate-700 dark:text-slate-300 flex items-center justify-between shadow-lg shadow-sky-500/5 transition-all active:scale-[0.98] group hover-glow-sky"
+                className="flex-1 bg-slate-50 dark:bg-[#121829]/90 hover:bg-slate-100 dark:hover:bg-[#161f33] border border-slate-300 dark:border-slate-700/80 hover:border-sky-500/60 rounded-xl px-4 py-3 text-xs text-slate-800 dark:text-slate-200 flex items-center justify-between shadow-lg shadow-sky-500/5 transition-all active:scale-[0.98] group hover-glow-sky"
               >
                 <div className="flex items-center gap-2.5">
-                  <Search className="w-4 h-4 text-sky-500 dark:text-sky-400 group-hover:scale-115 transition-transform" />
-                  <span className="text-slate-500 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-slate-200 font-medium">
+                  <Search className="w-4 h-4 text-sky-600 dark:text-sky-400 group-hover:scale-115 transition-transform" />
+                  <span className="text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-slate-200 font-medium">
                     Search any of 501 Indian companies...
                   </span>
                 </div>
-                <kbd className="hidden sm:inline-flex items-center gap-1 bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] px-2 py-0.5 rounded border border-slate-300 dark:border-slate-700 font-mono">
+                <kbd className="hidden sm:inline-flex items-center gap-1 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-400 text-[10px] px-2 py-0.5 rounded border border-slate-300 dark:border-slate-700 font-mono">
                   Ctrl K
                 </kbd>
               </button>
@@ -469,19 +469,19 @@ export default function DashboardPage() {
             {/* Hero Trust Badges (Key Telemetry Strip) */}
             <div className="pt-3 border-t border-slate-200 dark:border-slate-800/80 grid grid-cols-3 gap-3">
               <div className="space-y-0.5">
-                <div className="text-[10px] uppercase font-bold text-slate-400 font-mono">Universe</div>
-                <div className="text-sm font-extrabold text-slate-800 dark:text-slate-100 font-mono">501 Equities</div>
-                <div className="text-[10px] text-slate-500">20 NSE Sectors</div>
+                <div className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 font-mono">Universe</div>
+                <div className="text-sm font-extrabold text-slate-900 dark:text-slate-100 font-mono">501 Equities</div>
+                <div className="text-[10px] text-slate-600 dark:text-slate-400 font-medium">20 NSE Sectors</div>
               </div>
               <div className="space-y-0.5 border-l border-slate-200 dark:border-slate-800/80 pl-3">
-                <div className="text-[10px] uppercase font-bold text-slate-400 font-mono">Cost of Capital</div>
-                <div className="text-sm font-extrabold text-sky-600 dark:text-sky-400 font-mono">7.10% Rf</div>
-                <div className="text-[10px] text-slate-500">RBI Sovereign G-Sec</div>
+                <div className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 font-mono">Cost of Capital</div>
+                <div className="text-sm font-extrabold text-sky-700 dark:text-sky-400 font-mono">7.10% Rf</div>
+                <div className="text-[10px] text-slate-600 dark:text-slate-400 font-medium">RBI Sovereign G-Sec</div>
               </div>
               <div className="space-y-0.5 border-l border-slate-200 dark:border-slate-800/80 pl-3">
-                <div className="text-[10px] uppercase font-bold text-slate-400 font-mono">Verification</div>
-                <div className="text-sm font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">100% Audited</div>
-                <div className="text-[10px] text-slate-500">Zero Dummy Data</div>
+                <div className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 font-mono">Verification</div>
+                <div className="text-sm font-extrabold text-emerald-700 dark:text-emerald-400 font-mono">100% Audited</div>
+                <div className="text-[10px] text-slate-600 dark:text-slate-400 font-medium">Zero Dummy Data</div>
               </div>
             </div>
           </div>
@@ -499,7 +499,7 @@ export default function DashboardPage() {
                     className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all ${
                       isActive
                         ? "bg-sky-500 text-slate-950 shadow-md shadow-sky-500/20 scale-105"
-                        : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800/60"
+                        : "text-slate-700 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800/60"
                     }`}
                   >
                     {stk.symbol}
@@ -516,33 +516,33 @@ export default function DashboardPage() {
               className="w-full max-w-sm relative select-none"
             >
               <div
-                className="w-full rounded-2xl bg-gradient-to-b from-slate-900/95 via-[#0c1222]/95 to-slate-950/95 border border-sky-500/40 p-5 shadow-2xl shadow-sky-500/10 hover-glow-sky group transition-all relative overflow-hidden"
+                className="w-full rounded-2xl bg-white dark:bg-gradient-to-b dark:from-slate-900/95 dark:via-[#0c1222]/95 dark:to-slate-950/95 border border-slate-200 dark:border-sky-500/40 p-5 shadow-xl dark:shadow-2xl dark:shadow-sky-500/10 hover-glow-sky group transition-all relative overflow-hidden"
               >
                 {/* Card Ambient Glow Header */}
-                <div className="absolute top-0 right-0 w-36 h-36 bg-gradient-to-bl from-sky-500/20 to-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
+                <div className="absolute top-0 right-0 w-36 h-36 bg-gradient-to-bl from-sky-500/15 to-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
 
                 {/* Showcase Header with Official 3D Logo & Verified Tag */}
-                <div className="flex items-center justify-between pb-3.5 border-b border-slate-800/80 relative z-10">
+                <div className="flex items-center justify-between pb-3.5 border-b border-slate-200 dark:border-slate-800/80 relative z-10">
                   <div className="flex items-center gap-3">
                     <LogoIcon size="lg" />
                     <div>
                       <div className="flex items-center gap-1.5">
-                        <span className="font-mono text-sm font-black text-white group-hover:text-sky-300 transition-colors">
+                        <span className="font-mono text-sm font-black text-slate-900 dark:text-white group-hover:text-sky-600 dark:group-hover:text-sky-300 transition-colors">
                           {currentStock.symbol}
                         </span>
-                        <span className="text-[9px] bg-slate-800 text-slate-300 font-mono px-1.5 py-0.2 rounded font-bold">
+                        <span className="text-[9px] bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono px-1.5 py-0.5 rounded font-bold border border-slate-200 dark:border-transparent">
                           {currentStock.exchange}
                         </span>
                       </div>
-                      <div className="text-[10px] text-slate-400 truncate max-w-[150px]">
+                      <div className="text-[11px] font-medium text-slate-600 dark:text-slate-300 truncate max-w-[170px]" title={currentStock.name}>
                         {currentStock.name}
                       </div>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-1.5">
-                    <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/30">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
+                    <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/30">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 inline-block" />
                       AUDITED
                     </span>
                   </div>
@@ -552,25 +552,25 @@ export default function DashboardPage() {
                 <div className="py-4 space-y-3 relative z-10">
                   <div className="flex items-baseline justify-between">
                     <div>
-                      <div className="text-[10px] uppercase font-bold text-slate-400 font-mono tracking-wider">
+                      <div className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 font-mono tracking-wider">
                         Intrinsic Value / Share
                       </div>
-                      <div className="text-3xl font-black text-white font-mono tracking-tight mt-0.5 group-hover:text-sky-300 transition-colors">
+                      <div className="text-3xl font-black text-slate-950 dark:text-white font-mono tracking-tight mt-0.5 group-hover:text-sky-600 dark:group-hover:text-sky-300 transition-colors">
                         {currentStock.intrinsic}
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-[10px] uppercase font-bold text-slate-400 font-mono">
+                      <div className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 font-mono">
                         Market Price (CMP)
                       </div>
-                      <div className="text-sm font-bold text-slate-300 font-mono mt-0.5">
+                      <div className="text-sm font-bold text-slate-800 dark:text-slate-200 font-mono mt-0.5">
                         {currentStock.cmp}
                       </div>
                       <span
-                        className={`text-[10px] font-mono font-bold px-1.5 py-0.2 rounded border ${
+                        className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded border ${
                           currentStock.isPositiveMargin
-                            ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/30"
-                            : "text-rose-400 bg-rose-500/10 border-rose-500/30"
+                            ? "text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/30"
+                            : "text-rose-700 dark:text-rose-400 bg-rose-500/10 border-rose-500/30"
                         }`}
                       >
                         {currentStock.margin} Margin
@@ -580,11 +580,11 @@ export default function DashboardPage() {
 
                   {/* 5-Year FCFF Trajectory Visualizer */}
                   <div className="space-y-1.5 pt-1">
-                    <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono">
+                    <div className="flex items-center justify-between text-[10px] text-slate-600 dark:text-slate-400 font-mono">
                       <span>5-Yr FCFF Cash Flow Horizon</span>
-                      <span className="text-emerald-400 font-semibold">T+1 to T+5 CAGR {currentStock.cagr}</span>
+                      <span className="text-emerald-700 dark:text-emerald-400 font-semibold">T+1 to T+5 CAGR {currentStock.cagr}</span>
                     </div>
-                    <div className="grid grid-cols-5 gap-1.5 h-14 items-end bg-[#070b14] p-2 rounded-xl border border-slate-800/80">
+                    <div className="grid grid-cols-5 gap-1.5 h-14 items-end bg-slate-50 dark:bg-[#070b14] p-2 rounded-xl border border-slate-200 dark:border-slate-800/80">
                       {currentStock.bars.map((bar, i) => (
                         <div key={i} className="flex flex-col items-center gap-1 h-full justify-end group/bar">
                           <div
@@ -592,25 +592,25 @@ export default function DashboardPage() {
                             className="w-full rounded-md bg-gradient-to-t from-sky-600 via-sky-400 to-emerald-400 group-hover/bar:brightness-125 transition-all shadow-sm shadow-sky-500/20"
                             title={`${bar.y}: ${bar.v}`}
                           />
-                          <span className="text-[8px] font-mono text-slate-400">{bar.y.slice(0, 4)}</span>
+                          <span className="text-[9px] font-mono text-slate-600 dark:text-slate-400 font-medium">{bar.y.slice(0, 4)}</span>
                         </div>
                       ))}
                     </div>
                   </div>
 
                   {/* Valuation Parameters Pill */}
-                  <div className="grid grid-cols-3 gap-2 bg-[#080d1a] border border-slate-800/80 rounded-xl p-2.5 text-center text-[10px] font-mono">
+                  <div className="grid grid-cols-3 gap-2 bg-slate-50 dark:bg-[#080d1a] border border-slate-200 dark:border-slate-800/80 rounded-xl p-2.5 text-center text-[10px] font-mono">
                     <div>
-                      <span className="text-slate-500 block text-[9px] uppercase">WACC</span>
-                      <span className="font-bold text-sky-400">{currentStock.wacc}</span>
+                      <span className="text-slate-500 dark:text-slate-400 block text-[9px] uppercase font-bold">WACC</span>
+                      <span className="font-bold text-sky-700 dark:text-sky-400">{currentStock.wacc}</span>
                     </div>
-                    <div className="border-x border-slate-800">
-                      <span className="text-slate-500 block text-[9px] uppercase">Terminal g</span>
-                      <span className="font-bold text-emerald-400">{currentStock.terminalG}</span>
+                    <div className="border-x border-slate-200 dark:border-slate-800">
+                      <span className="text-slate-500 dark:text-slate-400 block text-[9px] uppercase font-bold">Terminal g</span>
+                      <span className="font-bold text-emerald-700 dark:text-emerald-400">{currentStock.terminalG}</span>
                     </div>
                     <div>
-                      <span className="text-slate-500 block text-[9px] uppercase">Implied EV</span>
-                      <span className="font-bold text-slate-200">{currentStock.impliedEv}</span>
+                      <span className="text-slate-500 dark:text-slate-400 block text-[9px] uppercase font-bold">Implied EV</span>
+                      <span className="font-bold text-slate-900 dark:text-slate-200">{currentStock.impliedEv}</span>
                     </div>
                   </div>
                 </div>
@@ -618,7 +618,7 @@ export default function DashboardPage() {
                 {/* Action Link Footer */}
                 <Link
                   href={`/valuation/${currentStock.symbol}`}
-                  className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-sky-400 hover:text-sky-300 font-semibold transition-colors"
+                  className="pt-3 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 font-semibold transition-colors"
                 >
                   <span className="flex items-center gap-1.5">
                     <Calculator className="w-3.5 h-3.5" />
@@ -637,7 +637,7 @@ export default function DashboardPage() {
                   )
                 }
                 aria-label="Previous valuation stock"
-                className="absolute -left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-slate-900/90 border border-slate-700 text-slate-300 hover:text-white hover:bg-slate-800 flex items-center justify-center shadow-lg active:scale-95 transition-all z-20"
+                className="absolute -left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center shadow-lg active:scale-95 transition-all z-20"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -648,14 +648,14 @@ export default function DashboardPage() {
                   setActiveStockIndex((prev) => (prev + 1) % FEATURED_DCF_STOCKS.length)
                 }
                 aria-label="Next valuation stock"
-                className="absolute -right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-slate-900/90 border border-slate-700 text-slate-300 hover:text-white hover:bg-slate-800 flex items-center justify-center shadow-lg active:scale-95 transition-all z-20"
+                className="absolute -right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center shadow-lg active:scale-95 transition-all z-20"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>
 
             {/* Pagination Dots & Gesture Hint */}
-            <div className="flex items-center justify-between w-full max-w-sm mt-2 px-1 text-[11px] text-slate-500 font-mono">
+            <div className="flex items-center justify-between w-full max-w-sm mt-2 px-1 text-[11px] text-slate-600 dark:text-slate-500 font-mono">
               <span className="text-[10px]">Swipe &larr; &rarr; or click arrows</span>
               <div className="flex items-center gap-1.5">
                 {FEATURED_DCF_STOCKS.map((_, i) => (
@@ -664,12 +664,12 @@ export default function DashboardPage() {
                     onClick={() => setActiveStockIndex(i)}
                     aria-label={`Go to slide ${i + 1}`}
                     className={`h-1.5 rounded-full transition-all ${
-                      i === activeStockIndex ? "w-5 bg-sky-400" : "w-1.5 bg-slate-600 hover:bg-slate-400"
+                      i === activeStockIndex ? "w-5 bg-sky-500 dark:bg-sky-400" : "w-1.5 bg-slate-300 dark:bg-slate-600 hover:bg-slate-400"
                     }`}
                   />
                 ))}
               </div>
-              <span className="text-[10px] font-bold text-sky-500 dark:text-sky-400">
+              <span className="text-[10px] font-bold text-sky-600 dark:text-sky-400">
                 {activeStockIndex + 1} / {FEATURED_DCF_STOCKS.length}
               </span>
             </div>
@@ -828,7 +828,7 @@ export default function DashboardPage() {
             <Link
               key={eq.symbol}
               href={`/valuation/${eq.symbol}`}
-              className={`bg-white dark:bg-[#111726] border border-slate-200 dark:${eq.color} rounded-xl p-4 sm:p-5 hover:bg-slate-50 dark:hover:bg-slate-800/40 hover-lift active-press transition-all shadow-md group flex flex-col justify-between`}
+              className="bg-white dark:bg-[#111726] border border-slate-200 dark:border-slate-800 hover:border-sky-500/60 dark:hover:border-sky-400 rounded-xl p-4 sm:p-5 hover:bg-slate-50 dark:hover:bg-slate-800/40 hover-lift active-press transition-all shadow-md group flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between">
