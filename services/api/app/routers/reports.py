@@ -36,13 +36,7 @@ async def generate_valuation_report(req: ReportRequest):
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DCF Valuation Memorandum - {req.symbol}</title>
 <style>
-  body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #0f172a; margin: 0; padding: 24px 20px 48px; line-height: 1.5; max-width: 920px; margin: 0 auto; }}
-  .toolbar {{ position: sticky; top: 0; z-index: 99; background: #0f172a; color: #fff; padding: 10px 16px; margin: -24px -20px 24px -20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; }}
-  .toolbar-logo {{ font-size: 14px; font-weight: 800; color: #38bdf8; }}
-  .btn {{ cursor: pointer; padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; border: none; font-family: inherit; }}
-  .btn-print {{ background: #0284c7; color: #fff; margin-right: 6px; }}
-  .btn-close {{ background: #334155; color: #fff; }}
-  .btn-close:hover {{ background: #e11d48; }}
+  body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #0f172a; margin: 0 auto; padding: 24px 20px 48px; line-height: 1.5; max-width: 920px; }}
   .header {{ border-bottom: 2px solid #0284c7; padding-bottom: 16px; margin-bottom: 24px; }}
   .title {{ font-size: 24px; font-weight: bold; margin: 0 0 6px 0; color: #0f172a; }}
   .subtitle {{ font-size: 13px; color: #64748b; }}
@@ -67,13 +61,6 @@ async def generate_valuation_report(req: ReportRequest):
 </style>
 </head>
 <body>
-  <div class="toolbar no-print">
-    <span class="toolbar-logo">QuantDCF Research Memorandum</span>
-    <div>
-      <button type="button" onclick="window.print()" class="btn btn-print">🖨️ Print / PDF</button>
-      <button type="button" onclick="window.close()" class="btn btn-close">✕ Close Window</button>
-    </div>
-  </div>
   <div class="header">
     <div class="badge">Institutional DCF Equity Research</div>
     <h1 class="title">{req.company_name} ({req.symbol})</h1>

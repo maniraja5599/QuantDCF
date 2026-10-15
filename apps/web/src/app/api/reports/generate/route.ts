@@ -78,81 +78,6 @@ export async function POST(req: NextRequest) {
       background: #ffffff;
       line-height: 1.5;
       font-size: 13px;
-      -webkit-font-smoothing: antialiased;
-    }
-    .report-toolbar {
-      position: sticky;
-      top: 0;
-      z-index: 999;
-      background: #0f172a;
-      color: #ffffff;
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #334155;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-    .toolbar-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .toolbar-logo {
-      font-size: 15px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      color: #38bdf8;
-    }
-    .toolbar-logo strong {
-      color: #ffffff;
-    }
-    .toolbar-badge {
-      font-size: 10px;
-      font-weight: 700;
-      background: rgba(56, 189, 248, 0.15);
-      color: #38bdf8;
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      padding: 2px 8px;
-      border-radius: 9999px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      font-family: ui-monospace, monospace;
-    }
-    .toolbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .btn-action {
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 6px 12px;
-      border-radius: 6px;
-      transition: all 0.15s ease;
-      border: none;
-      font-family: inherit;
-    }
-    .btn-print {
-      background: #0284c7;
-      color: #ffffff;
-    }
-    .btn-print:hover {
-      background: #0369a1;
-    }
-    .btn-close {
-      background: #334155;
-      color: #f1f5f9;
-      border: 1px solid #475569;
-    }
-    .btn-close:hover {
-      background: #e11d48;
-      color: #ffffff;
-      border-color: #be123c;
     }
     .report-container {
       max-width: 920px;
@@ -400,26 +325,7 @@ export async function POST(req: NextRequest) {
       }
     }
   </style>
-</head>
 <body>
-  <!-- Printable Sticky Toolbar (Hidden during actual print) -->
-  <div class="report-toolbar no-print">
-    <div class="toolbar-brand">
-      <span class="toolbar-logo">Quant<strong>DCF</strong></span>
-      <span class="toolbar-badge">Institutional Research Memorandum</span>
-    </div>
-    <div class="toolbar-actions">
-      <button type="button" onclick="window.print()" class="btn-action btn-print">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
-        Print / Save PDF
-      </button>
-      <button type="button" onclick="window.close()" class="btn-action btn-close">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        Close Window
-      </button>
-    </div>
-  </div>
-
   <div class="report-container">
     <div class="header">
       <div>
