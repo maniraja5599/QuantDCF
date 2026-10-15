@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import { api } from "@/lib/api-client";
 import {
   Company,
@@ -635,13 +636,23 @@ export default function CompanyValuationPage() {
       {/* Company Identity & Action Header */}
       <div className="bg-white dark:bg-[#111726] border border-slate-200 dark:border-slate-800 rounded-xl p-4 sm:p-5 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 transition-colors">
         <div className="space-y-1">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="text-xl font-black text-sky-600 dark:text-sky-400 font-mono tracking-tight">
               {symbol}
             </span>
             <span className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] px-1.5 py-0.5 rounded font-mono font-bold border border-slate-200 dark:border-transparent">
               {company?.exchange || "NSE"}
             </span>
+            {quote && (
+              <span className="font-mono text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700 flex items-center gap-1.5">
+                <span>CMP: ₹{quote.current_price?.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                {quote.percent_change !== undefined && (
+                  <span className={quote.percent_change >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}>
+                    {quote.percent_change >= 0 ? "+" : ""}{quote.percent_change.toFixed(2)}%
+                  </span>
+                )}
+              </span>
+            )}
             {historical.length > 0 && historical[0].provenance === "AUDITED" ? (
               <span className="bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 text-[10px] px-2 py-0.5 rounded flex items-center gap-1 font-semibold">
                 <ShieldCheck className="w-3 h-3" /> Audited Disclosures
@@ -657,6 +668,24 @@ export default function CompanyValuationPage() {
             <span>Sector: <strong className="text-slate-800 dark:text-slate-200">{company?.sector || "General"}</strong></span>
             <span>Industry: <strong className="text-slate-800 dark:text-slate-200">{company?.industry || "Equities"}</strong></span>
             {company?.isin && <span>ISIN: <strong className="text-slate-800 dark:text-slate-200 font-mono">{company.isin}</strong></span>}
+          </div>
+
+          {/* Quick Model Jump Strip */}
+          <div className="flex flex-wrap items-center gap-1.5 pt-1">
+            <span className="text-[10px] font-mono uppercase font-bold text-slate-400 mr-0.5">Jump Model:</span>
+            {["SUZLON", "TCS", "RELIANCE", "INFY", "HDFCBANK", "ITC", "LT"].map((s) => (
+              <Link
+                key={s}
+                href={`/valuation/${s}`}
+                className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-bold transition-all ${
+                  s === symbol
+                    ? "bg-sky-500 text-slate-950 shadow-sm font-black"
+                    : "bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-700"
+                }`}
+              >
+                {s}
+              </Link>
+            ))}
           </div>
         </div>
 

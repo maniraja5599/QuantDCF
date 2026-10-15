@@ -149,13 +149,12 @@ export function Navbar({ onToggleMobileMenu, isCollapsed = false, onToggleCollap
   const niftyPrice = nifty
     ? nifty.current_price.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
     : "22,622.70";
-  const niftyChangeText = nifty
-    ? `${nifty.change >= 0 ? "+" : ""}${nifty.change.toFixed(2)} (${nifty.percent_change >= 0 ? "+" : ""}${nifty.percent_change.toFixed(2)}%)`
-    : "-99.25 (-0.44%)";
-  const niftyCompactChange = nifty
-    ? `${nifty.percent_change >= 0 ? "+" : ""}${nifty.percent_change.toFixed(1)}%`
-    : "-0.4%";
-  const isPositive = nifty ? nifty.change >= 0 : false;
+  const niftyChangeVal = nifty?.change ?? -99.25;
+  const niftyPctVal = nifty?.percent_change ?? -0.44;
+  const niftyChangeSign = niftyChangeVal >= 0 ? "+" : "";
+  const niftyPctSign = niftyPctVal >= 0 ? "+" : "";
+  const niftyChangeText = `${niftyChangeSign}${niftyChangeVal.toFixed(2)} (${niftyPctSign}${niftyPctVal.toFixed(2)}%)`;
+  const isPositive = niftyChangeVal >= 0;
 
   return (
     <header className="h-16 bg-white dark:bg-[#0b0f1a] border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-3 sm:px-6 sticky top-0 z-30 w-full transition-colors">
@@ -172,14 +171,14 @@ export function Navbar({ onToggleMobileMenu, isCollapsed = false, onToggleCollap
           </button>
         )}
 
-        {/* Mobile Hamburger Drawer Trigger - 44px Touch Target with Smooth Minimal Feedback */}
+        {/* Mobile Hamburger Drawer Trigger */}
         {onToggleMobileMenu && (
           <button
             onClick={onToggleMobileMenu}
             aria-label="Open Navigation Drawer"
-            className="lg:hidden w-9 h-9 flex items-center justify-center rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/80 active:scale-95 transition-transform duration-100 focus:outline-none shrink-0 border border-slate-200 dark:border-slate-800/80"
+            className="lg:hidden w-8 h-8 flex items-center justify-center rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/80 active:scale-95 transition-transform duration-100 focus:outline-none shrink-0 border border-slate-200 dark:border-slate-800/80"
           >
-            <Menu className="w-5 h-5" />
+            <Menu className="w-4 h-4" />
           </button>
         )}
 
@@ -310,16 +309,16 @@ export function Navbar({ onToggleMobileMenu, isCollapsed = false, onToggleCollap
           </div>
         )}
 
-        {/* Mobile: Compact NIFTY Pill (Visible on screens >= 420px) */}
+        {/* Mobile: Compact NIFTY Pill */}
         {!serverError && (
           <div
-            className="hidden min-[420px]:flex sm:hidden items-center gap-1.5 bg-slate-100 dark:bg-[#0f172a] border border-slate-300 dark:border-slate-800 px-2 py-1 rounded-md text-[10px] font-mono shrink-0 hover-lift active-press"
-            title={`NIFTY 50: ₹${niftyPrice} (${niftyCompactChange})`}
+            className="flex sm:hidden items-center gap-1.5 bg-slate-100 dark:bg-[#0f172a] border border-slate-300 dark:border-slate-800 px-2 py-1 rounded-md text-[10px] font-mono shrink-0 hover-lift active-press"
+            title={`NIFTY 50: ₹${niftyPrice} (${niftyChangeText})`}
           >
             <span className={`w-1.5 h-1.5 rounded-full ${nifty?.is_live ? "bg-emerald-500 dark:bg-emerald-400 animate-ping" : "bg-emerald-500 dark:bg-emerald-400"}`} />
             <span suppressHydrationWarning className="font-extrabold text-slate-900 dark:text-white">₹{niftyPrice}</span>
             <span suppressHydrationWarning className={`font-bold ${isPositive ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}`}>
-              {niftyCompactChange}
+              {niftyChangeText}
             </span>
           </div>
         )}
@@ -327,7 +326,7 @@ export function Navbar({ onToggleMobileMenu, isCollapsed = false, onToggleCollap
         {/* Mobile: Server Error Dot (when offline) */}
         {serverError && (
           <div
-            className="flex sm:hidden items-center justify-center w-8 h-8 rounded-lg bg-rose-500/10 border border-rose-500/40 shrink-0"
+            className="flex sm:hidden items-center justify-center w-7 h-7 rounded-lg bg-rose-500/10 border border-rose-500/40 shrink-0"
             title="Server Offline / Disconnected"
           >
             <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse shadow-[0_0_8px_#f43f5e]" />
@@ -340,9 +339,9 @@ export function Navbar({ onToggleMobileMenu, isCollapsed = false, onToggleCollap
           onClick={() => setMobileSearchOpen(true)}
           aria-label="Search Indian Equities"
           title="Search Equities (Ctrl+K)"
-          className="sm:hidden w-9 h-9 flex items-center justify-center rounded-lg bg-slate-100 dark:bg-[#121829] hover:bg-slate-200 dark:hover:bg-slate-800 active:scale-95 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white border border-slate-300 dark:border-slate-800 transition-all shrink-0 hover-lift active-press"
+          className="sm:hidden w-7 h-7 flex items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white border border-slate-300 dark:border-slate-700/80 transition-all shrink-0 hover-lift active-press"
         >
-          <Search className="w-4 h-4 text-sky-500 dark:text-sky-400 hover-icon-pop" />
+          <Search className="w-3.5 h-3.5 text-sky-500 dark:text-sky-400" />
         </button>
 
         {/* Theme Mode Toggle (Dark / Light) */}
