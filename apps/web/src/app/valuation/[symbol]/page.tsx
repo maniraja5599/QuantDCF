@@ -539,81 +539,83 @@ export default function CompanyValuationPage() {
     ];
 
     return (
-      <div className="flex flex-col items-center justify-center min-h-[70vh] px-4">
-        <div className="w-full max-w-lg bg-white dark:bg-[#111726] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl space-y-6">
-          {/* Header */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-500">
-                <Loader2 className="w-5 h-5 animate-spin" />
+      <div className="flex flex-col items-center justify-center min-h-[65vh] px-3 sm:px-4">
+        <div className="w-full max-w-md sm:max-w-lg bg-white dark:bg-[#111726] border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-6 shadow-2xl space-y-4 transition-colors">
+          {/* Header on single clean line */}
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-500 shrink-0">
+                <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />
               </div>
-              <div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                  <span>Auditing {symbol} Financials</span>
-                  <span className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] px-2 py-0.5 rounded-full font-mono font-bold border border-emerald-500/20">
-                    LIVE FETCH
+              <div className="min-w-0">
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-100 truncate">
+                    Auditing {symbol}
+                  </h3>
+                  <span className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[9px] sm:text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold border border-emerald-500/20 shrink-0">
+                    LIVE
                   </span>
-                </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
-                  Autonomous Regulatory Disclosures Retrieval
+                </div>
+                <p className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 truncate">
+                  Regulatory Disclosures Ingestion
                 </p>
               </div>
             </div>
-            <span className="text-xs font-mono font-bold text-sky-600 dark:text-sky-400">
-              Step {auditStep} of 4
+            <span className="text-xs font-mono font-bold text-sky-600 dark:text-sky-400 shrink-0 whitespace-nowrap">
+              {auditStep}/4
             </span>
           </div>
 
           {/* Progress Bar */}
-          <div className="w-full bg-slate-100 dark:bg-slate-800/80 rounded-full h-2 overflow-hidden">
+          <div className="w-full bg-slate-100 dark:bg-slate-800/80 rounded-full h-1.5 overflow-hidden">
             <div
-              className="bg-gradient-to-r from-sky-500 to-emerald-500 h-2 rounded-full transition-all duration-500 ease-out"
+              className="bg-gradient-to-r from-sky-500 to-emerald-500 h-1.5 rounded-full transition-all duration-500 ease-out"
               style={{ width: `${Math.min(100, auditStep * 25)}%` }}
             />
           </div>
 
-          {/* Active Status Display */}
-          <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800/60 rounded-xl p-3.5 flex items-start gap-3">
-            <Radio className="w-4 h-4 text-sky-500 shrink-0 mt-0.5 animate-pulse" />
-            <div className="space-y-0.5">
-              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 font-mono">
-                Current Execution Status
+          {/* Active Status Display on one clean line */}
+          <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800/60 rounded-xl p-2.5 sm:p-3 flex items-center gap-2.5 min-w-0">
+            <Radio className="w-3.5 h-3.5 text-sky-500 shrink-0 animate-pulse" />
+            <div className="min-w-0 flex-1">
+              <div className="text-[9px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 font-mono leading-none">
+                Status
               </div>
-              <div className="text-xs font-semibold text-slate-800 dark:text-slate-200 font-mono">
+              <div className="text-[11px] font-semibold text-slate-800 dark:text-slate-200 font-mono truncate mt-0.5">
                 {auditStatus}
               </div>
             </div>
           </div>
 
           {/* Steps List */}
-          <div className="space-y-2.5 pt-1">
+          <div className="space-y-2 pt-0.5">
             {steps.map((s) => {
               const isDone = auditStep > s.id;
               const isCurrent = auditStep === s.id;
               return (
                 <div
                   key={s.id}
-                  className={`flex items-center gap-3 p-2.5 rounded-lg border text-xs transition-colors ${
+                  className={`flex items-center gap-2.5 p-2 rounded-lg border text-xs transition-colors ${
                     isDone
                       ? "bg-emerald-500/5 border-emerald-500/20 text-emerald-700 dark:text-emerald-400"
                       : isCurrent
-                      ? "bg-sky-500/10 border-sky-500/30 text-sky-700 dark:text-sky-300 font-semibold shadow-sm"
+                      ? "bg-sky-500/10 border-sky-500/30 text-sky-700 dark:text-sky-300 font-semibold shadow-xs"
                       : "bg-transparent border-transparent text-slate-400 dark:text-slate-600"
                   }`}
                 >
                   {isDone ? (
-                    <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <CheckCircle className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                   ) : isCurrent ? (
-                    <Loader2 className="w-4 h-4 text-sky-500 animate-spin shrink-0" />
+                    <Loader2 className="w-3.5 h-3.5 text-sky-500 animate-spin shrink-0" />
                   ) : (
-                    <div className="w-4 h-4 rounded-full border border-slate-300 dark:border-slate-700 flex items-center justify-center text-[10px] text-slate-400 dark:text-slate-600 shrink-0">
+                    <div className="w-3.5 h-3.5 rounded-full border border-slate-300 dark:border-slate-700 flex items-center justify-center text-[9px] text-slate-400 dark:text-slate-600 shrink-0 font-mono">
                       {s.id}
                     </div>
                   )}
-                  <div className="flex-1 flex justify-between items-center">
-                    <span>{s.title}</span>
-                    <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono">
-                      {isDone ? "VERIFIED" : isCurrent ? "PROCESSING..." : "QUEUED"}
+                  <div className="flex-1 flex justify-between items-center gap-2 min-w-0">
+                    <span className="truncate text-xs">{s.title}</span>
+                    <span className="text-[9px] sm:text-[10px] text-slate-400 dark:text-slate-500 font-mono shrink-0">
+                      {isDone ? "VERIFIED" : isCurrent ? "PROCESSING" : "QUEUED"}
                     </span>
                   </div>
                 </div>
@@ -622,9 +624,9 @@ export default function CompanyValuationPage() {
           </div>
 
           {/* Guarantee Pill */}
-          <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-            <span>Zero Dummy Data Guarantee &bull; 100% Exchange Disclosures</span>
+          <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-center gap-1.5 text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+            <span className="truncate">Zero Dummy Data Guarantee &bull; 100% Exchange Disclosures</span>
           </div>
         </div>
       </div>
@@ -689,12 +691,12 @@ export default function CompanyValuationPage() {
           </div>
         </div>
 
-        {/* Action Buttons with Responsive Mobile Grid */}
-        <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2">
+        {/* Action Buttons: Clean single horizontal scrollable strip on mobile, flex on desktop */}
+        <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto scrollbar-none w-full sm:w-auto py-1">
           <button
             onClick={handleRefreshAudit}
             disabled={isRefreshingAudit}
-            className="justify-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-semibold px-3 py-2 sm:py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-sm hover-lift active-press group shimmer-sweep"
+            className="shrink-0 whitespace-nowrap bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-semibold px-2.5 sm:px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-xs hover-lift active-press group shimmer-sweep"
             title="Automatically fetch latest audited statements from official exchange gateway"
           >
             <RefreshCw className={`w-3.5 h-3.5 text-sky-500 group-hover:rotate-180 transition-transform duration-500 ${isRefreshingAudit ? "animate-spin" : ""}`} />
@@ -703,7 +705,7 @@ export default function CompanyValuationPage() {
           <button
             onClick={handleSaveModel}
             disabled={isSaving}
-            className="justify-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-semibold px-3 py-2 sm:py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-sm hover-lift active-press group shimmer-sweep"
+            className="shrink-0 whitespace-nowrap bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-semibold px-2.5 sm:px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-xs hover-lift active-press group shimmer-sweep"
           >
             {saveSuccess ? (
               <>
@@ -719,7 +721,7 @@ export default function CompanyValuationPage() {
           </button>
           <button
             onClick={handleExportCSV}
-            className="justify-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 font-semibold px-3 py-2 sm:py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-sm hover-lift active-press group shimmer-sweep"
+            className="shrink-0 whitespace-nowrap bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 font-semibold px-2.5 sm:px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-xs hover-lift active-press group shimmer-sweep"
             title="Download full 5-year FCF schedule and DCF parameters as CSV"
           >
             <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 group-hover:-translate-y-0.5 transition-transform" />
@@ -727,7 +729,7 @@ export default function CompanyValuationPage() {
           </button>
           <button
             onClick={handleExportReport}
-            className="justify-center bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-3 py-2 sm:py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-md shadow-sky-500/20 hover-lift active-press group shimmer-sweep"
+            className="shrink-0 whitespace-nowrap bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-md shadow-sky-500/20 hover-lift active-press group shimmer-sweep"
           >
             <FileDown className="w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform" />
             <span>Export Memo</span>
