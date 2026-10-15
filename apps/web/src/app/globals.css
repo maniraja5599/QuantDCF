@@ -498,3 +498,17 @@ button, a, input, select {
   animation-play-state: paused;
 }
 
+@keyframes shrink-4s {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+.animate-shrink-4s {
+  transform-origin: left;
+  animation: shrink-4s 4s linear forwards;
+}
+
