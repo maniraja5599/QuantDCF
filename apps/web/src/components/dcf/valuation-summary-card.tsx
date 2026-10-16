@@ -77,6 +77,18 @@ export function ValuationSummaryCard({ output, quote, waccAssumptions, onOpenWac
     };
   });
 
+  // Visual Price Gauge (Fair Value vs Current Market Price) calculations
+  const numCmp = typeof cmp === "number" ? cmp : Number(cmp) || 0;
+  const hasCmpAndFair = numCmp > 0 && intrinsicVal > 0;
+  const isCmpOvervalued = hasCmpAndFair && numCmp > intrinsicVal;
+  const gaugeMin = hasCmpAndFair ? Math.min(intrinsicVal, numCmp) * 0.82 : 0;
+  const gaugeMax = hasCmpAndFair ? Math.max(intrinsicVal, numCmp) * 1.18 : 100;
+  const gaugeSpan = gaugeMax - gaugeMin > 0 ? gaugeMax - gaugeMin : 1;
+  const fairGaugePct = Math.min(94, Math.max(6, ((intrinsicVal - gaugeMin) / gaugeSpan) * 100));
+  const cmpGaugePct = Math.min(94, Math.max(6, ((numCmp - gaugeMin) / gaugeSpan) * 100));
+  const gaugeBarLeft = Math.min(fairGaugePct, cmpGaugePct);
+  const gaugeBarWidth = Math.max(6, Math.abs(cmpGaugePct - fairGaugePct));
+
   return (
     <div className="space-y-4">
       {/* Warning / Audit Flags Banner */}
@@ -169,6 +181,46 @@ export function ValuationSummaryCard({ output, quote, waccAssumptions, onOpenWac
                   <span className="text-[10px] text-slate-400">Market price unavailable</span>
                 )}
               </div>
+
+              {/* Visual Price Gauge: Fair Value vs Current Market Price Range Bar */}
+              {hasCmpAndFair && (
+                <div className="mt-2.5 pt-2 border-t border-slate-100 dark:border-slate-800/60 space-y-1.5">
+                  <div className="flex items-center justify-between text-[10px] font-mono">
+                    <span className="text-sky-600 dark:text-sky-400 font-semibold flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-sky-500" />
+                      Fair: ₹{intrinsicVal.toFixed(0)}
+                    </span>
+                    <span className={`font-semibold flex items-center gap-1 ${isCmpOvervalued ? "text-rose-600 dark:text-rose-400" : "text-emerald-600 dark:text-emerald-400"}`}>
+                      <span className={`w-1.5 h-1.5 rounded-full ${isCmpOvervalued ? "bg-rose-500" : "bg-emerald-500"}`} />
+                      CMP: ₹{numCmp.toFixed(0)}
+                    </span>
+                  </div>
+
+                  {/* Range Slider Visual Track */}
+                  <div className="relative h-2 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                    <div
+                      className={`absolute top-0 bottom-0 rounded-full transition-all duration-500 ${
+                        isCmpOvervalued
+                          ? "bg-gradient-to-r from-sky-400 via-amber-400 to-rose-500"
+                          : "bg-gradient-to-r from-emerald-500 via-teal-400 to-sky-400"
+                      }`}
+                      style={{
+                        left: `${gaugeBarLeft}%`,
+                        width: `${gaugeBarWidth}%`,
+                      }}
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between text-[9px] text-slate-500 dark:text-slate-400 font-sans">
+                    <span>{isCmpOvervalued ? "Premium Over Fair Value" : "Margin of Safety Discount"}</span>
+                    <span className={`font-mono font-bold ${isCmpOvervalued ? "text-rose-600 dark:text-rose-400" : "text-emerald-600 dark:text-emerald-400"}`}>
+                      {isCmpOvervalued
+                        ? `+₹${(numCmp - intrinsicVal).toFixed(2)}`
+                        : `+₹${(intrinsicVal - numCmp).toFixed(2)}`}
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
             <div className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight pt-1.5 border-t border-slate-200 dark:border-slate-800/50">
               Latest official market quote from NSE feed
@@ -328,8 +380,8 @@ export function ValuationSummaryCard({ output, quote, waccAssumptions, onOpenWac
         </div>
 
         {/* Institutional Valuation Multiples & Cross-Check Controls Strip */}
-        <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800/80 grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 dark:bg-[#0a0f1d]/60 -mx-4 sm:-mx-5 px-4 sm:px-5 py-3 rounded-b-none text-xs">
-          <div>
+        <div className="mt-4 p-3.5 sm:p-4 rounded-xl bg-slate-50/90 dark:bg-[#0c1220]/95 border border-slate-200 dark:border-slate-800 shadow-xs grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-xs">
+          <div className="space-y-1">
             <div className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400">Margin of Safety</div>
             <div className="font-bold text-xs mt-0.5 flex items-center gap-1.5">
               {upside !== undefined && upside !== null ? (
@@ -356,7 +408,7 @@ export function ValuationSummaryCard({ output, quote, waccAssumptions, onOpenWac
             <div className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">Spread between fair value & CMP</div>
           </div>
 
-          <div>
+          <div className="space-y-1 sm:pl-3 sm:border-l sm:border-slate-200 sm:dark:border-slate-800/80">
             <div className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400">Implied Forward EV/EBIT</div>
             <div className="font-extrabold text-xs text-slate-900 dark:text-slate-200 font-mono mt-0.5">
               {output.forecast_years[0]?.ebit > 0
@@ -366,7 +418,7 @@ export function ValuationSummaryCard({ output, quote, waccAssumptions, onOpenWac
             <div className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">Multiple on 1Y operating earnings</div>
           </div>
 
-          <div>
+          <div className="space-y-1 sm:pl-3 sm:border-l sm:border-slate-200 sm:dark:border-slate-800/80">
             <div className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400">Implied EV/Sales (FY25E)</div>
             <div className="font-extrabold text-xs text-slate-900 dark:text-slate-200 font-mono mt-0.5">
               {output.forecast_years[0]?.revenue > 0
@@ -376,7 +428,7 @@ export function ValuationSummaryCard({ output, quote, waccAssumptions, onOpenWac
             <div className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">Valuation on 1Y forward revenue</div>
           </div>
 
-          <div className="flex flex-col justify-between">
+          <div className="space-y-1 sm:pl-3 sm:border-l sm:border-slate-200 sm:dark:border-slate-800/80 flex flex-col justify-between">
             <div>
               <div className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 flex items-center justify-between">
                 <span>Exit Multiples Check</span>

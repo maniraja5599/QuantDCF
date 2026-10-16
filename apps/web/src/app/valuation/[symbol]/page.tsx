@@ -739,8 +739,8 @@ export default function CompanyValuationPage() {
   return (
     <div className="space-y-4 max-w-7xl mx-auto pb-8">
       {/* Company Identity & Action Header */}
-      <div className="bg-white dark:bg-[#111726] border border-slate-200 dark:border-slate-800 rounded-xl p-4 sm:p-5 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 transition-colors">
-        <div className="space-y-1">
+      <div className="bg-white dark:bg-[#111726] border border-slate-200 dark:border-slate-800 rounded-xl p-4 sm:p-5 shadow-lg flex flex-col xl:flex-row xl:items-center justify-between gap-4 transition-colors">
+        <div className="space-y-1 min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-xl font-black text-sky-600 dark:text-sky-400 font-mono tracking-tight">
               {symbol}
@@ -807,12 +807,12 @@ export default function CompanyValuationPage() {
         </div>
 
         {/* Action Buttons: Primary Highlight on Save Model, Ghost/Outline on Secondary Actions */}
-        <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto scrollbar-none w-full sm:w-auto py-1">
+        <div className="shrink-0 flex items-center flex-wrap gap-2 py-1 max-w-full">
           {/* Primary Action Button: Save Model */}
           <button
             onClick={handleSaveModel}
             disabled={isSaving}
-            className="shrink-0 whitespace-nowrap bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-400 hover:to-cyan-400 text-slate-950 font-bold px-3.5 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-md shadow-sky-500/25 active:scale-95 group shimmer-sweep"
+            className="shrink-0 whitespace-nowrap min-w-max bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-400 hover:to-cyan-400 text-slate-950 font-bold px-3.5 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-md shadow-sky-500/25 active:scale-95 group shimmer-sweep"
             title="Save this valuation model to your institutional workspace"
           >
             {saveSuccess ? (
@@ -832,7 +832,7 @@ export default function CompanyValuationPage() {
           <button
             onClick={handleRefreshAudit}
             disabled={isRefreshingAudit}
-            className="shrink-0 whitespace-nowrap bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700/80 font-semibold px-2.5 sm:px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-xs hover-lift active:scale-95 group"
+            className="shrink-0 whitespace-nowrap min-w-max bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700/80 font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-xs hover-lift active:scale-95 group"
             title="Automatically fetch latest audited statements from official exchange gateway"
           >
             <RefreshCw className={`w-3.5 h-3.5 text-sky-500 group-hover:rotate-180 transition-transform duration-500 ${isRefreshingAudit ? "animate-spin" : ""}`} />
@@ -842,7 +842,7 @@ export default function CompanyValuationPage() {
           {/* Secondary Ghost Button: Export Memo */}
           <button
             onClick={handleExportReport}
-            className="shrink-0 whitespace-nowrap bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700/80 font-semibold px-2.5 sm:px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-xs hover-lift active:scale-95 group"
+            className="shrink-0 whitespace-nowrap min-w-max bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700/80 font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-xs hover-lift active:scale-95 group"
             title="Export full institutional research memo and printable PDF"
           >
             <FileDown className="w-3.5 h-3.5 text-sky-500 group-hover:translate-y-0.5 transition-transform" />
@@ -852,7 +852,7 @@ export default function CompanyValuationPage() {
           {/* Secondary Ghost Button: Export CSV */}
           <button
             onClick={handleExportCSV}
-            className="shrink-0 whitespace-nowrap bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700/80 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 font-semibold px-2.5 sm:px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-xs hover-lift active:scale-95 group"
+            className="shrink-0 whitespace-nowrap min-w-max bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700/80 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-xs hover-lift active:scale-95 group"
             title="Download full 5-year FCF schedule and DCF parameters as CSV"
           >
             <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform" />
