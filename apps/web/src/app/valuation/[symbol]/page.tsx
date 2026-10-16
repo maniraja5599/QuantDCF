@@ -48,6 +48,9 @@ import {
   ChevronRight,
   RefreshCw,
   Radio,
+  Grid3X3,
+  ChevronUp,
+  ChevronDown,
 } from "lucide-react";
 import { formatCrore, formatINR } from "@/lib/formatters";
 
@@ -73,6 +76,11 @@ export default function CompanyValuationPage() {
 
   // WACC Modal state
   const [isWaccModalOpen, setIsWaccModalOpen] = useState(false);
+
+  // Quick Sensitivity Heatmap toggle & Scenario Presets
+  const [showQuickSensitivity, setShowQuickSensitivity] = useState(false);
+  const [activePreset, setActivePreset] = useState<"bear" | "base" | "bull" | "custom">("base");
+  const baseForecastsRef = useRef<ForecastYearInput[]>([]);
 
   // Active Tab & Peer Comps
   const [peerComps, setPeerComps] = useState<PeerCompsResponse | null>(null);
@@ -303,6 +311,7 @@ export default function CompanyValuationPage() {
           }));
           setForecasts(initForecasts);
         }
+        baseForecastsRef.current = initForecasts;
 
         await runEngine(initForecasts, waccAssumptions, terminalGrowth, latest, q);
       } catch (err: any) {
@@ -332,6 +341,7 @@ export default function CompanyValuationPage() {
           ebit_margin_pct: round2(latest.ebit_margin_pct),
           tax_rate_pct: round2(latest.effective_tax_rate_pct || 25.17),
         }));
+        baseForecastsRef.current = updated;
         setForecasts(updated);
         await runEngine(updated, waccAssumptions, terminalGrowth, latest, quote);
       }
@@ -342,7 +352,71 @@ export default function CompanyValuationPage() {
     }
   };
 
+  const handleApplyPreset = (preset: "bear" | "base" | "bull") => {
+    setActivePreset(preset);
+    const latest = historical.length > 0 ? historical[historical.length - 1] : undefined;
+    const baseMargin = latest ? round2(latest.ebit_margin_pct) : 24.0;
+    const baseTax = latest ? round2(latest.effective_tax_rate_pct || 25.17) : 25.17;
+    const currentBase = baseForecastsRef.current.length > 0 ? baseForecastsRef.current : forecasts;
+
+    if (preset === "bear") {
+      // Conservative: lower growth, compressed margin, higher hurdle rate, conservative g
+      const bearForecasts: ForecastYearInput[] = currentBase.map((f) => ({
+        ...f,
+        revenue_growth_pct: Math.max(2.0, round2(f.revenue_growth_pct - 3.0)),
+        ebit_margin_pct: Math.max(5.0, round2(baseMargin - 2.0)),
+        tax_rate_pct: baseTax,
+      }));
+      const bearWacc: WACCAssumptions = {
+        ...waccAssumptions,
+        equity_risk_premium_pct: 7.25,
+        pre_tax_cost_of_debt_pct: 8.75,
+      };
+      const bearG = 4.0;
+      setForecasts(bearForecasts);
+      setWaccAssumptions(bearWacc);
+      setTerminalGrowth(bearG);
+      runEngine(bearForecasts, bearWacc, bearG, latest, quote);
+    } else if (preset === "bull") {
+      // Aggressive: higher growth, expanded margin, optimized cost of capital, higher g
+      const bullForecasts: ForecastYearInput[] = currentBase.map((f) => ({
+        ...f,
+        revenue_growth_pct: round2(f.revenue_growth_pct + 3.0),
+        ebit_margin_pct: round2(baseMargin + 2.0),
+        tax_rate_pct: baseTax,
+      }));
+      const bullWacc: WACCAssumptions = {
+        ...waccAssumptions,
+        equity_risk_premium_pct: 6.0,
+        pre_tax_cost_of_debt_pct: 7.5,
+      };
+      const bullG = 6.0;
+      setForecasts(bullForecasts);
+      setWaccAssumptions(bullWacc);
+      setTerminalGrowth(bullG);
+      runEngine(bullForecasts, bullWacc, bullG, latest, quote);
+    } else {
+      // Base Case: restored baseline
+      const baseF: ForecastYearInput[] = currentBase.map((f) => ({
+        ...f,
+        ebit_margin_pct: baseMargin,
+        tax_rate_pct: baseTax,
+      }));
+      const baseWacc: WACCAssumptions = {
+        ...waccAssumptions,
+        equity_risk_premium_pct: 6.50,
+        pre_tax_cost_of_debt_pct: 8.0,
+      };
+      const baseG = 5.0;
+      setForecasts(baseF);
+      setWaccAssumptions(baseWacc);
+      setTerminalGrowth(baseG);
+      runEngine(baseF, baseWacc, baseG, latest, quote);
+    }
+  };
+
   const handleUpdateForecast = (index: number, field: keyof ForecastYearInput, value: number) => {
+    setActivePreset("custom");
     setForecasts((prev) => {
       const updated = [...prev];
       updated[index] = { ...updated[index], [field]: value };
@@ -701,67 +775,88 @@ export default function CompanyValuationPage() {
             {company?.isin && <span>ISIN: <strong className="text-slate-800 dark:text-slate-200 font-mono">{company.isin}</strong></span>}
           </div>
 
-          {/* Quick Model Jump Strip */}
-          <div className="flex items-center gap-1.5 pt-1 overflow-x-auto scrollbar-none max-w-full">
-            <span className="text-[10px] font-mono uppercase font-bold text-slate-500 dark:text-slate-400 shrink-0 mr-0.5">Jump Model:</span>
-            {["SUZLON", "TCS", "RELIANCE", "INFY", "HDFCBANK", "ITC", "LT"].map((s) => (
+          {/* Quick Institutional Watchlist Strip */}
+          <div className="flex items-center gap-1.5 pt-1.5 overflow-x-auto scrollbar-none max-w-full">
+            <span className="text-[10px] font-sans font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 shrink-0 mr-1 flex items-center gap-1">
+              <span>Watchlist</span>
+              <span>&rsaquo;</span>
+            </span>
+            {[
+              { sym: "SUZLON", name: "Suzlon" },
+              { sym: "TCS", name: "TCS" },
+              { sym: "RELIANCE", name: "Reliance" },
+              { sym: "INFY", name: "Infosys" },
+              { sym: "HDFCBANK", name: "HDFC Bank" },
+              { sym: "ITC", name: "ITC" },
+              { sym: "LT", name: "L&T" },
+            ].map(({ sym }) => (
               <Link
-                key={s}
-                href={`/valuation/${s}`}
-                className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-bold shrink-0 transition-all ${
-                  s === symbol
-                    ? "bg-sky-500 text-slate-950 shadow-sm font-black"
-                    : "bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-700"
+                key={sym}
+                href={`/valuation/${sym}`}
+                className={`px-2.5 py-0.5 rounded-full text-[10.5px] font-mono shrink-0 transition-all flex items-center gap-1 ${
+                  sym === symbol
+                    ? "bg-sky-500/20 text-sky-700 dark:text-sky-300 border border-sky-500/40 font-bold shadow-xs"
+                    : "bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-800 font-medium"
                 }`}
               >
-                {s}
+                {sym === symbol && <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse" />}
+                <span>{sym}</span>
               </Link>
             ))}
           </div>
         </div>
 
-        {/* Action Buttons: Clean single horizontal scrollable strip on mobile, flex on desktop */}
+        {/* Action Buttons: Primary Highlight on Save Model, Ghost/Outline on Secondary Actions */}
         <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto scrollbar-none w-full sm:w-auto py-1">
+          {/* Primary Action Button: Save Model */}
+          <button
+            onClick={handleSaveModel}
+            disabled={isSaving}
+            className="shrink-0 whitespace-nowrap bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-400 hover:to-cyan-400 text-slate-950 font-bold px-3.5 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-md shadow-sky-500/25 active:scale-95 group shimmer-sweep"
+            title="Save this valuation model to your institutional workspace"
+          >
+            {saveSuccess ? (
+              <>
+                <CheckCircle className="w-3.5 h-3.5 text-slate-950 font-black group-hover:scale-110 transition-transform" />
+                <span>Model Saved!</span>
+              </>
+            ) : (
+              <>
+                <Bookmark className="w-3.5 h-3.5 text-slate-950 group-hover:scale-110 transition-all duration-200" />
+                <span>Save Model</span>
+              </>
+            )}
+          </button>
+
+          {/* Secondary Ghost Button: Sync Audit */}
           <button
             onClick={handleRefreshAudit}
             disabled={isRefreshingAudit}
-            className="shrink-0 whitespace-nowrap bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-semibold px-2.5 sm:px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-xs hover-lift active-press group shimmer-sweep"
+            className="shrink-0 whitespace-nowrap bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700/80 font-semibold px-2.5 sm:px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-xs hover-lift active:scale-95 group"
             title="Automatically fetch latest audited statements from official exchange gateway"
           >
             <RefreshCw className={`w-3.5 h-3.5 text-sky-500 group-hover:rotate-180 transition-transform duration-500 ${isRefreshingAudit ? "animate-spin" : ""}`} />
             <span>{isRefreshingAudit ? "Auditing..." : "Sync Audit"}</span>
           </button>
-          <button
-            onClick={handleSaveModel}
-            disabled={isSaving}
-            className="shrink-0 whitespace-nowrap bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-semibold px-2.5 sm:px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-xs hover-lift active-press group shimmer-sweep"
-          >
-            {saveSuccess ? (
-              <>
-                <CheckCircle className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform" />
-                <span className="text-emerald-600 dark:text-emerald-400 font-bold">Saved</span>
-              </>
-            ) : (
-              <>
-                <Bookmark className="w-3.5 h-3.5 text-slate-600 dark:text-slate-400 group-hover:text-amber-400 group-hover:scale-110 transition-all duration-200" />
-                <span>Save Model</span>
-              </>
-            )}
-          </button>
-          <button
-            onClick={handleExportCSV}
-            className="shrink-0 whitespace-nowrap bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 font-semibold px-2.5 sm:px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-xs hover-lift active-press group shimmer-sweep"
-            title="Download full 5-year FCF schedule and DCF parameters as CSV"
-          >
-            <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 group-hover:-translate-y-0.5 transition-transform" />
-            <span>Export CSV</span>
-          </button>
+
+          {/* Secondary Ghost Button: Export Memo */}
           <button
             onClick={handleExportReport}
-            className="shrink-0 whitespace-nowrap bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-md shadow-sky-500/20 hover-lift active-press group shimmer-sweep"
+            className="shrink-0 whitespace-nowrap bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700/80 font-semibold px-2.5 sm:px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-xs hover-lift active:scale-95 group"
+            title="Export full institutional research memo and printable PDF"
           >
-            <FileDown className="w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform" />
+            <FileDown className="w-3.5 h-3.5 text-sky-500 group-hover:translate-y-0.5 transition-transform" />
             <span>Export Memo</span>
+          </button>
+
+          {/* Secondary Ghost Button: Export CSV */}
+          <button
+            onClick={handleExportCSV}
+            className="shrink-0 whitespace-nowrap bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700/80 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 font-semibold px-2.5 sm:px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-xs hover-lift active:scale-95 group"
+            title="Download full 5-year FCF schedule and DCF parameters as CSV"
+          >
+            <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform" />
+            <span>Export CSV</span>
           </button>
         </div>
       </div>
@@ -786,8 +881,52 @@ export default function CompanyValuationPage() {
         <ValuationSummaryCard
           output={output}
           quote={quote}
+          waccAssumptions={waccAssumptions}
           onOpenWaccModal={() => setIsWaccModalOpen(true)}
         />
+      )}
+
+      {/* Quick Sensitivity Heatmap Collapsible Bar & 5x5 Matrix */}
+      {sensitivity && (
+        <div className="bg-white dark:bg-[#111726] border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-md transition-colors">
+          <button
+            onClick={() => setShowQuickSensitivity(!showQuickSensitivity)}
+            className="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
+          >
+            <div className="flex items-center gap-2.5">
+              <div className="w-7 h-7 rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-600 dark:text-sky-400 flex items-center justify-center font-bold">
+                <Grid3X3 className="w-4 h-4" />
+              </div>
+              <div>
+                <div className="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider flex items-center gap-2">
+                  <span>5x5 Valuation Sensitivity Heatmap</span>
+                  <span className="text-[10px] font-mono text-sky-600 dark:text-sky-400 bg-sky-500/10 px-2 py-0.2 rounded font-semibold">
+                    WACC vs Perpetual Growth Matrix
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                  Instant fair value matrix across 25 discount rate & terminal growth combinations.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-sky-600 dark:text-sky-400 font-semibold hidden sm:inline">
+                {showQuickSensitivity ? "Collapse Heatmap" : "Expand 5x5 Heatmap"}
+              </span>
+              {showQuickSensitivity ? (
+                <ChevronUp className="w-4 h-4 text-slate-500" />
+              ) : (
+                <ChevronDown className="w-4 h-4 text-slate-500" />
+              )}
+            </div>
+          </button>
+
+          {showQuickSensitivity && (
+            <div className="border-t border-slate-200 dark:border-slate-800 p-2 sm:p-4 bg-slate-50/50 dark:bg-[#0c1220]/50 animate-in fade-in">
+              <SensitivityMatrixTable data={sensitivity} />
+            </div>
+          )}
+        </div>
       )}
 
       {/* Navigation Tabs Bar with Responsive Left/Right Chevrons */}
@@ -923,6 +1062,7 @@ export default function CompanyValuationPage() {
             terminalGrowthPct={terminalGrowth}
             onUpdateForecast={handleUpdateForecast}
             onUpdateTerminalGrowth={(val) => {
+              setActivePreset("custom");
               setTerminalGrowth(val);
               const latest = historical.length > 0 ? historical[historical.length - 1] : undefined;
               runEngine(forecasts, waccAssumptions, val, latest, quote);
@@ -931,6 +1071,8 @@ export default function CompanyValuationPage() {
               const latest = historical.length > 0 ? historical[historical.length - 1] : undefined;
               runEngine(forecasts, waccAssumptions, terminalGrowth, latest, quote);
             }}
+            onApplyPreset={handleApplyPreset}
+            activePreset={activePreset}
             isLoading={recalculating}
           />
 
@@ -940,7 +1082,7 @@ export default function CompanyValuationPage() {
           {/* Charts Row */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <ValuationBridgeChart output={output} />
-            <CashflowTrajectoryChart output={output} />
+            <CashflowTrajectoryChart output={output} historical={historical} />
           </div>
         </div>
       )}

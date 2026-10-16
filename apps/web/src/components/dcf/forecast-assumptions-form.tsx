@@ -9,6 +9,8 @@ interface ForecastAssumptionsFormProps {
   onUpdateForecast: (index: number, field: keyof ForecastYearInput, value: number) => void;
   onUpdateTerminalGrowth: (value: number) => void;
   onRecalculate: () => void;
+  onApplyPreset?: (preset: "bear" | "base" | "bull") => void;
+  activePreset?: "bear" | "base" | "bull" | "custom";
   isLoading: boolean;
 }
 
@@ -18,6 +20,8 @@ export function ForecastAssumptionsForm({
   onUpdateForecast,
   onUpdateTerminalGrowth,
   onRecalculate,
+  onApplyPreset,
+  activePreset,
   isLoading,
 }: ForecastAssumptionsFormProps) {
   return (
@@ -42,6 +46,62 @@ export function ForecastAssumptionsForm({
       </div>
 
       <div className="p-3.5 sm:p-4 space-y-3">
+        {/* Pre-set Scenario Toggles (Bull / Base / Bear) */}
+        <div className="bg-slate-50 dark:bg-[#0b101c] p-3 rounded-lg border border-slate-200 dark:border-slate-800/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="space-y-0.5">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wide">
+                Quick Scenario Presets
+              </span>
+              <span className="text-[10px] text-sky-600 dark:text-sky-400 font-mono bg-sky-500/10 px-1.5 py-0.2 rounded font-semibold border border-sky-500/20">
+                1-Click Model Calibration
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400">
+              Instantly toggle between conservative downside, base consensus, and aggressive upside assumptions.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-1.5 bg-slate-200/70 dark:bg-slate-800/80 p-1 rounded-xl shrink-0 w-full sm:w-auto">
+            <button
+              type="button"
+              onClick={() => onApplyPreset?.("bear")}
+              className={`flex-1 sm:flex-initial px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                activePreset === "bear"
+                  ? "bg-rose-500 text-white shadow-sm shadow-rose-500/30 scale-[1.02]"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-300/50 dark:hover:bg-slate-700/50"
+              }`}
+            >
+              <span>🐻</span>
+              <span>Conservative (Bear)</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => onApplyPreset?.("base")}
+              className={`flex-1 sm:flex-initial px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                activePreset === "base"
+                  ? "bg-sky-500 text-slate-950 shadow-sm shadow-sky-500/30 scale-[1.02]"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-300/50 dark:hover:bg-slate-700/50"
+              }`}
+            >
+              <span>⚖️</span>
+              <span>Base Case</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => onApplyPreset?.("bull")}
+              className={`flex-1 sm:flex-initial px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                activePreset === "bull"
+                  ? "bg-emerald-500 text-white shadow-sm shadow-emerald-500/30 scale-[1.02]"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-300/50 dark:hover:bg-slate-700/50"
+              }`}
+            >
+              <span>🐂</span>
+              <span>Aggressive (Bull)</span>
+            </button>
+          </div>
+        </div>
+
         {/* Terminal Growth Slider */}
         <div className="bg-slate-50 dark:bg-[#0b101c] p-3 rounded-lg border border-slate-200 dark:border-slate-800/80 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
           <div className="space-y-1">

@@ -35,7 +35,7 @@ export function HistoricalFinancialsTable({ statements }: HistoricalFinancialsTa
             </span>
           </h3>
           <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-            All figures reported in ₹ Crore as filed in Annual Reports with BSE/NSE.
+            All figures reported in ₹ Crore as filed in Annual Reports with BSE/NSE (Net Revenue from Operations per Ind AS 115, excluding State Excise Duty & GST).
           </p>
         </div>
       </div>

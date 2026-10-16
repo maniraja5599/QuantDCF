@@ -76,7 +76,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         />
 
         {/* Main Page Content Container */}
-        <main className="flex-1 w-full p-3 sm:p-5 lg:p-6 xl:p-8 pb-12 transition-all min-w-0 overflow-x-hidden">
+        <main className="flex-1 w-full p-3 sm:p-5 lg:p-6 xl:p-8 pb-20 lg:pb-12 transition-all min-w-0 overflow-x-hidden">
           {children}
         </main>
 
