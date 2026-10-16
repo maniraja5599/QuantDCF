@@ -148,35 +148,36 @@ export function CashflowTrajectoryChart({ output, historical }: CashflowChartPro
               />
             )}
 
-            {/* Historical Bars */}
+            {/* Historical Actuals (Monochrome / Slate shades) */}
             <Bar
               yAxisId="left"
               dataKey="Actual Revenue"
               fill="#64748b"
               radius={[4, 4, 0, 0]}
-              opacity={0.7}
+              opacity={0.8}
             />
             <Bar
               yAxisId="right"
               dataKey="Actual FCF"
-              fill="#059669"
+              fill="#94a3b8"
               radius={[4, 4, 0, 0]}
-              opacity={0.75}
+              opacity={0.9}
             />
 
-            {/* Forecast Bars */}
+            {/* DCF Projections (Institutional Sky / Cyan / Brand Blue shades) */}
             <Bar
               yAxisId="left"
               dataKey="Projected Revenue"
               fill="#0284c7"
               radius={[4, 4, 0, 0]}
-              opacity={0.85}
+              opacity={0.9}
             />
             <Bar
               yAxisId="right"
               dataKey="Projected FCF"
-              fill="#10b981"
+              fill="#06b6d4"
               radius={[4, 4, 0, 0]}
+              opacity={0.95}
             />
 
             {/* Dotted Trendline spanning entire timeline */}
@@ -195,9 +196,9 @@ export function CashflowTrajectoryChart({ output, historical }: CashflowChartPro
               yAxisId="right"
               type="monotone"
               dataKey="PV of FCF"
-              stroke="#f59e0b"
+              stroke="#818cf8"
               strokeWidth={2}
-              dot={{ r: 4, fill: "#f59e0b" }}
+              dot={{ r: 4, fill: "#818cf8" }}
             />
           </ComposedChart>
         </ResponsiveContainer>

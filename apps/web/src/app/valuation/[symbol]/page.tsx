@@ -51,6 +51,8 @@ import {
   Grid3X3,
   ChevronUp,
   ChevronDown,
+  Sliders,
+  Upload,
 } from "lucide-react";
 import { formatCrore, formatINR } from "@/lib/formatters";
 
@@ -126,6 +128,22 @@ export default function CompanyValuationPage() {
   // Save Modal state
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+
+  // Export Dropdown state
+  const [showExportMenu, setShowExportMenu] = useState(false);
+  const exportMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (exportMenuRef.current && !exportMenuRef.current.contains(event.target as Node)) {
+        setShowExportMenu(false);
+      }
+    }
+    if (showExportMenu) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [showExportMenu]);
 
   // Forecast state
   const [terminalGrowth, setTerminalGrowth] = useState<number>(5.0);
@@ -839,25 +857,60 @@ export default function CompanyValuationPage() {
             <span>{isRefreshingAudit ? "Auditing..." : "Sync Audit"}</span>
           </button>
 
-          {/* Secondary Ghost Button: Export Memo */}
-          <button
-            onClick={handleExportReport}
-            className="shrink-0 whitespace-nowrap min-w-max bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700/80 font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-xs hover-lift active:scale-95 group"
-            title="Export full institutional research memo and printable PDF"
-          >
-            <FileDown className="w-3.5 h-3.5 text-sky-500 group-hover:translate-y-0.5 transition-transform" />
-            <span>Export Memo</span>
-          </button>
+          {/* Combined Export Dropdown Menu Button */}
+          <div className="relative" ref={exportMenuRef}>
+            <button
+              onClick={() => setShowExportMenu((prev) => !prev)}
+              className="shrink-0 whitespace-nowrap min-w-max bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700/80 font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-xs hover-lift active:scale-95 group"
+              title="Export research memo or CSV data"
+            >
+              <FileDown className="w-3.5 h-3.5 text-sky-500 group-hover:translate-y-0.5 transition-transform" />
+              <span>Export</span>
+              <ChevronDown className={`w-3 h-3 text-slate-500 dark:text-slate-400 transition-transform duration-200 ${showExportMenu ? "rotate-180" : ""}`} />
+            </button>
 
-          {/* Secondary Ghost Button: Export CSV */}
-          <button
-            onClick={handleExportCSV}
-            className="shrink-0 whitespace-nowrap min-w-max bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700/80 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-xs hover-lift active:scale-95 group"
-            title="Download full 5-year FCF schedule and DCF parameters as CSV"
-          >
-            <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform" />
-            <span>Export CSV</span>
-          </button>
+            {showExportMenu && (
+              <div className="absolute right-0 top-full mt-1.5 w-60 z-50 bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-slate-700/90 rounded-xl shadow-2xl p-1.5 space-y-1 text-xs animate-in fade-in slide-in-from-top-1">
+                <button
+                  onClick={() => {
+                    setShowExportMenu(false);
+                    handleExportReport();
+                  }}
+                  className="w-full text-left px-3 py-2 rounded-lg hover:bg-sky-50 dark:hover:bg-slate-800/80 flex items-start gap-2.5 transition-colors group/item"
+                >
+                  <FileDown className="w-4 h-4 text-sky-500 mt-0.5 shrink-0 group-hover/item:scale-110 transition-transform" />
+                  <div>
+                    <div className="font-bold text-slate-800 dark:text-slate-200 group-hover/item:text-sky-600 dark:group-hover/item:text-sky-400">
+                      Export Research Memo (PDF)
+                    </div>
+                    <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+                      Printable institutional report & audit notes
+                    </div>
+                  </div>
+                </button>
+
+                <div className="border-t border-slate-100 dark:border-slate-800/80 my-0.5" />
+
+                <button
+                  onClick={() => {
+                    setShowExportMenu(false);
+                    handleExportCSV();
+                  }}
+                  className="w-full text-left px-3 py-2 rounded-lg hover:bg-emerald-50 dark:hover:bg-slate-800/80 flex items-start gap-2.5 transition-colors group/item"
+                >
+                  <FileSpreadsheet className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0 group-hover/item:scale-110 transition-transform" />
+                  <div>
+                    <div className="font-bold text-slate-800 dark:text-slate-200 group-hover/item:text-emerald-600 dark:group-hover/item:text-emerald-400">
+                      Export Model (CSV)
+                    </div>
+                    <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+                      5-Year cash flow schedule & parameters
+                    </div>
+                  </div>
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -945,99 +998,116 @@ export default function CompanyValuationPage() {
         <div
           ref={tabsRef}
           onScroll={checkTabScroll}
-          className="flex space-x-1 sm:space-x-2 text-xs font-semibold text-slate-500 dark:text-slate-400 overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-800 scrollbar-track-transparent pb-0 px-1 w-full scroll-smooth"
+          className="flex space-x-1 sm:space-x-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-800 scrollbar-track-transparent pb-0 px-1 w-full scroll-smooth"
         >
+          {/* 1. Core DCF Model */}
           <button
             onClick={() => setActiveTab("model")}
-            className={`px-2.5 py-2 pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 shrink-0 ${
+            className={`px-3 py-2 pb-2.5 transition-all border-b-2 flex items-center gap-1.5 shrink-0 rounded-t-lg ${
               activeTab === "model"
-                ? "border-sky-500 text-sky-700 dark:text-sky-400 font-bold"
-                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-slate-200"
+                ? "border-sky-500 text-sky-600 dark:text-sky-400 font-bold bg-sky-500/[0.08]"
+                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100/60 dark:hover:bg-slate-800/40"
             }`}
           >
             <Layers className="w-3.5 h-3.5" /> Forecast & Models
           </button>
+
+          {/* 2. Sensitivity Matrix (Prioritized Upfront) */}
           <button
-            onClick={() => setActiveTab("historical")}
-            className={`px-2.5 py-2 pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 shrink-0 ${
-              activeTab === "historical"
-                ? "border-sky-500 text-sky-700 dark:text-sky-400 font-bold"
-                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-slate-200"
+            onClick={() => setActiveTab("sensitivity")}
+            className={`px-3 py-2 pb-2.5 transition-all border-b-2 flex items-center gap-1.5 shrink-0 rounded-t-lg ${
+              activeTab === "sensitivity"
+                ? "border-sky-500 text-sky-600 dark:text-sky-400 font-bold bg-sky-500/[0.08]"
+                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100/60 dark:hover:bg-slate-800/40"
             }`}
           >
-            <Calendar className="w-3.5 h-3.5" /> Audited Financials
+            <Grid3X3 className="w-3.5 h-3.5" /> Sensitivity Matrix
           </button>
+
+          {/* 3. Peer Comps (Prioritized Upfront) */}
           <button
             onClick={() => setActiveTab("peers")}
-            className={`px-2.5 py-2 pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 shrink-0 ${
+            className={`px-3 py-2 pb-2.5 transition-all border-b-2 flex items-center gap-1.5 shrink-0 rounded-t-lg ${
               activeTab === "peers"
-                ? "border-sky-500 text-sky-700 dark:text-sky-400 font-bold"
-                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-slate-200"
+                ? "border-sky-500 text-sky-600 dark:text-sky-400 font-bold bg-sky-500/[0.08]"
+                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100/60 dark:hover:bg-slate-800/40"
             }`}
           >
             <Users className="w-3.5 h-3.5" /> Peer Comps
           </button>
+
+          {/* 4. Audited Financials */}
+          <button
+            onClick={() => setActiveTab("historical")}
+            className={`px-3 py-2 pb-2.5 transition-all border-b-2 flex items-center gap-1.5 shrink-0 rounded-t-lg ${
+              activeTab === "historical"
+                ? "border-sky-500 text-sky-600 dark:text-sky-400 font-bold bg-sky-500/[0.08]"
+                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100/60 dark:hover:bg-slate-800/40"
+            }`}
+          >
+            <Calendar className="w-3.5 h-3.5" /> Audited Financials
+          </button>
+
+          {/* 5. Banking (DDM/P-B) */}
           <button
             onClick={() => setActiveTab("bfsi")}
-            className={`px-2.5 py-2 pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 shrink-0 ${
+            className={`px-3 py-2 pb-2.5 transition-all border-b-2 flex items-center gap-1.5 shrink-0 rounded-t-lg ${
               activeTab === "bfsi"
-                ? "border-emerald-500 text-emerald-700 dark:text-emerald-400 font-bold"
-                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-slate-200"
+                ? "border-emerald-500 text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-500/[0.08]"
+                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100/60 dark:hover:bg-slate-800/40"
             }`}
           >
             <Landmark className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> Banking (DDM/P-B)
             {isBFSI && <span className="text-[9px] bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 px-1 rounded font-mono font-bold">BFSI</span>}
           </button>
+
+          {/* 6. SOTP Valuation */}
           <button
             onClick={() => setActiveTab("sotp")}
-            className={`px-2.5 py-2 pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 shrink-0 ${
+            className={`px-3 py-2 pb-2.5 transition-all border-b-2 flex items-center gap-1.5 shrink-0 rounded-t-lg ${
               activeTab === "sotp"
-                ? "border-amber-500 text-amber-700 dark:text-amber-400 font-bold"
-                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-slate-200"
+                ? "border-amber-500 text-amber-600 dark:text-amber-400 font-bold bg-amber-500/[0.08]"
+                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100/60 dark:hover:bg-slate-800/40"
             }`}
           >
             <PieChart className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" /> SOTP
             {isConglomerate && <span className="text-[9px] bg-amber-500/20 text-amber-700 dark:text-amber-400 px-1 rounded font-mono font-bold">Conglomerate</span>}
           </button>
-          <button
-            onClick={() => setActiveTab("sensitivity")}
-            className={`px-2.5 py-2 pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 shrink-0 ${
-              activeTab === "sensitivity"
-                ? "border-sky-500 text-sky-700 dark:text-sky-400 font-bold"
-                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-slate-200"
-            }`}
-          >
-            Sensitivity Matrix
-          </button>
+
+          {/* 7. Scenario Studio */}
           <button
             onClick={() => setActiveTab("scenarios")}
-            className={`px-2.5 py-2 pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 shrink-0 ${
+            className={`px-3 py-2 pb-2.5 transition-all border-b-2 flex items-center gap-1.5 shrink-0 rounded-t-lg ${
               activeTab === "scenarios"
-                ? "border-sky-500 text-sky-700 dark:text-sky-400 font-bold"
-                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-slate-200"
+                ? "border-sky-500 text-sky-600 dark:text-sky-400 font-bold bg-sky-500/[0.08]"
+                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100/60 dark:hover:bg-slate-800/40"
             }`}
           >
-            Scenarios
+            <Sliders className="w-3.5 h-3.5" /> Scenario Studio
           </button>
+
+          {/* 8. Audit Trail */}
           <button
             onClick={() => setActiveTab("audit")}
-            className={`px-2.5 py-2 pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 shrink-0 ${
+            className={`px-3 py-2 pb-2.5 transition-all border-b-2 flex items-center gap-1.5 shrink-0 rounded-t-lg ${
               activeTab === "audit"
-                ? "border-sky-500 text-sky-700 dark:text-sky-400 font-bold"
-                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-slate-200"
+                ? "border-sky-500 text-sky-600 dark:text-sky-400 font-bold bg-sky-500/[0.08]"
+                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100/60 dark:hover:bg-slate-800/40"
             }`}
           >
-            Audit Trail
+            <ShieldCheck className="w-3.5 h-3.5" /> Audit Trail
           </button>
+
+          {/* 9. Upload (CSV/XLSX) */}
           <button
             onClick={() => setActiveTab("upload")}
-            className={`px-2.5 py-2 pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 shrink-0 ${
+            className={`px-3 py-2 pb-2.5 transition-all border-b-2 flex items-center gap-1.5 shrink-0 rounded-t-lg ${
               activeTab === "upload"
-                ? "border-sky-500 text-sky-700 dark:text-sky-400 font-bold"
-                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-slate-200"
+                ? "border-sky-500 text-sky-600 dark:text-sky-400 font-bold bg-sky-500/[0.08]"
+                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100/60 dark:hover:bg-slate-800/40"
             }`}
           >
-            Upload (CSV/XLSX)
+            <Upload className="w-3.5 h-3.5" /> Upload (CSV/XLSX)
           </button>
         </div>
 
