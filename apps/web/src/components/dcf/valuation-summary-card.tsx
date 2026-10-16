@@ -389,7 +389,9 @@ export function ValuationSummaryCard({ output, quote, waccAssumptions, onOpenWac
                 </button>
               </div>
               <div className="font-extrabold text-xs text-sky-600 dark:text-sky-400 font-mono mt-0.5">
-                {finalEbitda > 0 ? `${(output.pv_terminal_value / (finalEbitda * discountFactorN)).toFixed(1)}x Implied Exit` : "—"}
+                {finalEbitda > 0 && discountFactorN > 0
+                  ? `${(output.pv_terminal_value / (finalEbitda * discountFactorN)).toFixed(1)}x Implied Exit`
+                  : "—"}
               </div>
             </div>
             <div className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">Terminal EV/EBITDA triangulation</div>
@@ -468,19 +470,20 @@ export function ValuationSummaryCard({ output, quote, waccAssumptions, onOpenWac
 
         {/* Reverse DCF Market-Implied Expectations Stat Card */}
         {(() => {
-          if (!cmp || cmp <= 0 || output.diluted_shares <= 0) return null;
-          const marketCap = cmp * output.diluted_shares;
+          const numCmp = typeof cmp === "number" ? cmp : Number(cmp);
+          if (!numCmp || isNaN(numCmp) || numCmp <= 0 || !output.diluted_shares || output.diluted_shares <= 0) return null;
+          const marketCap = numCmp * output.diluted_shares;
           const marketEv = marketCap + output.total_debt - output.cash_and_equivalents + output.minority_interest;
-          const fcf1 = output.forecast_years[0]?.free_cash_flow;
+          const fcf1 = output.forecast_years?.[0]?.free_cash_flow;
           const marketFcfYield = fcf1 && marketCap > 0 ? (fcf1 / marketCap) * 100 : null;
 
-          const n = output.forecast_years.length;
-          const fcfn = output.forecast_years[n - 1]?.free_cash_flow;
+          const n = output.forecast_years?.length || 0;
+          const fcfn = n > 0 ? output.forecast_years[n - 1]?.free_cash_flow : undefined;
           const wacc = output.discount_rate_wacc_pct / 100;
           const pvFcf = output.cumulative_pv_fcf;
 
           let marketImpliedG: number | null = null;
-          if (fcfn && fcfn > 0 && wacc > 0 && marketEv > pvFcf) {
+          if (fcfn && fcfn > 0 && wacc > 0 && marketEv > pvFcf && n > 0) {
             const pvTermTarget = (marketEv - pvFcf) * Math.pow(1 + wacc, n);
             const impliedG = (pvTermTarget * wacc - fcfn) / (pvTermTarget + fcfn);
             if (!isNaN(impliedG) && impliedG > -0.2 && impliedG < wacc) {
@@ -503,7 +506,7 @@ export function ValuationSummaryCard({ output, quote, waccAssumptions, onOpenWac
                       Reverse DCF &bull; Market Expectations Analysis
                     </h4>
                     <p className="text-[10px] text-slate-500 dark:text-slate-400">
-                      What the current stock price (₹{cmp.toFixed(2)}) requires the company to deliver indefinitely.
+                      What the current stock price (₹{numCmp.toFixed(2)}) requires the company to deliver indefinitely.
                     </p>
                   </div>
                 </div>
@@ -576,11 +579,11 @@ export function ValuationSummaryCard({ output, quote, waccAssumptions, onOpenWac
                   {marketImpliedG !== null ? (
                     marketImpliedG > modelG ? (
                       <span>
-                        <strong>Analyst Note:</strong> At CMP of ₹{cmp.toFixed(2)}, market is pricing in an aggressive <strong>{marketImpliedG.toFixed(2)}%</strong> perpetual cash growth rate (exceeding India&apos;s nominal GDP anchor of 5.5%). Fundamental safety margin requires either margin expansion or accelerating revenue.
+                        <strong>Analyst Note:</strong> At CMP of ₹{numCmp.toFixed(2)}, market is pricing in an aggressive <strong>{marketImpliedG.toFixed(2)}%</strong> perpetual cash growth rate (exceeding India&apos;s nominal GDP anchor of 5.5%). Fundamental safety margin requires either margin expansion or accelerating revenue.
                       </span>
                     ) : (
                       <span>
-                        <strong>Analyst Note:</strong> At CMP of ₹{cmp.toFixed(2)}, market implies modest perpetual terminal growth of <strong>{marketImpliedG.toFixed(2)}%</strong>. This indicates market caution, providing fundamental investors with an attractive margin of safety against model baseline ({modelG.toFixed(1)}%).
+                        <strong>Analyst Note:</strong> At CMP of ₹{numCmp.toFixed(2)}, market implies modest perpetual terminal growth of <strong>{marketImpliedG.toFixed(2)}%</strong>. This indicates market caution, providing fundamental investors with an attractive margin of safety against model baseline ({modelG.toFixed(1)}%).
                       </span>
                     )
                   ) : (

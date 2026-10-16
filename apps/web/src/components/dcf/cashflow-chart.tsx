@@ -134,6 +134,7 @@ export function CashflowTrajectoryChart({ output, historical }: CashflowChartPro
             {/* Vertical demarcation between actuals and forecast */}
             {firstForecastLabel && (
               <ReferenceLine
+                yAxisId="left"
                 x={firstForecastLabel}
                 stroke="#0ea5e9"
                 strokeDasharray="3 3"
